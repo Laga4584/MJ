@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+
+    android:background="@drawable/bg_index"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/rootView"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/app_name"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_medium2"
+        android:textColor="@color/text_color_white"
+        android:text="@string/index_message"
+        android:gravity="end"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="@dimen/spacing_large2"
+        android:layout_marginRight="@dimen/spacing_large2" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_medium2"
+        android:textColor="@color/text_color_white"
+        android:text="@string/permission_checking"
+        android:gravity="center"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
