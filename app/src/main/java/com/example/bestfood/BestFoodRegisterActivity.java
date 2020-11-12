@@ -37,7 +37,7 @@ public class BestFoodRegisterActivity extends AppCompatActivity {
 
         context = this;
 
-        int memberSeq = ((MyApp)getApplication()).getMemberSeq();
+        int memberSeq = ((App)getApplication()).getMemberSeq();
 
         //BestFoodRegisterLocationFragment로 넘길 기본적인 정보를 저장한다.
         FoodInfoItem infoItem = new FoodInfoItem();

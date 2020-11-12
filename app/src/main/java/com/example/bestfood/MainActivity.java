@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        memberInfoItem = ((MyApp)getApplication()).getMemberInfoItem();
+        memberInfoItem = ((App)getApplication()).getMemberInfoItem();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

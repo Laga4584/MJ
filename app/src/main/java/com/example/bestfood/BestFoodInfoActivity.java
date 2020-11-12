@@ -73,7 +73,7 @@ public class BestFoodInfoActivity extends AppCompatActivity
 
         loadingText = findViewById(R.id.loading_layout);
 
-        memberSeq = ((MyApp)getApplication()).getMemberSeq();
+        memberSeq = ((App)getApplication()).getMemberSeq();
         foodInfoSeq = getIntent().getIntExtra(INFO_SEQ, 0);
         selectFoodInfo(foodInfoSeq, memberSeq);
 
@@ -316,6 +316,6 @@ public class BestFoodInfoActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        ((MyApp) getApplication()).setFoodInfoItem(item);
+        ((App) getApplication()).setFoodInfoItem(item);
     }
 }

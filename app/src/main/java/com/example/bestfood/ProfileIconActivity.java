@@ -56,7 +56,7 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
 
         context = this;
 
-        memberInfoItem = ((MyApp) getApplication()).getMemberInfoItem();
+        memberInfoItem = ((App) getApplication()).getMemberInfoItem();
 
         setToolbar();
         setView();

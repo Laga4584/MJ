@@ -21,7 +21,6 @@ import com.example.bestfood.lib.EtcLib;
 import com.example.bestfood.lib.GeoLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
-import com.example.bestfood.lib.RemoteLib;
 import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
@@ -174,7 +173,7 @@ public class IndexActivity extends AppCompatActivity {
      * @param item 사용자 정보
      */
     private void setMemberInfoItem(MemberInfoItem item) {
-        ((MyApp) getApplicationContext()).setMemberInfoItem(item);
+        ((App) getApplicationContext()).setMemberInfoItem(item);
 
         startMain();
     }
@@ -183,7 +182,7 @@ public class IndexActivity extends AppCompatActivity {
      * MainActivity를 실행하고 현재 액티비티를 종료한다.
      */
     public void startMain() {
-        Intent intent = new Intent(IndexActivity.this, MainActivity.class);
+        Intent intent = new Intent(IndexActivity.this, LoginActivity.class);
         startActivity(intent);
 
         finish();

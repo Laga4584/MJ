@@ -73,7 +73,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = this.getActivity();
 
-        memberSeq = ((MyApp)this.getActivity().getApplication()).getMemberSeq();
+        memberSeq = ((App)this.getActivity().getApplication()).getMemberSeq();
 
         View layout = inflater.inflate(R.layout.fragment_bestfood_list, container, false);
 
@@ -89,12 +89,12 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
 
-        MyApp myApp = ((MyApp) getActivity().getApplication());
-        FoodInfoItem currentInfoItem = myApp.getFoodInfoItem();
+        App app = ((App) getActivity().getApplication());
+        FoodInfoItem currentInfoItem = app.getFoodInfoItem();
 
         if (infoListAdapter != null && currentInfoItem != null) {
             infoListAdapter.setItem(currentInfoItem);
-            myApp.setFoodInfoItem(null);
+            app.setFoodInfoItem(null);
         }
     }
 

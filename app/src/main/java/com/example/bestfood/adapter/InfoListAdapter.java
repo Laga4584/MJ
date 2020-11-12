@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bestfood.Constant;
-import com.example.bestfood.MyApp;
+import com.example.bestfood.App;
 import com.example.bestfood.R;
 import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.MemberInfoItem;
@@ -47,7 +47,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
         this.resource = resource;
         this.itemList = itemList;
 
-        memberInfoItem = ((MyApp) context.getApplicationContext()).getMemberInfoItem();
+        memberInfoItem = ((App) context.getApplicationContext()).getMemberInfoItem();
     }
 
     /**
