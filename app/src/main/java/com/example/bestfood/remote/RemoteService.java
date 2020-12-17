@@ -26,7 +26,7 @@ import retrofit2.http.Query;
  */
 public interface RemoteService {
     //String BASE_URL = "http://192.168.1.134:3000";
-    String BASE_URL = "http://ec2-13-209-4-99.ap-northeast-2.compute.amazonaws.com:3000";
+    String BASE_URL = "http://ec2-54-180-82-94.ap-northeast-2.compute.amazonaws.com:3000";
     String MEMBER_ICON_URL = BASE_URL + "/member/";
     String IMAGE_URL = BASE_URL + "/img/";
 
