@@ -1,5 +1,6 @@
 package com.example.bestfood;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bestfood.item.MemberInfoItem;
+import com.example.bestfood.lib.MyLog;
+import com.example.bestfood.lib.MyToast;
+import com.example.bestfood.lib.StringLib;
+import com.example.bestfood.remote.RemoteService;
+import com.example.bestfood.remote.ServiceGenerator;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
@@ -20,7 +27,20 @@ import com.kakao.usermgmt.response.model.UserAccount;
 import com.kakao.util.OptionalBoolean;
 import com.kakao.util.exception.KakaoException;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LoginActivity extends AppCompatActivity {
+    String email_2 = "", gender_2 = "", ageRange_2 = "", birthday_2 = "", name_2 = "";
+    MemberInfoItem newItem;
+
+
+    Context context;
+
+
+    private final String TAG = this.getClass().getSimpleName();
 
     private SessionCallback sessionCallback;
 
@@ -29,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        newItem = ((App) getApplication()).getMemberInfoItem();
+        context = this;
         sessionCallback = new SessionCallback();
         Session.getCurrentSession().addCallback(sessionCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
@@ -71,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(MeV2Response result) {
-                    Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
+
                     UserAccount kakaoAccount = result.getKakaoAccount();
                     if (kakaoAccount != null) {
 
@@ -80,16 +102,16 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (email != null) {
                             Log.i("KAKAO_API", "email: " + email);
-                            intent.putExtra("email", email);
+                            email_2 = email;
 
                         } else if (kakaoAccount.emailNeedsAgreement() == OptionalBoolean.TRUE) {
-                            intent.putExtra("email", email);
+                            email_2 = email;
 
                             // 동의 요청 후 이메일 획득 가능
                             // 단, 선택 동의로 설정되어 있다면 서비스 이용 시나리오 상에서 반드시 필요한 경우에만 요청해야 합니다.
 
                         } else {
-                            intent.putExtra("email", "none");
+                            email_2 = "none";
                             // 이메일 획득 불가
                         }
 
@@ -98,16 +120,16 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (!gender.equals("null")) {
                             Log.i("KAKAO_API", "gender: " + gender);
-                            intent.putExtra("gender", gender);
+                            gender_2 = gender;
 
                         } else if (kakaoAccount.genderNeedsAgreement() == OptionalBoolean.TRUE) {
-                            intent.putExtra("gender", gender);
+                            gender_2 = gender;
 
                             // 동의 요청 후 이메일 획득 가능
                             // 단, 선택 동의로 설정되어 있다면 서비스 이용 시나리오 상에서 반드시 필요한 경우에만 요청해야 합니다.
 
                         } else {
-                            intent.putExtra("gender", "none");
+                            gender_2 = "none";
                             // 이메일 획득 불가
                         }
 
@@ -116,16 +138,16 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (!ageRange.equals("null")) {
                             Log.i("KAKAO_API", "ageRange: " + ageRange);
-                            intent.putExtra("ageRange", ageRange);
+                            ageRange_2 = ageRange;
 
                         } else if (kakaoAccount.ageRangeNeedsAgreement() == OptionalBoolean.TRUE) {
-                            intent.putExtra("ageRange", ageRange);
+                            ageRange_2 = ageRange;
 
                             // 동의 요청 후 이메일 획득 가능
                             // 단, 선택 동의로 설정되어 있다면 서비스 이용 시나리오 상에서 반드시 필요한 경우에만 요청해야 합니다.
 
                         } else {
-                            intent.putExtra("ageRange", "none");
+                            ageRange_2 = "none";
                             // 이메일 획득 불가
                         }
 
@@ -134,16 +156,16 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (birthday != null) {
                             Log.i("KAKAO_API", "birthday: " + birthday);
-                            intent.putExtra("birthday", birthday);
+                            birthday_2 = birthday;
 
                         } else if (kakaoAccount.birthdayNeedsAgreement() == OptionalBoolean.TRUE) {
-                            intent.putExtra("birthday", birthday);
+                            birthday_2 = birthday;
 
                             // 동의 요청 후 이메일 획득 가능
                             // 단, 선택 동의로 설정되어 있다면 서비스 이용 시나리오 상에서 반드시 필요한 경우에만 요청해야 합니다.
 
                         } else {
-                            intent.putExtra("birthday", "none");
+                            birthday_2 = "none";
                             // 이메일 획득 불가
                         }
 
@@ -154,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("KAKAO_API", "nickname: " + profile.getNickname());
                             Log.d("KAKAO_API", "profile image: " + profile.getProfileImageUrl());
                             Log.d("KAKAO_API", "thumbnail image: " + profile.getThumbnailImageUrl());
-                            intent.putExtra("name", profile.getNickname());
+                            name_2 = profile.getNickname();
 
                         } else if (kakaoAccount.profileNeedsAgreement() == OptionalBoolean.TRUE) {
                             // 동의 요청 후 프로필 정보 획득 가능
@@ -188,9 +210,8 @@ public class LoginActivity extends AppCompatActivity {
 
                      */
                     //여기까지가 추가된 부분.
+                    selectMemberInfo(email_2);
 
-                    startActivity(intent);
-                    finish();
                 }
             });
         }
@@ -200,4 +221,149 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "로그인 도중 오류가 발생했습니다. 인터넷 연결을 확인해주세요: "+e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * 리트로핏을 활용해서 서버로부터 사용자 정보를 조회한다.
+     * 사용자 정보를 조회했다면 setMemberInfoItem() 메소드를 호출하고
+     * 그렇지 않다면 goProfileActivity() 메소드를 호출한다.
+     *
+     * @param phone 폰의 전화번호
+     */
+    public void selectMemberInfo(String phone) {
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        Call<MemberInfoItem> call = remoteService.selectMemberInfo(phone);
+        call.enqueue(new Callback<MemberInfoItem>() {
+            @Override
+            public void onResponse(Call<MemberInfoItem> call, Response<MemberInfoItem> response) {
+                MemberInfoItem item = response.body();
+
+                if (response.isSuccessful() && !StringLib.getInstance().isBlank(item.name)) {
+                    MyLog.d(TAG, "success " + response.body().toString());
+                    setMemberInfoItem(item);
+                } else {
+                    MyLog.d(TAG, "not success");
+                    MyLog.d(TAG, newItem.toString());
+                    newItem.birthday = birthday_2;
+
+                    newItem.email = email_2;
+                    newItem.name = name_2;
+                    newItem.sextype = gender_2;
+
+                    insertMemberInfo(newItem);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MemberInfoItem> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+                MyLog.d(TAG, t.toString());
+            }
+        });
+    }
+
+    /**
+     * 전달받은 MemberInfoItem을 Application 객체에 저장한다.
+     * 그리고 startMain() 메소드를 호출한다.
+     *
+     * @param item 사용자 정보
+     */
+    private void setMemberInfoItem(MemberInfoItem item) {
+        ((App) getApplicationContext()).setMemberInfoItem(item);
+
+        startMain();
+    }
+
+    /**
+     * MainActivity를 실행하고 현재 액티비티를 종료한다.
+     */
+    public void startMain() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+
+        finish();
+    }
+
+    /**
+     * 사용자 정보를 조회하지 못했다면 insertMemberPhone() 메소드를 통해
+     * 전화번호를 서버에 저장하고 MainActivity를 실행한 후 ProfileActivity를 실행한다.
+     * 그리고 현재 액티비티를 종료한다.
+     *
+     * @param item 사용자 정보
+     */
+
+    private void goProfileActivity(MemberInfoItem item) {
+        /*
+        if (item == null || item.seq <= 0) {
+            insertMemberPhone();
+        }
+*/
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+
+        Intent intent2 = new Intent(this, ProfileActivity.class);
+        startActivity(intent2);
+
+        finish();
+    }
+
+    private void insertMemberInfo(MemberInfoItem item) {
+        RemoteService remoteService =
+                ServiceGenerator.createService(RemoteService.class);
+
+        Call<String> call = remoteService.insertMemberInfo(item);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    String seq = response.body();
+                    try {
+                        newItem.seq = Integer.parseInt(seq);
+                        if (newItem.seq == 0) {
+                            MyToast.s(context, R.string.member_insert_fail_message);
+                            return;
+                        }
+                    } catch (Exception e) {
+                        MyToast.s(context, R.string.member_insert_fail_message);
+                        return;
+                    }
+                    goProfileActivity(newItem);
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+            }
+        });
+    }
+
+    /**
+     * 폰의 전화번호를 서버에 저장한다.
+     */
+    private void insertMemberPhone() {
+        //String phone = EtcLib.getInstance().getPhoneNumber(context);
+        RemoteService remoteService =
+                ServiceGenerator.createService(RemoteService.class);
+
+        Call<String> call = remoteService.insertMemberPhone(email_2);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    MyLog.d(TAG, "success insert id " + response.body().toString());
+                } else {
+                    int statusCode = response.code();
+
+                    ResponseBody errorBody = response.errorBody();
+
+                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+            }
+        });
+    }
+
 }

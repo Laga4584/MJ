@@ -11,6 +11,7 @@ public class MemberInfoItem {
     public String name;
     public String sextype;
     public String birthday;
+    public String email;
     @SerializedName("member_icon_filename") public String memberIconFilename;
     @SerializedName("reg_date") public String regDate;
 
@@ -24,6 +25,7 @@ public class MemberInfoItem {
                 ", birthday='" + birthday + '\'' +
                 ", memberIconFilename='" + memberIconFilename + '\'' +
                 ", regDate='" + regDate + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }
