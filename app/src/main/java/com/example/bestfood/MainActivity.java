@@ -1,149 +1,94 @@
 package com.example.bestfood;
 
 import android.os.Bundle;
-import com.google.android.material.navigation.NavigationView;
-import 	androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
+import android.util.Log;
+
+import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
+import androidx.fragment.app.Fragment;
 
-import com.example.bestfood.item.MemberInfoItem;
-import com.example.bestfood.lib.GoLib;
-import com.example.bestfood.lib.StringLib;
-import com.example.bestfood.remote.RemoteService;
-import com.squareup.picasso.Picasso;
+import com.example.bestfood.lib.MyToast;
+import com.google.android.material.tabs.TabLayout;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+public class MainActivity extends AppCompatActivity {
 
-/**
- * 맛집 정보앱의 핵심 액티비티이며 왼쪽에 네비게이션 뷰를 가지며
- * 다양한 프래그먼트를 보여주는 컨테이너 역할을 한다.
- */
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    private final String TAG = getClass().getSimpleName();
+    Toolbar toolbar;
 
-    MemberInfoItem memberInfoItem;
-    DrawerLayout drawer;
-    View headerLayout;
+    BestFoodListFragment fragment1;
+    Fragment2 fragment2;
 
-    CircleImageView profileIconImage;
-
-    /**
-     * 액티비티와 네비게이션 뷰를 설정하고 BestFoodListFragment를 화면에 보여준다.
-     * @param savedInstanceState 액티비티가 새로 생성되었을 경우, 이전 상태 값을 가지는 객체
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        memberInfoItem = ((App)getApplication()).getMemberInfoItem();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        actionBar.setLogo(R.drawable.ic_keep_off);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        fragment1 = new BestFoodListFragment();
+        fragment2 = new Fragment2();
 
-        headerLayout = navigationView.getHeaderView(0);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
 
-        GoLib.getInstance()
-                .goFragment(getSupportFragmentManager(), R.id.content_main,
-                        BestFoodListFragment.newInstance());
-
-
-    }
-
-    /**
-     * 프로필 정보는 별도 액티비티에서 변경될 수 있으므로
-     * 변경을 바로 감지하기 위해 화면이 새로 보여질 대마다 setProfileView() 를 호출한다.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        setProfileView();
-    }
-
-    /**
-     * 프로필 이미지와 프로필 이름을 설정한다.
-     */
-    private void setProfileView() {
-        profileIconImage = (CircleImageView) headerLayout.findViewById(R.id.profile_icon);
-        profileIconImage.setOnClickListener(new View.OnClickListener() {
+        TabLayout tabs = findViewById(R.id.tabs);
+        tabs.addTab(tabs.newTab().setText("통화기록"));
+        tabs.addTab(tabs.newTab().setText("스팸기록"));
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
-                GoLib.getInstance().goProfileActivity(MainActivity.this);
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                Log.d("MainActivity", "선택된 탭 : " + position);
+
+                Fragment selected = null;
+                if (position == 0) {
+                    selected = fragment1;
+                } else if (position == 1) {
+                    selected = fragment2;
+                }
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, selected).commit();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
 
-        if (StringLib.getInstance().isBlank(memberInfoItem.memberIconFilename)) {
-            Picasso.get().load(R.drawable.ic_person).into(profileIconImage);
-        } else {
-            Picasso.get()
-                    .load(RemoteService.MEMBER_ICON_URL + memberInfoItem.memberIconFilename)
-                    .into(profileIconImage);
-        }
-
-        TextView nameText = (TextView) headerLayout.findViewById(R.id.name);
-
-        if (memberInfoItem.name == null || memberInfoItem.name.equals("")) {
-            nameText.setText(R.string.name_need);
-        } else {
-            nameText.setText(memberInfoItem.name);
-        }
     }
 
-    /**
-     * 폰에서 뒤로가기 버튼을 클릭했을 때 호출하는 메소드이며
-     * 네비게이션 메뉴가 보여진 상태일 경우, 네비게이션 메뉴를 닫는다.
-     */
     @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
-    /**
-     * 네비게이션 메뉴를 클릭했을 때 호출되는 메소드
-     * @param item 메뉴 아이템 객체
-     * @return 메뉴 클릭 이벤트의 처리 여부
-     */
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_list) {
-            GoLib.getInstance().goFragment(getSupportFragmentManager(),
-                    R.id.content_main, BestFoodListFragment.newInstance());
-
-
-        } else if (id == R.id.nav_register) {
-            GoLib.getInstance().goBestFoodRegisterActivity(this);
-
-        } else if (id == R.id.nav_profile) {
-            GoLib.getInstance().goProfileActivity(this);
-        }
-
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int curId = item.getItemId();
+        switch (curId) {
+            case R.id.menu_profile:
+                MyToast.s(this, "프로필 메뉴가 선택되었습니다.");
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

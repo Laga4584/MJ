@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bestfood.item.MemberInfoItem;
+import com.example.bestfood.lib.EtcLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.lib.StringLib;
@@ -21,7 +22,6 @@ import com.kakao.usermgmt.ApiErrorCode;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
-import com.kakao.usermgmt.response.model.AgeRange;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 import com.kakao.util.OptionalBoolean;
@@ -50,6 +50,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         newItem = ((App) getApplication()).getMemberInfoItem();
+        // 여기서부터 나중에 고쳐야함 임시로 추가
+        newItem.phone = EtcLib.getInstance().getPhoneNumber(this);
+        Log.i("newItem", newItem.toString());
+        //여기까지
         context = this;
         sessionCallback = new SessionCallback();
         Session.getCurrentSession().addCallback(sessionCallback);

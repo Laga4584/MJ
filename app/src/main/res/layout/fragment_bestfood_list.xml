@@ -45,13 +45,6 @@
             android:textColor="@color/text_color_black"
             android:textStyle="bold"/>
 
-        <ImageView
-            android:id="@+id/list_type"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="@dimen/spacing_small"
-            android:src="@drawable/ic_list2"/>
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

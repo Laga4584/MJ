@@ -50,7 +50,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
-    int listTypeValue = 2;
+    int listTypeValue = 1;
     String orderType;
 
     /**
@@ -112,7 +112,6 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
 
         bestFoodList = (RecyclerView) view.findViewById(R.id.list);
         noDataText = (TextView) view.findViewById(R.id.no_data);
-        listType = (ImageView) view.findViewById(R.id.list_type);
 
         orderMeter = (TextView) view.findViewById(R.id.order_meter);
         orderFavorite = (TextView) view.findViewById(R.id.order_favorite);
@@ -121,7 +120,6 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         orderMeter.setOnClickListener(this);
         orderFavorite.setOnClickListener(this);
         orderRecent.setOnClickListener(this);
-        listType.setOnClickListener(this);
 
         setRecyclerView();
 
@@ -202,10 +200,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.list_type) {
-            changeListType();
 
-        } else {
             if (v.getId() == R.id.order_meter) {
                 orderType = Constant.ORDER_TYPE_METER;
 
@@ -227,7 +222,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
 
             setRecyclerView();
             listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, 0);
-        }
+
     }
 
     /**
