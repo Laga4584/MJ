@@ -68,6 +68,7 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
 
     boolean isSavingImage = false;
 
+
     /**
      * FoodInfoItem 객체를 인자로 저장하는
      * BestFoodRegisterInputFragment 인스턴스를 생성해서 반환한다.

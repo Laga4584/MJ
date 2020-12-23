@@ -33,7 +33,7 @@ import retrofit2.Response;
 /**
  * 맛집 정보 리스트를 보여주는 프래그먼트
  */
-public class BestFoodListFragment extends Fragment implements View.OnClickListener {
+public class BestFoodSampleFragment extends Fragment implements View.OnClickListener {
     private final String TAG = this.getClass().getSimpleName();
 
     Context context;
@@ -43,12 +43,12 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
     RecyclerView bestFoodList;
     TextView noDataText;
 
-    Spinner spinner;
+    //Spinner spinner;
     //TextView orderMeter;
     //TextView orderFavorite;
     //TextView orderRecent;
 
-    ImageView listType;
+    //ImageView listType;
 
     InfoListAdapter infoListAdapter;
     StaggeredGridLayoutManager layoutManager;
@@ -81,7 +81,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
 
         memberSeq = ((App)this.getActivity().getApplication()).getMemberSeq();
 
-        View layout = inflater.inflate(R.layout.fragment_bestfood_list, container, false);
+        View layout = inflater.inflate(R.layout.fragment_bestfood_sample, container, false);
 
         return layout;
     }
@@ -119,7 +119,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         bestFoodList = (RecyclerView) view.findViewById(R.id.list);
         noDataText = (TextView) view.findViewById(R.id.no_data);
 
-        spinner = (Spinner) view.findViewById(R.id.spinner);
+        //spinner = (Spinner) view.findViewById(R.id.spinner);
         //orderMeter = (TextView) view.findViewById(R.id.order_meter);
         //orderFavorite = (TextView) view.findViewById(R.id.order_favorite);
         //orderRecent = (TextView) view.findViewById(R.id.order_recent);
@@ -128,32 +128,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         //orderFavorite.setOnClickListener(this);
         //orderRecent.setOnClickListener(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getActivity(), android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
-        );
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    orderType = Constant.ORDER_TYPE_METER;
-                    setRecyclerView();
-                    listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, 0);
-                }else {
-                    orderType = Constant.ORDER_TYPE_RECENT;
-                    setRecyclerView();
-                    listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, 0);
-                }
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
         setRecyclerView();
 
         listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, 0);
@@ -270,18 +245,5 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         //orderRecent.setTextColor(ContextCompat.getColor(context, color3));
     }
 
-    /**
-     * 리사이클러뷰의 리스트 형태를 변경한다.
-     */
-    private void changeListType() {
-        if (listTypeValue == 1) {
-            listTypeValue = 2;
-            listType.setImageResource(R.drawable.ic_list2);
-        } else {
-            listTypeValue = 1;
-            listType.setImageResource(R.drawable.ic_list);
 
-        }
-        setLayoutManager(listTypeValue);
-    }
 }

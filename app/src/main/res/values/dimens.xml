@@ -21,4 +21,12 @@
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_large2">22sp</dimen>
     <dimen name="cardview_round_basic">4dp</dimen>
+
+    <dimen name="pageMargin">20dp</dimen>
+
+    <dimen name="offset">20dp</dimen>
+
+    <dimen name="pageMarginAndOffset">40dp</dimen>
+
+    <dimen name="frameSize">500dp</dimen>
 </resources>

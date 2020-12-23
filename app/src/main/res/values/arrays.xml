@@ -4,4 +4,8 @@
         <item>카메라</item>
         <item>앨범</item>
     </string-array>
+    <string-array name="spinner_category">
+        <item>완료 케이스 보이기</item>
+        <item>완료 케이스 보이지 않기</item>
+    </string-array>
 </resources>

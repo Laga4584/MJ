@@ -1,10 +1,12 @@
 package com.example.bestfood;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,19 +14,29 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.bestfood.lib.MyToast;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
-
+    FloatingActionButton fab;
     Toolbar toolbar;
 
     BestFoodListFragment fragment1;
-    Fragment2 fragment2;
+    BestFoodSampleFragment fragment2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startMain();
+            }
+        });
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -36,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
         fragment1 = new BestFoodListFragment();
-        fragment2 = new Fragment2();
+        fragment2 = new BestFoodSampleFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
 
         TabLayout tabs = findViewById(R.id.tabs);
-        tabs.addTab(tabs.newTab().setText("통화기록"));
-        tabs.addTab(tabs.newTab().setText("스팸기록"));
+        tabs.addTab(tabs.newTab().setText("Case List"));
+        tabs.addTab(tabs.newTab().setText("Sample Cases"));
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -70,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -89,6 +103,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    /**
+     * MainActivity를 실행하고 현재 액티비티를 종료한다.
+     */
+    public void startMain() {
+        Intent intent = new Intent(MainActivity.this, CaseActivity.class);
+        startActivity(intent);
+
+        //finish();
     }
 
 }

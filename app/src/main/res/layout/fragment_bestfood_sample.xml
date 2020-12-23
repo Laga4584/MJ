@@ -4,38 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/top_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <View
-
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-
-            />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_small2"
-            >
-        </Spinner>
-
-
-
-
-
-
-
-    </LinearLayout>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_below="@+id/top_layout"
