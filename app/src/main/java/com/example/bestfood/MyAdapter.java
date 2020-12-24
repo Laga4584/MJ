@@ -35,10 +35,18 @@ public class MyAdapter extends FragmentStateAdapter {
             else if(position==5) return new FragSixth();
             else return new FragSeventh();
 
-        } else{
-            return new FragmentEighth();
+        } else {
+            if (mCount == 1) {
+                if (position == 0) return new FragFirst1();
+                else return new FragFirst2();
+            } else if (mCount == 4) {
+                if (position == 0) return new FragFourth1();
+                else return new FragFourth2();
+            } else if (mCount == 6) {
+                if (position == 0) return new FragSixth1();
+                else return new FragSixth2();
+            } else return new FragSixth2();
         }
-
 
     }
     public int getType(){
@@ -57,8 +65,5 @@ public class MyAdapter extends FragmentStateAdapter {
             return 2;
         }
     }
-
-    public int getRealPosition(int position) { return position % mCount; }
-
 
 }

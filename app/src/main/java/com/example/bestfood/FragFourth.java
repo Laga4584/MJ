@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 
 public class FragFourth extends Fragment {
@@ -14,6 +15,12 @@ public class FragFourth extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.frame_4p, container, false);
+        ViewPager2 viewPager2 = rootView.findViewById(R.id.viewPager2);
+
+        MyAdapter adapter = new MyAdapter(this, 4);
+        adapter.setType(MyAdapter.TYPE_VERTICAL_VIEWPAGER);
+        viewPager2.setAdapter(adapter);
+        viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
 
         return rootView;
     }

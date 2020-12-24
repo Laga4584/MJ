@@ -7,13 +7,23 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.bestfood.item.CaseInfoItem;
+import com.example.bestfood.item.FoodInfoItem;
+import com.example.bestfood.item.GeoItem;
 import com.google.android.material.tabs.TabLayout;
 
 
 public class CaseActivity extends FragmentActivity {
+    private final String TAG = this.getClass().getSimpleName();
+    public static CaseInfoItem currentItem = null;
+
+    Context context;
+
+
 
     private ViewPager2 mPager;
     private FragmentStateAdapter pagerAdapter;
@@ -27,11 +37,16 @@ public class CaseActivity extends FragmentActivity {
         setContentView(R.layout.activity_case);
 
 
+        int memberSeq = ((App)getApplication()).getMemberSeq();
+
+        //Fragment로 넘길 기본적인 정보를 저장한다.
+        CaseInfoItem infoItem = new CaseInfoItem();
+        infoItem.memberSeq = memberSeq;
 
         //ViewPager2
         mPager = findViewById(R.id.viewpager);
         //Adapter
-        pagerAdapter = new MyAdapter(this, num_page);
+        pagerAdapter = new MyAdapter(this, 8);
         ((MyAdapter) pagerAdapter).setType(MyAdapter.TYPE_HORIZONTAL_VIEWPAGER);
         mPager.setAdapter(pagerAdapter);
         //Indicator

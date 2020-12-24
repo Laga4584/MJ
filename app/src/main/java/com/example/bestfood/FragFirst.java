@@ -16,7 +16,7 @@ public class FragFirst extends Fragment {
               R.layout.frame_1p, container, false);
       ViewPager2 viewPager2 = rootView.findViewById(R.id.viewPager2);
 
-      MyAdapter adapter = new MyAdapter(this, 2);
+      MyAdapter adapter = new MyAdapter(this, 1);
       adapter.setType(MyAdapter.TYPE_VERTICAL_VIEWPAGER);
       viewPager2.setAdapter(adapter);
       viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);

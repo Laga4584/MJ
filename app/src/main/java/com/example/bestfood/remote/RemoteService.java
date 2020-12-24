@@ -1,5 +1,6 @@
 package com.example.bestfood.remote;
 
+import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.KeepItem;
 import com.example.bestfood.item.MemberInfoItem;
@@ -29,6 +30,14 @@ public interface RemoteService {
     String BASE_URL = "http://ec2-54-180-82-94.ap-northeast-2.compute.amazonaws.com:3000";
     String MEMBER_ICON_URL = BASE_URL + "/member/";
     String IMAGE_URL = BASE_URL + "/img/";
+
+    //채팅
+    @GET("/chat/info/{info_seq}")
+    Call<ArrayList<ChatItem>> selectChatInfo(@Path("info/{info_seq}") int chatInfoSeq, @Query("member_seq") int memberSeq, int repairerSeq);
+
+    @POST("/chat/info")
+    Call<String> insertChatInfo(@Body ChatItem ChatItem);
+
 
     //사용자 정보
     @GET("/member/{phone}")
