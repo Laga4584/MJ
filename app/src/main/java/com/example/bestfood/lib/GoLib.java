@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.bestfood.BestFoodInfoActivity;
 import com.example.bestfood.BestFoodRegisterActivity;
+import com.example.bestfood.CaseActivity;
 import com.example.bestfood.ProfileActivity;
 
 /**
@@ -92,6 +93,12 @@ public class GoLib {
     public void goBestFoodInfoActivity(Context context, int infoSeq) {
         Intent intent = new Intent(context, BestFoodInfoActivity.class);
         intent.putExtra(BestFoodInfoActivity.INFO_SEQ, infoSeq);
+        context.startActivity(intent);
+    }
+
+    public void goCaseActivity(Context context, int infoSeq) {
+        Intent intent = new Intent(context, CaseActivity.class);
+        intent.putExtra(CaseActivity.INFO_SEQ, infoSeq);
         context.startActivity(intent);
     }
 }

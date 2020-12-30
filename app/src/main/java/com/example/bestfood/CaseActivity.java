@@ -1,6 +1,7 @@
 package com.example.bestfood;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -9,46 +10,119 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import com.example.bestfood.item.CaseInfoItem;
-import com.example.bestfood.item.FoodInfoItem;
-import com.example.bestfood.item.GeoItem;
+import com.example.bestfood.lib.MyLog;
+import com.example.bestfood.remote.RemoteService;
+import com.example.bestfood.remote.ServiceGenerator;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.Arrays;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CaseActivity extends FragmentActivity {
+    public static final String INFO_SEQ = "INFO_SEQ";
     private final String TAG = this.getClass().getSimpleName();
     public static CaseInfoItem currentItem = null;
 
     Context context;
+    int memberSeq;
+    int caseInfoSeq;
+    public static int iCount;
 
-
-
-    private ViewPager2 mPager;
+    public Boolean clicked = false;
+    public static ViewPager2 mPager;
     private FragmentStateAdapter pagerAdapter;
     private int num_page = 7;
 
     private TabLayout tabLayout;
+    public static CaseInfoItem infoItem;
+
+    String[] status_list = {"견적 요청", "견적 확인", "결제", "발송", "수선", "배송", "후기"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_case);
+        infoItem = new CaseInfoItem();
+        memberSeq = ((App)getApplication()).getMemberSeq();
+
+        caseInfoSeq = getIntent().getIntExtra(INFO_SEQ, 0);
 
 
-        int memberSeq = ((App)getApplication()).getMemberSeq();
+
 
         //Fragment로 넘길 기본적인 정보를 저장한다.
-        CaseInfoItem infoItem = new CaseInfoItem();
-        infoItem.memberSeq = memberSeq;
+        //infoItem = new CaseInfoItem();
+        //infoItem.memberSeq = memberSeq;
+        //MyLog.d(TAG, "infoItem " + infoItem.toString());
 
         //ViewPager2
         mPager = findViewById(R.id.viewpager);
+        selectCaseInfo(caseInfoSeq);
+        //adapterSetup();
+        //settingTabLayout();
+        //mPager.setCurrentItem(iCount);
+
+
+    }
+
+
+
+    /**
+     * 서버에서 맛집 정보를 조회한다.
+     * @param caseInfoSeq 맛집 정보 시퀀스
+     */
+    private void selectCaseInfo(int caseInfoSeq) {
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+        Call<CaseInfoItem> call = remoteService.selectCaseInfo(caseInfoSeq);
+
+        call.enqueue(new Callback<CaseInfoItem>() {
+            @Override
+            public void onResponse(Call<CaseInfoItem> call, Response<CaseInfoItem> response) {
+                CaseInfoItem item = response.body();
+
+                if (response.isSuccessful() && item != null && item.seq > 0) {
+                    infoItem = item;
+                    //infoItem.status = item.status;
+
+                    MyLog.d(TAG, "here item " + item.toString());
+                    iCount = Arrays.asList(status_list).indexOf(infoItem.status);
+
+                    adapterSetup();
+                    //setView();
+                    //loadingText.setVisibility(View.GONE);
+                } else {
+                    MyLog.d(TAG, "here item " + item.toString());
+                    infoItem.memberSeq = memberSeq;
+                    iCount = 0;
+                    //loadingText.setVisibility(View.VISIBLE);
+                    //((TextView) findViewById(R.id.loading_text)).setText(R.string.loading_not);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseInfoItem> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+                MyLog.d(TAG, t.toString());
+            }
+        });
+    }
+
+
+    public void adapterSetup(){
         //Adapter
-        pagerAdapter = new MyAdapter(this, 8);
+        pagerAdapter = new MyAdapter(this, 8, iCount);
         ((MyAdapter) pagerAdapter).setType(MyAdapter.TYPE_HORIZONTAL_VIEWPAGER);
+        ((MyAdapter) pagerAdapter).setInfoItem(infoItem);
         mPager.setAdapter(pagerAdapter);
+
         //Indicator
 
         //ViewPager Setting
@@ -62,7 +136,14 @@ public class CaseActivity extends FragmentActivity {
 
          */
         mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        mPager.setCurrentItem(0);
+        MyLog.d(TAG, "here iCount  " + iCount);
+        //mPager.setCurrentItem(0);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                mPager.setCurrentItem(iCount);
+            }
+        });
         mPager.setOffscreenPageLimit(3);
 
         mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -104,7 +185,6 @@ public class CaseActivity extends FragmentActivity {
         });
 
         settingTabLayout();
-
     }
 
     //tablayout - viewpager 연결
@@ -161,7 +241,19 @@ public class CaseActivity extends FragmentActivity {
 
             }
         });
+
+    }
+    /*
+    public void notifyToSlideToRespectivePage(int pageNumber) {
+
+        clicked = true;
+        MyLog.d("clicked check case", clicked.toString());
+        adapterSetup();
+    }
+    public boolean getClicked(){
+        return clicked;
     }
 
+     */
 }
 

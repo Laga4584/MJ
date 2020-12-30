@@ -1,5 +1,6 @@
 package com.example.bestfood.remote;
 
+import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.KeepItem;
@@ -32,11 +33,24 @@ public interface RemoteService {
     String IMAGE_URL = BASE_URL + "/img/";
 
     //채팅
-    @GET("/chat/info/{info_seq}")
-    Call<ArrayList<ChatItem>> selectChatInfo(@Path("info/{info_seq}") int chatInfoSeq, @Query("member_seq") int memberSeq, int repairerSeq);
+    @GET("/chat/list")
+    Call<ArrayList<ChatItem>> selectChatInfo(@Body ChatItem ChaItem);
 
     @POST("/chat/info")
     Call<String> insertChatInfo(@Body ChatItem ChatItem);
+
+    //케이스
+    @GET("/case/info/{seq}")
+    Call<CaseInfoItem> selectCaseInfo(@Path("seq") int seq);
+
+    @POST("/case/info")
+    Call<String> insertCaseInfo(@Body CaseInfoItem infoItem);
+
+    @GET("/case/list")
+    Call<ArrayList<CaseInfoItem>> listCaseInfo(@Query("member_seq") int memberSeq,
+                                               @Query("current_page") int currentPage);
+    @POST("/case/info/status")
+    Call<String> updateCaseStatus(@Query("seq") int seq, @Field("status") String status);
 
 
     //사용자 정보

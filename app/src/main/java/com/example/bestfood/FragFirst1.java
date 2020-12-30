@@ -1,7 +1,6 @@
 package com.example.bestfood;
 
 import android.content.Context;
-import android.location.Address;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,14 +17,18 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.bestfood.item.CaseInfoItem;
-import com.example.bestfood.item.FoodInfoItem;
-import com.example.bestfood.item.GeoItem;
-import com.example.bestfood.lib.GeoLib;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.StringLib;
+import com.example.bestfood.remote.RemoteService;
+import com.example.bestfood.remote.ServiceGenerator;
 
 import org.parceler.Parcels;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class FragFirst1 extends Fragment implements View.OnClickListener{
@@ -34,12 +37,12 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
 
     Context context;
     CaseInfoItem infoItem;
-    Address address;
 
     Spinner spinner1;
     Spinner spinner2;
     EditText descriptionEdit;
-    TextView currentLength;
+
+    Button nextButton;
 
     String[] services = {"수선", "염색"};
     String[] products = {"핸드백", "지갑"};
@@ -49,11 +52,11 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
      * @param infoItem 맛집 정보를 저장하는 객체
      * @return BestFoodRegisterInputFragment 인스턴스
      */
-    public static BestFoodRegisterInputFragment newInstance(FoodInfoItem infoItem) {
+    public static FragFirst1 newInstance(CaseInfoItem infoItem) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(INFO_ITEM, Parcels.wrap(infoItem));
 
-        BestFoodRegisterInputFragment fragment = new BestFoodRegisterInputFragment();
+        FragFirst1 fragment = new FragFirst1();
         fragment.setArguments(bundle);
 
         return fragment;
@@ -67,6 +70,8 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //infoItem = new CaseInfoItem();
+
         if (getArguments() != null) {
             infoItem = Parcels.unwrap(getArguments().getParcelable(INFO_ITEM));
             if (infoItem.seq != 0) {
@@ -74,6 +79,8 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
             }
             MyLog.d(TAG, "infoItem " + infoItem);
         }
+
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,7 +147,7 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                currentLength.setText(String.valueOf(s.length()));
+                infoItem.description = descriptionEdit.getText().toString();
             }
 
             @Override
@@ -148,19 +155,24 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
             }
         });
 
-        Button cameraButton = (Button) view.findViewById(R.id.camera_button);
-        cameraButton.setOnClickListener(this);
 
-        Button nextButton = (Button) view.findViewById(R.id.button);
-        nextButton.setOnClickListener(this);
+
+
+        //CaseActivity.currentItem = infoItem;
+        FragFirst.currentItem = infoItem;
+
+        //nextButton = (Button) view.findViewById(R.id.button);
+        //nextButton.setOnClickListener(this);
     }
+
+
     /**
      * 클릭이벤트를 처리한다.
      * @param v 클릭한 뷰에 대한 정보
      */
     @Override
     public void onClick(View v) {
-        infoItem.description = descriptionEdit.getText().toString();
+
         MyLog.d(TAG, "onClick imageItem " + infoItem);
 
         if (v.getId() == R.id.input4) {
@@ -173,18 +185,58 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
             /*
             MainFragment mainFragment = (MainFragment) getFragmentManager().findFragmentById(R.id.ll_fragment);
             mainFragment.changeFragmentTextView("호호호");
-*/
 
+*/
+            //((CaseActivity)getActivity()).notifyToSlideToRespectivePage(0);
+
+            //insertCaseInfo();
+           // MyLog.d(TAG, "button clicked");
 
 
         }
     }
+
     /**
-     * 프래그먼트로 이동한다.
+     * 사용자가 입력한 정보를 서버에 저장한다.
      */
-    private void goNextPage() {
-        GoLib.getInstance().goFragmentBack(getActivity().getSupportFragmentManager(),
-                R.id.content_main, BestFoodRegisterImageFragment.newInstance(infoItem.seq));
+    private void insertCaseInfo() {
+        MyLog.d(TAG, infoItem.toString());
+
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        Call<String> call = remoteService.insertCaseInfo(infoItem);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    int seq = 0;
+                    String seqString = response.body();
+
+                    try {
+                        seq = Integer.parseInt(seqString);
+                    } catch (Exception e) {
+                        seq = 0;
+                    }
+
+                    if (seq == 0) {
+                        //등록 실패
+                    } else {
+                        infoItem.seq = seq;
+                        //goNextPage();
+                    }
+                } else { // 등록 실패
+                    int statusCode = response.code();
+                    ResponseBody errorBody = response.errorBody();
+                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+            }
+        });
     }
+
 
 }

@@ -10,6 +10,7 @@ public class ChatItem {
     public int seq;
     @SerializedName("member_seq") public int memberSeq;
     @SerializedName("repairer_seq") public int repairerSeq;
+    public Boolean sending;
     public String message;
     @SerializedName("reg_date") public String regDate;
 
@@ -19,6 +20,7 @@ public class ChatItem {
                 "seq=" + seq +
                 ", memberSeq=" + memberSeq +
                 ", repairerSeq=" + repairerSeq +
+                ", sending=" + sending +
                 ", message=" + message +
                 ", regDate='" + regDate + '\'' +
                 '}';

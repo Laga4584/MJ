@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.bestfood.Constant;
 import com.example.bestfood.App;
 import com.example.bestfood.R;
+import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.MemberInfoItem;
 import com.example.bestfood.lib.DialogLib;
@@ -33,7 +34,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
 
     private Context context;
     private int resource;
-    private ArrayList<FoodInfoItem> itemList;
+    private ArrayList<CaseInfoItem> itemList;
     private MemberInfoItem memberInfoItem;
 
     /**
@@ -42,7 +43,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
      * @param resource 아이템을 보여주기 위해 사용할 리소스 아이디
      * @param itemList 아이템 리스트
      */
-    public InfoListAdapter(Context context, int resource, ArrayList<FoodInfoItem> itemList) {
+    public InfoListAdapter(Context context, int resource, ArrayList<CaseInfoItem> itemList) {
         this.context = context;
         this.resource = resource;
         this.itemList = itemList;
@@ -54,9 +55,9 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
      * 특정 아이템의 변경사항을 적용하기 위해 기본 아이템을 새로운 아이템으로 변경한다.
      * @param newItem 새로운 아이템
      */
-    public void setItem(FoodInfoItem newItem) {
+    public void setItem(CaseInfoItem newItem) {
         for (int i=0; i < itemList.size(); i++) {
-            FoodInfoItem item = itemList.get(i);
+            CaseInfoItem item = itemList.get(i);
 
             if (item.seq == newItem.seq) {
                 itemList.set(i, newItem);
@@ -70,7 +71,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
      * 현재 아이템 리스트에 새로운 아이템 리스트를 추가한다.
      * @param itemList 새로운 아이템 리스트
      */
-    public void addItemList(ArrayList<FoodInfoItem> itemList) {
+    public void addItemList(ArrayList<CaseInfoItem> itemList) {
         this.itemList.addAll(itemList);
         notifyDataSetChanged();
     }
@@ -83,7 +84,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
     private void changeItemKeep(int seq, boolean keep) {
         for (int i=0; i < itemList.size(); i++) {
             if (itemList.get(i).seq == seq) {
-                itemList.get(i).isKeep = keep;
+                //itemList.get(i).isKeep = keep;
                 notifyItemChanged(i);
                 break;
             }
@@ -119,16 +120,16 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final FoodInfoItem item = itemList.get(position);
+        final CaseInfoItem item = itemList.get(position);
         MyLog.d(TAG, "getView " + item);
-
+        /*
         if (item.isKeep) {
             holder.keep.setImageResource(R.drawable.ic_keep_on);
         } else {
             holder.keep.setImageResource(R.drawable.ic_keep_off);
         }
-
-        holder.name.setText(item.name);
+        */
+        holder.name.setText(item.status);
         holder.description.setText(StringLib.getInstance().getSubString(context,
                 item.description, Constant.MAX_LENGTH_DESCRIPTION));
 
@@ -137,10 +138,10 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GoLib.getInstance().goBestFoodInfoActivity(context, item.seq);
+                GoLib.getInstance().goCaseActivity(context, item.seq);
             }
         });
-
+        /*
         holder.keep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,6 +154,8 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
                 }
             }
         });
+
+         */
     }
 
     /**

@@ -12,21 +12,39 @@ public class CaseInfoItem {
     public String service;
     public String product;
     public String description;
+    public String method;
+    public String price;
+    public String time;
+    public String address;
+    public String address_detail;
+    public String review;
+    public String status;
+    public String status2;
     @SerializedName("reg_date") public String regDate;
     @SerializedName("mod_date") public String modDate;
     @SerializedName("image_filename") public String imageFilename;
+    @SerializedName("image_memo") public String imageMemo;
 
     @Override
     public String toString() {
-        return "FoodInfoItem{" +
+        return "CaseInfoItem{" +
                 "seq=" + seq +
                 ", memberSeq=" + memberSeq +
-                ", name='" + service + '\'' +
-                ", tel='" + product + '\'' +
+                ", service='" + service + '\'' +
+                ", product='" + product + '\'' +
                 ", description='" + description + '\'' +
+                ", method='" + method + '\'' +
+                ", price='" + price + '\'' +
+                ", time='" + time + '\'' +
+                ", address='" + address + '\'' +
+                ", address_detail='" + address_detail + '\'' +
+                ", review='" + review + '\'' +
+                ", status='" + status + '\'' +
+                ", status2='" + status2 + '\'' +
                 ", regDate='" + regDate + '\'' +
                 ", modDate='" + modDate + '\'' +
-                ", imageFilename='" + imageFilename + '\'' +
+                ", image_filename='" + imageFilename + '\'' +
+                ", image_memo='" + imageMemo + '\'' +
                 '}';
     }
 }

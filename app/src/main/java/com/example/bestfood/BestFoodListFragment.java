@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.bestfood.item.CaseInfoItem;
 import com.google.android.gms.maps.model.LatLng;
 import com.example.bestfood.adapter.InfoListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
@@ -96,7 +97,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         super.onResume();
 
         App app = ((App) getActivity().getApplication());
-        FoodInfoItem currentInfoItem = app.getFoodInfoItem();
+        CaseInfoItem currentInfoItem = app.getCaseInfoItem();
 
         if (infoListAdapter != null && currentInfoItem != null) {
             infoListAdapter.setItem(currentInfoItem);
@@ -140,11 +141,11 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
                 if (i == 0) {
                     orderType = Constant.ORDER_TYPE_METER;
                     setRecyclerView();
-                    listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, 0);
+                    listInfo(memberSeq, 0);
                 }else {
                     orderType = Constant.ORDER_TYPE_RECENT;
                     setRecyclerView();
-                    listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, 0);
+                    listInfo(memberSeq, 0);
                 }
 
             }
@@ -156,7 +157,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         });
         setRecyclerView();
 
-        listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, 0);
+        listInfo(memberSeq, 0);
     }
 
 
@@ -178,13 +179,13 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         setLayoutManager(listTypeValue);
 
         infoListAdapter = new InfoListAdapter(context,
-                R.layout.row_bestfood_list, new ArrayList<FoodInfoItem>());
+                R.layout.row_bestfood_list, new ArrayList<CaseInfoItem>());
         bestFoodList.setAdapter(infoListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, page);
+                listInfo(memberSeq, page);
             }
         };
         bestFoodList.addOnScrollListener(scrollListener);
@@ -193,20 +194,17 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
     /**
      * 서버에서 맛집 정보를 조회한다.
      * @param memberSeq 사용자 시퀀스
-     * @param userLatLng 사용자 위도 경도 객체
-     * @param orderType 맛집 정보 정렬 순서
      * @param currentPage 현재 페이지
      */
-    private void listInfo(int memberSeq, LatLng userLatLng, String orderType, final int currentPage) {
+    private void listInfo(int memberSeq, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<FoodInfoItem>> call = remoteService.listFoodInfo(memberSeq, userLatLng.latitude,
-                userLatLng.longitude, orderType, currentPage);
-        call.enqueue(new Callback<ArrayList<FoodInfoItem>>() {
+        Call<ArrayList<CaseInfoItem>> call = remoteService.listCaseInfo(memberSeq, currentPage);
+        call.enqueue(new Callback<ArrayList<CaseInfoItem>>() {
             @Override
-            public void onResponse(Call<ArrayList<FoodInfoItem>> call,
-                                   Response<ArrayList<FoodInfoItem>> response) {
-                ArrayList<FoodInfoItem> list = response.body();
+            public void onResponse(Call<ArrayList<CaseInfoItem>> call,
+                                   Response<ArrayList<CaseInfoItem>> response) {
+                ArrayList<CaseInfoItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
                     infoListAdapter.addItemList(list);
@@ -220,7 +218,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
             }
 
             @Override
-            public void onFailure(Call<ArrayList<FoodInfoItem>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<CaseInfoItem>> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }

@@ -3,6 +3,7 @@ package com.example.bestfood;
 import android.app.Application;
 import android.os.StrictMode;
 
+import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.MemberInfoItem;
 
@@ -22,6 +23,7 @@ import com.kakao.auth.KakaoSDK;
 public class App extends Application {
     private MemberInfoItem memberInfoItem;
     private FoodInfoItem foodInfoItem;
+    private CaseInfoItem caseInfoItem;
 
     private static volatile App instance = null;
 
@@ -134,8 +136,15 @@ public class App extends Application {
     public void setFoodInfoItem(FoodInfoItem foodInfoItem) {
         this.foodInfoItem = foodInfoItem;
     }
+    public void setCaseInfoItem(CaseInfoItem caseInfoItem) {
+        this.caseInfoItem = caseInfoItem;
+    }
 
     public FoodInfoItem getFoodInfoItem() {
         return foodInfoItem;
+    }
+
+    public CaseInfoItem getCaseInfoItem() {
+        return caseInfoItem;
     }
 }

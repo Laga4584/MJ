@@ -100,19 +100,14 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:autofillHints="hint"
-            android:inputType="text" />
+             />
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"
             />
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:text="견적 요청하기" />
+
+
 
 
     </LinearLayout>
