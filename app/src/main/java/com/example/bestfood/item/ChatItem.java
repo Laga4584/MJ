@@ -8,9 +8,9 @@ import com.google.gson.annotations.SerializedName;
 @org.parceler.Parcel
 public class ChatItem {
     public int seq;
-    @SerializedName("member_seq") public int memberSeq;
+    @SerializedName("user_seq") public int userSeq;
     @SerializedName("repairer_seq") public int repairerSeq;
-    public Boolean sending;
+    public int sending;
     public String message;
     @SerializedName("reg_date") public String regDate;
 
@@ -18,7 +18,7 @@ public class ChatItem {
     public String toString() {
         return "FoodInfoItem{" +
                 "seq=" + seq +
-                ", memberSeq=" + memberSeq +
+                ", userSeq=" + userSeq +
                 ", repairerSeq=" + repairerSeq +
                 ", sending=" + sending +
                 ", message=" + message +

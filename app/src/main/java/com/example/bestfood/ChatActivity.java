@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.bestfood.adapter.ChatMessageAdapter;
+import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
@@ -28,13 +29,15 @@ import retrofit2.Response;
 public class ChatActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
 
-    ArrayList<ChatItem> rMessageList;
+    public static ArrayList<ChatItem> rMessageList = new ArrayList<ChatItem>();
 
     int currentMemberSeq;
     int currentRepairerSeq;
 
     TextView strRepairerName;
     RecyclerView message_list;
+    RecyclerView.LayoutManager layoutManager;
+    ChatMessageAdapter chatMessageAdapter;
     EditText input_message;
     Button btSend;
 
@@ -45,44 +48,23 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        //rMessageList = new ArrayList<ChatItem>();
         strRepairerName = (TextView) findViewById(R.id.show_repairer_name);
         message_list = (RecyclerView) findViewById(R.id.message_list);
         input_message = (EditText) findViewById(R.id.input_message);
         btSend = (Button) findViewById(R.id.Send);
 
-        strRepairerName.setText(((App)getApplication()).getCaseInfoItem().service);
+        strRepairerName.setText("이름");
         strmessage = input_message.getText().toString();
 
-        currentMemberSeq = ((App)getApplication()).getMemberSeq();
-        currentRepairerSeq = ((App)getApplication()).getCaseInfoItem().memberSeq;
+        currentMemberSeq = 1;
+        currentRepairerSeq = 1;
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        message_list.setLayoutManager(layoutManager);
 
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-
-        Call<ArrayList<ChatItem>> call = remoteService.selectChatInfo(currentMemberSeq, currentRepairerSeq);
-
-        call.enqueue(new Callback<ArrayList<ChatItem>>() {
-            @Override
-            public void onResponse(Call<ArrayList<ChatItem>> call, Response<ArrayList<ChatItem>> response) {
-                rMessageList = response.body();
-
-                if (response.isSuccessful()) {
-                    MyLog.d(TAG, "here item " + rMessageList.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<ChatItem>> call, Throwable t) {
-                MyLog.d(TAG, "Fail to get " + t.toString());
-            }
-        });
+        getList();
 
         getChatItem();
 
-        ChatMessageAdapter chatMessageAdapter = new ChatMessageAdapter(getApplicationContext(), rMessageList);
-        message_list.setAdapter(chatMessageAdapter);
 
         btSend.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -97,15 +79,50 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    private void getList(){
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        Call<ArrayList<ChatItem>> call = remoteService.selectChatInfo(currentMemberSeq, currentRepairerSeq);
+
+        call.enqueue(new Callback<ArrayList<ChatItem>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ChatItem>> call, Response<ArrayList<ChatItem>> response)
+            {
+                ArrayList<ChatItem> list = response.body();
+
+                if (response.isSuccessful()) {
+                    MyLog.d(TAG, "here item " + list.toString());
+                    rMessageList = list;
+                    setAdapter();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ChatItem>> call, Throwable t) {
+                MyLog.d(TAG, "Fail to get " + t.toString());
+            }
+        });
+    }
+
+    private void setAdapter(){
+        MyLog.d(TAG, "here item " + rMessageList.toString());
+        layoutManager = new LinearLayoutManager(this);
+        message_list.setLayoutManager(layoutManager);
+
+        chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatItem>());
+        message_list.setAdapter(chatMessageAdapter);
+        chatMessageAdapter.addItemList(rMessageList);
+    }
+
     private ChatItem getChatItem() {
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd/hh/mm/ss");
 
         ChatItem item = new ChatItem();
-        item.memberSeq = ((App)getApplication()).getMemberSeq();
-        item.repairerSeq = ((App)getApplication()).getCaseInfoItem().memberSeq;
-        item.sending = true;
+        item.userSeq = 1;
+        item.repairerSeq = 1;
+        item.sending = 1;
         item.message = strmessage;
         item.regDate = simpleDate.format(mDate);
 

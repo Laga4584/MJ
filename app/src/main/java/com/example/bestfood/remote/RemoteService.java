@@ -50,7 +50,7 @@ public interface RemoteService {
      */
 
     @GET("/chat/list")
-    Call<ArrayList<ChatItem>> selectChatInfo(@Query("member_seq") int memberSeq,
+    Call<ArrayList<ChatItem>> selectChatInfo(@Query("user_seq") int userSeq,
                                              @Query("repairer_seq") int repairerSeq);
 
 
