@@ -131,6 +131,7 @@ public class ChatActivity extends AppCompatActivity {
         chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatItem>());
         message_list.setAdapter(chatMessageAdapter);
         chatMessageAdapter.addItemList(rMessageList);
+        message_list.scrollToPosition(rMessageList.size()+1);
     }
 
     private ChatItem getChatItem() {
