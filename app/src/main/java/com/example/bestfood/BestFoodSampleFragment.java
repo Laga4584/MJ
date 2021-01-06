@@ -3,24 +3,16 @@ package com.example.bestfood;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.bestfood.item.CaseInfoItem;
-import com.google.android.gms.maps.model.LatLng;
-import com.example.bestfood.adapter.InfoListAdapter;
+import com.example.bestfood.item.SampleItem;
+import com.example.bestfood.adapter.SampleListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
-import com.example.bestfood.item.FoodInfoItem;
-import com.example.bestfood.item.GeoItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
@@ -51,7 +43,7 @@ public class BestFoodSampleFragment extends Fragment implements View.OnClickList
 
     //ImageView listType;
 
-    InfoListAdapter infoListAdapter;
+    SampleListAdapter infoListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
@@ -64,8 +56,8 @@ public class BestFoodSampleFragment extends Fragment implements View.OnClickList
      * BestFoodListFragment 인스턴스를 생성한다.
      * @return BestFoodListFragment 인스턴스
      */
-    public static BestFoodListFragment newInstance() {
-        BestFoodListFragment f = new BestFoodListFragment();
+    public static BestFoodSampleFragment newInstance() {
+        BestFoodSampleFragment f = new BestFoodSampleFragment();
         return f;
     }
 
@@ -95,14 +87,17 @@ public class BestFoodSampleFragment extends Fragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
-
+        /*
         App app = ((App) getActivity().getApplication());
-        CaseInfoItem currentInfoItem = app.getCaseInfoItem();
+        SampleItem currentInfoItem = app.getSampleItem();
 
         if (infoListAdapter != null && currentInfoItem != null) {
             infoListAdapter.setItem(currentInfoItem);
-            app.setCaseInfoItem(null);
+            app.setSampleItem(null);
+
         }
+
+         */
     }
 
     /**
@@ -153,8 +148,8 @@ public class BestFoodSampleFragment extends Fragment implements View.OnClickList
     private void setRecyclerView() {
         setLayoutManager(listTypeValue);
 
-        infoListAdapter = new InfoListAdapter(context,
-                R.layout.row_bestfood_list, new ArrayList<CaseInfoItem>());
+        infoListAdapter = new SampleListAdapter(context,
+                R.layout.row_bestfood_list, new ArrayList<SampleItem>());
         bestFoodList.setAdapter(infoListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
@@ -174,12 +169,12 @@ public class BestFoodSampleFragment extends Fragment implements View.OnClickList
     private void listInfo(int memberSeq, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<CaseInfoItem>> call = remoteService.listCaseInfo(memberSeq, currentPage);
-        call.enqueue(new Callback<ArrayList<CaseInfoItem>>() {
+        Call<ArrayList<SampleItem>> call = remoteService.listSampleInfo(currentPage);
+        call.enqueue(new Callback<ArrayList<SampleItem>>() {
             @Override
-            public void onResponse(Call<ArrayList<CaseInfoItem>> call,
-                                   Response<ArrayList<CaseInfoItem>> response) {
-                ArrayList<CaseInfoItem> list = response.body();
+            public void onResponse(Call<ArrayList<SampleItem>> call,
+                                   Response<ArrayList<SampleItem>> response) {
+                ArrayList<SampleItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
                     infoListAdapter.addItemList(list);
@@ -193,7 +188,7 @@ public class BestFoodSampleFragment extends Fragment implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<ArrayList<CaseInfoItem>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<SampleItem>> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }

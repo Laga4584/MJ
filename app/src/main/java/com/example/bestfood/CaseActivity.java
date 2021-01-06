@@ -21,6 +21,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.Arrays;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,7 +33,7 @@ public class CaseActivity extends FragmentActivity {
     public static CaseInfoItem currentItem = null;
 
     Context context;
-    int memberSeq;
+    int userSeq;
     int caseInfoSeq;
     public static int iCount;
 
@@ -51,7 +52,7 @@ public class CaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_case);
         infoItem = new CaseInfoItem();
-        memberSeq = ((App)getApplication()).getMemberSeq();
+        userSeq = ((App)getApplication()).getMemberSeq();
 
         caseInfoSeq = getIntent().getIntExtra(INFO_SEQ, 0);
 
@@ -60,7 +61,7 @@ public class CaseActivity extends FragmentActivity {
 
         //Fragment로 넘길 기본적인 정보를 저장한다.
         //infoItem = new CaseInfoItem();
-        //infoItem.memberSeq = memberSeq;
+        //infoItem.userSeq = userSeq;
         //MyLog.d(TAG, "infoItem " + infoItem.toString());
 
         //ViewPager2
@@ -99,9 +100,10 @@ public class CaseActivity extends FragmentActivity {
                     //setView();
                     //loadingText.setVisibility(View.GONE);
                 } else {
-                    MyLog.d(TAG, "here item " + item.toString());
-                    infoItem.memberSeq = memberSeq;
+                    //MyLog.d(TAG, "here item " + item.toString());
+                    infoItem.userSeq = userSeq;
                     iCount = 0;
+                    adapterSetup();
                     //loadingText.setVisibility(View.VISIBLE);
                     //((TextView) findViewById(R.id.loading_text)).setText(R.string.loading_not);
                 }

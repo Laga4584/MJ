@@ -49,6 +49,8 @@
         <activity android:name=".BestFoodInfoActivity" />
         <activity android:name=".BestFoodRegisterActivity" />
         <activity android:name=".CaseActivity"/>
+        <activity android:name=".ImageActivity"/>
+        <activity android:name=".SampleActivity"/>
         <activity android:name=".AddressActivity"/>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ProfileIconActivity" />

@@ -10,7 +10,10 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bestfood.lib.RemoteLib;
+
 import java.util.Arrays;
+import java.util.Objects;
 
 
 public class FragSixth extends Fragment {
@@ -42,7 +45,7 @@ public class FragSixth extends Fragment {
         nextButton = rootView.findViewById(R.id.button2);
 
         int state = Arrays.asList(status_list).indexOf(CaseActivity.infoItem.status2);
-        String address = CaseActivity.infoItem.address + " " + CaseActivity.infoItem.address_detail;
+        String address = CaseActivity.infoItem.address + " " + CaseActivity.infoItem.addressDetail;
 
         if (state == 0){
             stateText.setText("배송 중입니다.");
@@ -56,6 +59,7 @@ public class FragSixth extends Fragment {
                 @Override
                 public void onClick(View view) {
                     CaseActivity.mPager.setCurrentItem(3);
+                    RemoteLib.getInstance().updateCaseStatus(3, 0);
                 }
             });
 
@@ -63,12 +67,11 @@ public class FragSixth extends Fragment {
                 @Override
                 public void onClick(View view) {
                     CaseActivity.iCount = 6;
-                    ((CaseActivity)getActivity()).adapterSetup();
-                    CaseActivity.mPager.setCurrentItem(6);
+                    (Objects.requireNonNull((CaseActivity)getActivity())).adapterSetup();
+                    RemoteLib.getInstance().updateCaseStatus(6, 0);
                 }
             });
         }
-
 
         return rootView;
     }

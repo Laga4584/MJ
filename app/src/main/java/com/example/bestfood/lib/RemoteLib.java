@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.example.bestfood.CaseActivity;
 import com.example.bestfood.R;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
@@ -34,6 +35,7 @@ public class RemoteLib {
     public static final String TAG = RemoteLib.class.getSimpleName();
 
     private volatile static RemoteLib instance;
+    String[] status_list_1 = {"견적 요청", "견적 확인", "결제", "발송", "수선", "배송", "후기"};
 
     public static RemoteLib getInstance() {
         if (instance == null) {
@@ -131,6 +133,46 @@ public class RemoteLib {
     /**
      * 맛집 이미지를 서버에 업로드한다.
      * @param infoSeq 맛집 정보 일련번호
+     * @param label 이미지 설명
+     * @param file 파일 객체
+     * @param handler 처리 결과를 응답할 핸들러
+     */
+    public void uploadCaseImage(int infoSeq, String label, File file, final Handler handler) {
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        RequestBody requestFile =
+                RequestBody.create(file, MediaType.parse("multipart/form-data"));
+
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+
+        RequestBody infoSeqBody =
+                RequestBody.create(
+                         "" + infoSeq, MediaType.parse("multipart/form-data"));
+        RequestBody labelBody =
+                RequestBody.create(
+                        label, MediaType.parse("multipart/form-data"));
+
+        Call<ResponseBody> call =
+                remoteService.uploadCaseImage(infoSeqBody, labelBody, body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call,
+                                   Response<ResponseBody> response) {
+                MyLog.d(TAG, "uploadCaseImage success");
+                handler.sendEmptyMessage(0);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                MyLog.e(TAG, "uploadCaseImage fail");
+            }
+        });
+    }
+
+    /**
+     * 맛집 이미지를 서버에 업로드한다.
+     * @param infoSeq 맛집 정보 일련번호
      * @param imageMemo 이미지 설명
      * @param file 파일 객체
      * @param handler 처리 결과를 응답할 핸들러
@@ -146,7 +188,7 @@ public class RemoteLib {
 
         RequestBody infoSeqBody =
                 RequestBody.create(
-                         "" + infoSeq, MediaType.parse("multipart/form-data"));
+                        "" + infoSeq, MediaType.parse("multipart/form-data"));
         RequestBody imageMemoBody =
                 RequestBody.create(
                         imageMemo, MediaType.parse("multipart/form-data"));
@@ -164,6 +206,87 @@ public class RemoteLib {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 MyLog.e(TAG, "uploadFoodImage fail");
+            }
+        });
+    }
+
+    public void updateCaseStatus(int index1, int index2){
+        final String status1 = status_list_1[index1];
+        final String status2;
+        if (index2 == 1) status2 = "배송 대기";
+        else status2 = CaseActivity.infoItem.status2;
+
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        Call<String> call = remoteService.updateCaseStatus(CaseActivity.infoItem.seq, status1, status2);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    int seq = 0;
+                    String seqString = response.body();
+
+                    try {
+                        seq = Integer.parseInt(seqString);
+                    } catch (Exception e) {
+                        seq = 0;
+                    }
+
+                    if (seq == 0) {
+                        //등록 실패
+                    } else {
+                        CaseActivity.infoItem.seq = seq;
+                        CaseActivity.infoItem.status = status1;
+                        CaseActivity.infoItem.status2 = status2;
+                        //goNextPage();
+                    }
+                } else { // 등록 실패
+                    int statusCode = response.code();
+                    ResponseBody errorBody = response.errorBody();
+                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+            }
+        });
+    }
+
+    public void uploadCaseDot(int seq, String dot){
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        Call<String> call = remoteService.uploadCaseDot(seq, dot);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    int seq = 0;
+                    String seqString = response.body();
+
+                    try {
+                        seq = Integer.parseInt(seqString);
+                    } catch (Exception e) {
+                        seq = 0;
+                    }
+
+                    if (seq == 0) {
+                        //등록 실패
+                    } else {
+                        //CaseActivity.infoItem.seq = seq;
+                        //goNextPage();
+                    }
+                } else { // 등록 실패
+                    int statusCode = response.code();
+                    ResponseBody errorBody = response.errorBody();
+                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
             }
         });
     }

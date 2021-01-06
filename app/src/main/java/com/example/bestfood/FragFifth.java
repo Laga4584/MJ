@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 public class FragFifth extends Fragment {
     ImageView repairImage;
     TextView repairText;
+    TextView stateText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,9 +27,11 @@ public class FragFifth extends Fragment {
 
         repairImage = rootView.findViewById(R.id.image);
         repairText = rootView.findViewById(R.id.text2);
+        stateText = rootView.findViewById(R.id.text3);
 
-        setImage(repairImage, CaseActivity.infoItem.imageFilename);
-        repairText.setText(CaseActivity.infoItem.imageMemo);
+        setImage(repairImage, CaseActivity.infoItem.repairImageFilename);
+        repairText.setText(CaseActivity.infoItem.repairDescription);
+        stateText.setText(CaseActivity.infoItem.repairState);
         return rootView;
     }
 

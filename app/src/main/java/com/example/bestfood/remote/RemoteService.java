@@ -5,6 +5,7 @@ import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.KeepItem;
 import com.example.bestfood.item.MemberInfoItem;
+import com.example.bestfood.item.SampleItem;
 
 import java.util.ArrayList;
 
@@ -31,10 +32,19 @@ public interface RemoteService {
     String BASE_URL = "http://ec2-54-180-82-94.ap-northeast-2.compute.amazonaws.com:3000";
     String MEMBER_ICON_URL = BASE_URL + "/member/";
     String IMAGE_URL = BASE_URL + "/img/";
+    String SAMPLE_URL = BASE_URL + "/sample/";
+
+    //샘플
+    @GET("/sample/info/{seq}")
+    Call<SampleItem> selectSampleInfo(@Path("seq") int seq);
+
+    @GET("/sample/list")
+    Call<ArrayList<SampleItem>> listSampleInfo(@Query("current_page") int currentPage);
 
     //채팅
     @GET("/chat/list")
-    Call<ArrayList<ChatItem>> selectChatInfo(@Body ChatItem ChaItem);
+    Call<ArrayList<ChatItem>> selectChatInfo(@Query("user_seq") int memberSeq,
+                                             @Query("repairer_seq") int repairerSeq);
 
     @POST("/chat/info")
     Call<String> insertChatInfo(@Body ChatItem ChatItem);
@@ -47,11 +57,21 @@ public interface RemoteService {
     Call<String> insertCaseInfo(@Body CaseInfoItem infoItem);
 
     @GET("/case/list")
-    Call<ArrayList<CaseInfoItem>> listCaseInfo(@Query("member_seq") int memberSeq,
+    Call<ArrayList<CaseInfoItem>> listCaseInfo(@Query("user_seq") int memberSeq,
                                                @Query("current_page") int currentPage);
-    @POST("/case/info/status")
-    Call<String> updateCaseStatus(@Query("seq") int seq, @Field("status") String status);
 
+    @POST("/case/status")
+    Call<String> updateCaseStatus(@Query("seq") int seq, @Query("status") String status, @Query("status2") String status2);
+
+    @Multipart
+    @POST("/case/info/image")
+    Call<ResponseBody> uploadCaseImage(@Part("info_seq") RequestBody infoSeq,
+                                       @Part("label") RequestBody label,
+                                       @Part MultipartBody.Part file);
+
+    @POST("/case/info/dot")
+    Call<String> uploadCaseDot(@Query("seq") int seq,
+                                     @Query("dot") String dot);
 
     //사용자 정보
     @GET("/member/{phone}")

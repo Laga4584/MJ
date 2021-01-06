@@ -50,12 +50,13 @@ public class MyAdapter extends FragmentStateAdapter {
 
         } else {
             if (mCount == 1) {
-                if (position == 0) {
-                    FragFirst1 frag = new FragFirst1();
-                    frag = FragFirst1.newInstance(infoItem);
-                    return frag;
-                }
-                else return new FragFirst2();
+                if (iCount<2) {
+                    if (position == 0) {
+                        FragFirst1 frag = new FragFirst1();
+                        frag = FragFirst1.newInstance(infoItem);
+                        return frag;
+                    } else return new FragFirst2();
+                }else return new FragFirst2();
             } else if (mCount == 4) {
                 if (iCount<2) {
                     if (position == 0) return new FragFourth1();

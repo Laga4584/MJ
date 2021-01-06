@@ -66,7 +66,7 @@ public class FragFourth1 extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                infoItem.address_detail = addressEdit.getText().toString();
+                infoItem.addressDetail = addressEdit.getText().toString();
             }
 
             @Override

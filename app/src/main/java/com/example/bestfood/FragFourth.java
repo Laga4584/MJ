@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.lib.MyLog;
+import com.example.bestfood.lib.RemoteLib;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 
@@ -104,7 +105,8 @@ public class FragFourth extends Fragment {
                     } else {
                         infoItem.seq = seq;
                         CaseActivity.infoItem.address = infoItem.address;
-                        CaseActivity.infoItem.address_detail = infoItem.address_detail;
+                        CaseActivity.infoItem.addressDetail = infoItem.addressDetail;
+                        RemoteLib.getInstance().updateCaseStatus(4, 1);
                         //goNextPage();
                     }
                 } else { // 등록 실패

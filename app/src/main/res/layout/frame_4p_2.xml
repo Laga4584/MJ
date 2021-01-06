@@ -41,6 +41,26 @@
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold" />
+        <TextView
+            android:id="@+id/text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="설명"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/text4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="금액"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="0dp"

@@ -9,7 +9,7 @@ public class ImageItem {
     @SerializedName("seq") public int seq;
     @SerializedName("info_seq") public int infoSeq;
     @SerializedName("file_name") public String fileName;
-    @SerializedName("image_memo") public String imageMemo;
+    @SerializedName("label") public String label;
     @SerializedName("reg_date") public String regDate;
 
     @Override
@@ -18,7 +18,7 @@ public class ImageItem {
                 "seq=" + seq +
                 ", infoSeq=" + infoSeq +
                 ", fileName='" + fileName + '\'' +
-                ", imageMemo='" + imageMemo + '\'' +
+                ", label='" + label + '\'' +
                 ", regDate='" + regDate + '\'' +
                 '}';
     }

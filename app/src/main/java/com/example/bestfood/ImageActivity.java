@@ -1,13 +1,12 @@
 package com.example.bestfood;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,14 +14,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
-import androidx.fragment.app.Fragment;
-import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.Fragment;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bestfood.custom.CustomView;
 import com.example.bestfood.item.ImageItem;
@@ -34,20 +33,15 @@ import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.lib.RemoteLib;
 import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import com.squareup.picasso.Transformation;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 
-/**
- * 맛집 이미지를 등록하는 액티비티
- */
-public class BestFoodRegisterImageFragment extends Fragment implements View.OnClickListener {
+public class ImageActivity extends AppCompatActivity implements View.OnClickListener{
     private final String TAG = this.getClass().getSimpleName();
     public static final String INFO_SEQ = "INFO_SEQ";
 
@@ -60,67 +54,37 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
     File imageFile;
     String imageFilename;
 
-    EditText imageMemoEdit;
+    //EditText imageMemoEdit;
     ImageView infoImage;
-    //CustomView infoImage;
-
+    CustomView pointImage;
+    TextView descriptionText;
     ImageItem imageItem;
 
+    Button prevButton;
+    Button nextButton;
+    Button completeButton;
+
     boolean isSavingImage = false;
+    ArrayList position_list_X;
+    ArrayList position_list_Y;
+    int nextCount = 0;
 
+    @SuppressLint("ClickableViewAccessibility")
 
-    /**
-     * FoodInfoItem 객체를 인자로 저장하는
-     * BestFoodRegisterInputFragment 인스턴스를 생성해서 반환한다.
-     * @param infoSeq 서버에 저장한 맛집 정보에 대한 시퀀스
-     * @return BestFoodRegisterImageFragment 인스턴스
-     */
-    public static Fragment newInstance(int infoSeq) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(INFO_SEQ, infoSeq);
-
-        BestFoodRegisterImageFragment f = new BestFoodRegisterImageFragment();
-        f.setArguments(bundle);
-
-        return f;
-    }
-
-    /**
-     * 프래그먼트가 생성될 때 호출되며 인자에 저장된 INFO_SEQ를 멤버 변수 infoSeq에 저장한다.
-     * @param savedInstanceState 프래그먼트가 새로 생성되었을 경우, 이전 상태 값을 가지는 객체
-     */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_image);
 
-        if (getArguments() != null) {
-            infoSeq = getArguments().getInt(INFO_SEQ);
-        }
-    }
+        infoSeq = getIntent().getIntExtra(INFO_SEQ, 0);
+        context = this;
 
-    /**
-     * fragment_bestfood_register_image.xml 기반으로 뷰를 생성한다.
-     * @param inflater XML를 객체로 변환하는 LayoutInflater 객체
-     * @param container null이 아니라면 부모 뷰
-     * @param savedInstanceState null이 아니라면 이전에 저장된 상태를 가진 객체
-     * @return 생성한 뷰 객체
-     */
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = this.getActivity();
-        View v = inflater.inflate(R.layout.fragment_bestfood_register_image, container, false);
+        //테스트용으로 seq 지정
+        infoSeq = 1;
+        //테스트용으로 seq 지정
 
-        return v;
-    }
-
-    /**
-     * onCreateView() 메소드 뒤에 호출되며 기본 정보 생성과 화면 처리를 한다.
-     * @param view onCreateView() 메소드에 의해 반환된 뷰
-     * @param savedInstanceState null이 아니라면 이전에 저장된 상태를 가진 객체
-     */
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        position_list_X = new ArrayList();
+        position_list_Y = new ArrayList();
 
         imageItem = new ImageItem();
         imageItem.infoSeq = infoSeq;
@@ -128,14 +92,39 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
         imageFilename = infoSeq + "_" + String.valueOf(System.currentTimeMillis());
         imageFile = FileLib.getInstance().getImageFile(context, imageFilename);
 
-        infoImage = (ImageView) view.findViewById(R.id.bestfood_image);
-        imageMemoEdit = (EditText) view.findViewById(R.id.register_image_memo);
+        infoImage = (ImageView)findViewById(R.id.bestfood_image);
+        pointImage = (CustomView)findViewById(R.id.bestfood_image_2);
+        descriptionText = (TextView)findViewById(R.id.image_description);
+        descriptionText.setText("사진을 업로드하고 위치를 표시해 주세요");
+        //imageMemoEdit = (EditText)findViewById(R.id.register_image_memo);
 
-        ImageView imageRegister = (ImageView) view.findViewById(R.id.bestfood_image_register);
+        ImageView imageRegister = (ImageView)findViewById(R.id.bestfood_image_register);
         imageRegister.setOnClickListener(this);
 
-        view.findViewById(R.id.prev).setOnClickListener(this);
-        view.findViewById(R.id.complete).setOnClickListener(this);
+        prevButton = (Button)findViewById(R.id.prev);
+        nextButton = (Button)findViewById(R.id.next);
+        completeButton = (Button)findViewById(R.id.complete);
+        prevButton.setOnClickListener(this);
+        nextButton.setOnClickListener(this);
+        completeButton.setOnClickListener(this);
+        completeButton.setVisibility(View.GONE);
+
+        pointImage.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //scrollView.setVisibility(View.INVISIBLE);
+                //scrollView2.setVisibility(View.VISIBLE);
+                //pointImage.X = (int) motionEvent.getX();
+                //pointImage.Y = (int) motionEvent.getY();
+                position_list_X.add((int) motionEvent.getX());
+                position_list_Y.add((int) motionEvent.getY());
+                pointImage.position_list_X = position_list_X;
+                pointImage.position_list_Y = position_list_Y;
+                pointImage.invalidate();
+                //pointImage.touched = true;
+                return false;
+            }
+        });
     }
 
     /**
@@ -164,10 +153,28 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
     public void onClick(View v) {
         if (v.getId() == R.id.bestfood_image_register) {
             showImageDialog(context);
-        } else if (v.getId() == R.id.complete) {
+        } else if (v.getId() == R.id.prev){
+            pointImage.position_list_X.remove(pointImage.position_list_X.size()-1);
+            pointImage.position_list_Y.remove(pointImage.position_list_Y.size()-1);
+            pointImage.invalidate();
+        } else if (v.getId() == R.id.next) {
             saveImage();
-        } else if (v.getId() == R.id.prev) {
-            GoLib.getInstance().goBackFragment(getActivity().getSupportFragmentManager());
+            infoImage.setImageResource(0);
+            descriptionText.setText("상세 사진을 찍어 주세요");
+            nextCount += 1;
+            if (nextCount == 1){
+                String dot = "";
+                for (int i=0; i<position_list_X.size(); i++){
+                    if (i>0) dot = dot + "/ ";
+                    dot = dot + position_list_X.get(i) + ", " + position_list_Y.get(i);
+                }
+                RemoteLib.getInstance().uploadCaseDot(infoSeq, dot);
+            }
+            if (nextCount >= 1) pointImage.setVisibility(View.GONE);
+            if (nextCount >= position_list_X.size()) completeButton.setVisibility(View.VISIBLE);
+        } else if (v.getId() == R.id.complete){
+            saveImage();
+            context.finish();
         }
     }
 
@@ -270,7 +277,6 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
 
                         @Override
                         public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
                         }
 
                         @Override
@@ -296,8 +302,6 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
                         }
                     });
                     */
-
-
                 }
             }
         }
@@ -307,12 +311,16 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
      * 사용자가 선택한 이미지와 입력한 메모를 ImageItem 객체에 저장한다.
      */
     private  void setImageItem() {
+        /*
         String imageMemo = imageMemoEdit.getText().toString();
         if (StringLib.getInstance().isBlank(imageMemo)) {
             imageMemo = "";
         }
 
-        //imageItem.imageMemo = imageMemo;
+        imageItem.imageMemo = imageMemo;
+         */
+        if (nextCount == 0) imageItem.label = "main";
+        else imageItem.label = "detail";
         imageItem.fileName = imageFilename + ".png";
     }
 
@@ -333,8 +341,8 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
 
         setImageItem();
 
-        //RemoteLib.getInstance().uploadFoodImage(infoSeq,
-        //        imageItem.imageMemo, imageFile, finishHandler);
+        RemoteLib.getInstance().uploadCaseImage(infoSeq,
+                imageItem.label, imageFile, finishHandler);
         isSavingImage = false;
     }
 
@@ -347,17 +355,17 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
                 .setTitle(R.string.title_bestfood_image_register)
                 .setSingleChoiceItems(R.array.camera_album_category, -1,
                         new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            getImageFromCamera();
-                        } else {
-                            getImageFromAlbum();
-                        }
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == 0) {
+                                    getImageFromCamera();
+                                } else {
+                                    getImageFromAlbum();
+                                }
 
-                        dialog.dismiss();
-                    }
-                }).show();
+                                dialog.dismiss();
+                            }
+                        }).show();
     }
 
     Handler imageUploadHandler = new Handler(Looper.getMainLooper()) {
@@ -373,7 +381,7 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            context.finish();
+            //context.finish();
         }
     };
 

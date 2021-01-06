@@ -40,12 +40,16 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
 
     Spinner spinner1;
     Spinner spinner2;
+    Spinner spinner3;
     EditText descriptionEdit;
 
+    Button cameraButton;
     Button nextButton;
 
     String[] services = {"수선", "염색"};
     String[] products = {"핸드백", "지갑"};
+    String[] brands = {"브랜드1", "브랜드2"};
+
     /**
      * FoodInfoItem 객체를 인자로 저장하는
      * BestFoodRegisterInputFragment 인스턴스를 생성해서 반환한다.
@@ -91,6 +95,7 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
 
         return rootView;
     }
+
     /**
      * onCreateView() 메소드 뒤에 호출되며 맛집 정보를 입력할 뷰들을 생성한다.
      * @param view onCreateView() 메소드에 의해 반환된 뷰
@@ -138,8 +143,27 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
             }
         });
 
+        spinner3 = (Spinner) view.findViewById(R.id.spinner3);
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(
+                getActivity(), android.R.layout.simple_spinner_item, brands);
+        adapter3.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+        spinner3.setAdapter(adapter3);
+        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                infoItem.brand = brands[i];
+            }
 
-        descriptionEdit = (EditText) view.findViewById(R.id.input4);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        descriptionEdit = (EditText) view.findViewById(R.id.input5);
         descriptionEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -155,7 +179,8 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
             }
         });
 
-
+        cameraButton = view.findViewById(R.id.camera_button);
+        cameraButton.setOnClickListener(this);
 
 
         //CaseActivity.currentItem = infoItem;
@@ -173,9 +198,9 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
 
-        MyLog.d(TAG, "onClick imageItem " + infoItem);
-
-        if (v.getId() == R.id.input4) {
+        if (v.getId() == R.id.camera_button) {
+            MyLog.d(TAG, "onClick button ");
+            goNextPage();
             /*
             GoLib.getInstance().goFragment(getActivity().getSupportFragmentManager(),
                     R.id.content_main, BestFoodRegisterImageFragment.newInstance(infoItem));
@@ -236,6 +261,11 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
                 MyLog.d(TAG, "no internet connectivity");
             }
         });
+    }
+
+    private void goNextPage() {
+        MyLog.d(TAG, "onClick button go");
+        GoLib.getInstance().goImageActivity(context, infoItem.seq);
     }
 
 

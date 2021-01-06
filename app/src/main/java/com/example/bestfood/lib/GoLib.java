@@ -9,7 +9,9 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.bestfood.BestFoodInfoActivity;
 import com.example.bestfood.BestFoodRegisterActivity;
 import com.example.bestfood.CaseActivity;
+import com.example.bestfood.ImageActivity;
 import com.example.bestfood.ProfileActivity;
+import com.example.bestfood.SampleActivity;
 
 /**
  * 액티비티나 프래그먼트 실행 라이브러리
@@ -99,6 +101,21 @@ public class GoLib {
     public void goCaseActivity(Context context, int infoSeq) {
         Intent intent = new Intent(context, CaseActivity.class);
         intent.putExtra(CaseActivity.INFO_SEQ, infoSeq);
+        context.startActivity(intent);
+    }
+
+    public void goImageActivity(Context context, int infoSeq) {
+        Intent intent = new Intent(context, ImageActivity.class);
+        intent.putExtra(ImageActivity.INFO_SEQ, infoSeq);
+        context.startActivity(intent);
+    }
+
+    public void goSampleActivity(Context context, int infoSeq) {
+        MyLog.d(TAG, "here intent");
+        Intent intent = new Intent(context, SampleActivity.class);
+        MyLog.d(TAG, "here intent2");
+        intent.putExtra(SampleActivity.INFO_SEQ, infoSeq);
+        MyLog.d(TAG, "here intent3");
         context.startActivity(intent);
     }
 }

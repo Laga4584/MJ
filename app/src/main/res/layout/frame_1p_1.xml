@@ -29,7 +29,7 @@
             android:layout_marginVertical="@dimen/activity_vertical_margin"
             android:text="원하시는 서비스를 선택해 주세요"
             android:textColor="@android:color/darker_gray"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
 
         <Spinner
@@ -40,7 +40,6 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:textSize="@dimen/text_size_small2"
             />
-
 
         <TextView
             android:id="@+id/text2"
@@ -69,6 +68,26 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginVertical="@dimen/activity_vertical_margin"
+            android:gravity="center"
+            android:text="물품의 브랜드를 선택해 주세요."
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinner3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:textSize="@dimen/text_size_small2"
+            />
+        <TextView
+            android:id="@+id/text4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="@dimen/activity_vertical_margin"
             android:text="물품 사진을 등록해 주세요"
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/text_size_medium"
@@ -83,7 +102,7 @@
             android:text="사진 업로드" />
 
         <TextView
-            android:id="@+id/text4"
+            android:id="@+id/text5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -94,7 +113,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/input4"
+            android:id="@+id/input5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

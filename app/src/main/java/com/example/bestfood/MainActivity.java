@@ -97,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         switch (curId) {
             case R.id.menu_profile:
                 MyToast.s(this, "프로필 메뉴가 선택되었습니다.");
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

@@ -35,13 +35,8 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     String email_2 = "", gender_2 = "", ageRange_2 = "", birthday_2 = "", name_2 = "";
     MemberInfoItem newItem;
-
-
     Context context;
-
-
     private final String TAG = this.getClass().getSimpleName();
-
     private SessionCallback sessionCallback;
 
     @Override

@@ -11,11 +11,15 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class CustomView extends androidx.appcompat.widget.AppCompatImageView {
     Canvas mCanvas;
     Bitmap mBitmap;
     Paint mPaint;
 
+    public ArrayList position_list_X;
+    public ArrayList position_list_Y;
     int X;
     int Y;
 
@@ -34,6 +38,8 @@ public class CustomView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     private void init(Context context){
+        this.position_list_X = new ArrayList();
+        this.position_list_Y = new ArrayList();
         this.mPaint = new Paint();
         this.mPaint.setColor(Color.WHITE);
 }
@@ -41,24 +47,21 @@ public class CustomView extends androidx.appcompat.widget.AppCompatImageView {
 
     @Override
     protected void onSizeChanged(int w, int h , int oldw, int oldh){
-        Bitmap img = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        //Bitmap img = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas();
-        canvas.setBitmap(img);
-        canvas.drawColor(Color.GRAY);
+        //canvas.setBitmap(img);
+        //canvas.drawColor(Color.GRAY);
 
-        mBitmap = mBitmap;
+        //mBitmap = mBitmap;
         mCanvas = canvas;
     }
     @Override
     protected void onDraw(Canvas canvas){
-        if (mBitmap != null){
-            //canvas.drawBitmap(mBitmap, 0, 0, null);
-        }
-        if (touched) {
-            canvas.drawCircle(X, Y, 20, mPaint);
-        }
+        for (int i=0; i<position_list_X.size(); i++){
+            canvas.drawCircle((int) position_list_X.get(i), (int) position_list_Y.get(i), 20, mPaint);}
     }
 
+    /*
     @Override
     public boolean onTouchEvent(MotionEvent event){
 
@@ -72,6 +75,8 @@ public class CustomView extends androidx.appcompat.widget.AppCompatImageView {
 
         return true;
     }
+
+     */
 }
 
 

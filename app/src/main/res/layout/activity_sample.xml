@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_below="@+id/toolbar_layout"
+    android:fillViewport="true"
+    android:layout_height="match_parent"
+    android:scrollbars="none">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/pageMarginAndOffset"
+    android:layout_marginRight="@dimen/pageMarginAndOffset"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="샘플"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold" />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
+    <TextView
+        android:id="@+id/text8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="수선자"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/repairer_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="염색"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/text9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="브랜드"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/brand_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="브랜드"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="서비스 종류"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/service_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="염색"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="물품 종류"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/product_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="핸드백"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="요청 사항"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="끈이 떨어졌어요"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/text4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="수선 방법"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/method_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="염색"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/text5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="가격"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/price_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="5만원"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/text6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="소요 시간"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="3일"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/text10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="수선 내용 설명"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/result_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="이렇게 했습니다."
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/text7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="후기"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/review_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="감사합니다."
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/text11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:text="평점"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/score_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+</LinearLayout>
+</ScrollView>
