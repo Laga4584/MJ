@@ -34,7 +34,7 @@ public interface RemoteService {
 
     //채팅
     @GET("/chat/list")
-    Call<ArrayList<ChatItem>> selectChatInfo(@Body ChatItem ChaItem);
+    Call<ArrayList<ChatItem>> selectChatInfo();
 
     @POST("/chat/info")
     Call<String> insertChatInfo(@Body ChatItem ChatItem);
