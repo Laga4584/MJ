@@ -42,9 +42,16 @@ public interface RemoteService {
     Call<ArrayList<SampleItem>> listSampleInfo(@Query("current_page") int currentPage);
 
     //채팅
+    /*
     @GET("/chat/list")
     Call<ArrayList<ChatItem>> selectChatInfo(@Query("user_seq") int memberSeq,
                                              @Query("repairer_seq") int repairerSeq);
+
+     */
+
+    @GET("/chat/list")
+    Call<ArrayList<ChatItem>> selectChatInfo();
+
 
     @POST("/chat/info")
     Call<String> insertChatInfo(@Body ChatItem ChatItem);

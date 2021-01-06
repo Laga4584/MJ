@@ -100,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.menu_chat:
+                MyToast.s(this, "채팅 메뉴가 선택되었습니다.");
+                Intent intent2 = new Intent(MainActivity.this, ChatActivity.class);
+                startActivity(intent2);
             default:
                 break;
         }

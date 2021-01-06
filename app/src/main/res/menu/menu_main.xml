@@ -9,4 +9,10 @@
         android:title="profile"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/menu_chat"
+        android:icon="@drawable/ic_tell"
+        android:title="profile"
+        app:showAsAction="always" />
+
 </menu>
