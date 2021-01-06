@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
@@ -55,7 +57,20 @@ public class ChatActivity extends AppCompatActivity {
         btSend = (Button) findViewById(R.id.Send);
 
         strRepairerName.setText("이름");
-        strmessage = input_message.getText().toString();
+        input_message.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                strmessage = input_message.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         currentMemberSeq = 1;
         currentRepairerSeq = 1;
@@ -68,8 +83,12 @@ public class ChatActivity extends AppCompatActivity {
 
         btSend.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (input_message.getText().toString().trim().length() < 1) {
-                    rMessageList.add(getChatItem());
+                if (strmessage.trim().length() > 0) {
+                    //rMessageList.add(getChatItem());
+                    ArrayList<ChatItem> newList = new ArrayList<ChatItem>();
+                    newList.add(getChatItem());
+                    MyLog.d(TAG, "here newlist " + newList.toString());
+                    chatMessageAdapter.addItemList(newList);
                     insertChatInfo(getChatItem());
                 } else {
                     input_message.setText(null);
