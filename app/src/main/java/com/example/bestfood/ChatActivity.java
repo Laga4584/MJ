@@ -90,9 +90,11 @@ public class ChatActivity extends AppCompatActivity {
                     MyLog.d(TAG, "here newlist " + newList.toString());
                     chatMessageAdapter.addItemList(newList);
                     insertChatInfo(getChatItem());
-                } else {
+                    message_list.scrollToPosition(rMessageList.size());
                     input_message.setText(null);
                 }
+                message_list.scrollToPosition(rMessageList.size());
+                input_message.setText(null);
             }
         });
 
