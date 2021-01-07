@@ -62,7 +62,7 @@
         <activity android:name=".AddressActivity"/>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ProfileIconActivity" />
-        <activity android:name=".ChatActivity"/>
+        <activity android:name=".ChatActivity" android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>
