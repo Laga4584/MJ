@@ -51,8 +51,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
         //rMessageList = new ArrayList<ChatItem>();
         strRepairerName = (TextView) findViewById(R.id.show_repairer_name);
         message_list = (RecyclerView) findViewById(R.id.message_list);

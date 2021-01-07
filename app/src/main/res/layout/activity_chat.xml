@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,26 +12,28 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="@+id/chat_box_line">
 
         <TextView
             android:id="@+id/show_repairer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:textSize="24dp"
+            android:layout_weight="1"
+            android:text="RepairerName"
             android:textColor="#ffffff"
-            android:text="RepairerName" />
+            android:textSize="24dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.9">
+        app:layout_constraintBottom_toTopOf="@+id/chat_box"
+        app:layout_constraintTop_toBottomOf="@+id/name_space">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -40,7 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginBottom="0dp"
-        android:background="#dfdfdf" />
+        android:background="#dfdfdf"
+        app:layout_constraintBottom_toTopOf="@+id/chat_box"/>
 
     <LinearLayout
         android:id="@+id/chat_box"
@@ -48,7 +51,8 @@
         android:layout_height="wrap_content"
         android:background="#ffffff"
         android:minHeight="48dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
@@ -76,4 +80,4 @@
             android:text="SEND"
             android:textSize="14dp" />
     </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
