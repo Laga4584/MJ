@@ -62,8 +62,7 @@
         <activity android:name=".AddressActivity"/>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ProfileIconActivity" />
-        <activity android:name=".ChatActivity"
-            android:windowSoftInputMode="stateUnchanged|adjustPan"/>
+        <activity android:name=".ChatActivity"/>
     </application>
 
 </manifest>
