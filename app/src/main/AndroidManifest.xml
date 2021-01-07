@@ -62,7 +62,10 @@
         <activity android:name=".AddressActivity"/>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ProfileIconActivity" />
-        <activity android:name=".ChatActivity" android:windowSoftInputMode="adjustUnspecified"/>
+        <activity android:name=".ChatActivity"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
