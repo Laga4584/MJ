@@ -96,7 +96,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
 
         void bind(int position) {
             messageText.setText(messageList.get(position).message);
-            timeText.setText(messageList.get(position).regDate.substring(11,13) + " : " + messageList.get(position).regDate.substring(13,15));
+            timeText.setText(messageList.get(position).regDate.substring(11,16));
         }
     }
 
@@ -112,7 +112,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
 
         void bind(int position) {
             messageText.setText(messageList.get(position).message);
-            timeText.setText(messageList.get(position).regDate.substring(11,13) + " : " + messageList.get(position).regDate.substring(13,15));
+            timeText.setText(messageList.get(position).regDate.substring(11,16));
         }
     }
 

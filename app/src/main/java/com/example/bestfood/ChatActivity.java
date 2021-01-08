@@ -90,9 +90,11 @@ public class ChatActivity extends AppCompatActivity {
                     MyLog.d(TAG, "here newlist " + newList.toString());
                     chatMessageAdapter.addItemList(newList);
                     insertChatInfo(getChatItem());
-                } else {
+                    message_list.scrollToPosition(rMessageList.size());
                     input_message.setText(null);
                 }
+                message_list.scrollToPosition(rMessageList.size());
+                input_message.setText(null);
             }
         });
 
@@ -131,6 +133,7 @@ public class ChatActivity extends AppCompatActivity {
         chatMessageAdapter = new ChatMessageAdapter(this, new ArrayList<ChatItem>());
         message_list.setAdapter(chatMessageAdapter);
         chatMessageAdapter.addItemList(rMessageList);
+        message_list.scrollToPosition(rMessageList.size()-1);
     }
 
     private ChatItem getChatItem() {
