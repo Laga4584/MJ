@@ -1,29 +1,32 @@
 package com.example.bestfood;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
+
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.bestfood.item.CaseInfoItem;
-import com.google.android.gms.maps.model.LatLng;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import com.example.bestfood.adapter.InfoListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
-import com.example.bestfood.item.FoodInfoItem;
-import com.example.bestfood.item.GeoItem;
+import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.lib.MyLog;
+import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -31,11 +34,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * 맛집 정보 리스트를 보여주는 프래그먼트
- */
-public class BestFoodListFragment extends Fragment implements View.OnClickListener {
+public class CaseListActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
+    FloatingActionButton fab;
+    Toolbar toolbar;
 
     Context context;
 
@@ -53,67 +55,39 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
     String orderType;
     String[] items = {"완료 케이스 보기", "완료 케이스 숨기기"};
 
-    /**
-     * BestFoodListFragment 인스턴스를 생성한다.
-     * @return BestFoodListFragment 인스턴스
-     */
-    public static BestFoodListFragment newInstance() {
-        BestFoodListFragment f = new BestFoodListFragment();
-        return f;
-    }
-
-    /**
-     * fragment_bestfood_list.xml 기반으로 뷰를 생성한다.
-     * @param inflater XML를 객체로 변환하는 LayoutInflater 객체
-     * @param container null이 아니라면 부모 뷰
-     * @param savedInstanceState null이 아니라면 이전에 저장된 상태를 가진 객체
-     * @return 생성한 뷰 객체
-     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = this.getActivity();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_caselist);
 
-        memberSeq = ((App)this.getActivity().getApplication()).getMemberSeq();
+        context = this;
+        memberSeq = ((App)this.getApplication()).getMemberSeq();
 
-        View layout = inflater.inflate(R.layout.fragment_bestfood_list, container, false);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startCase();
+            }
+        });
 
-        return layout;
-    }
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-    /**
-     * 프래그먼트가 일시 중지 상태가 되었다가 다시 보여질 때 호출된다.
-     * BestFoodInfoActivity가 실행된 후,
-     * 즐겨찾기 상태가 변경되었을 경우 이를 반영하는 용도로 사용한다.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
 
-        App app = ((App) getActivity().getApplication());
-        CaseInfoItem currentInfoItem = app.getCaseInfoItem();
+        actionBar.setLogo(R.drawable.ic_keep_off);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
-        if (infoListAdapter != null && currentInfoItem != null) {
-            infoListAdapter.setItem(currentInfoItem);
-            app.setFoodInfoItem(null);
-        }
-    }
-
-    /**
-     * onCreateView() 메소드 뒤에 호출되며 화면 뷰들을 설정한다.
-     * @param view onCreateView() 메소드에 의해 반환된 뷰
-     * @param savedInstanceState null이 아니라면 이전에 저장된 상태를 가진 객체
-     */
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.nav_list);
+        this.getSupportActionBar().setTitle(R.string.nav_list);
 
         orderType = Constant.ORDER_TYPE_METER;
 
-        bestFoodList = (RecyclerView) view.findViewById(R.id.list);
-        noDataText = (TextView) view.findViewById(R.id.no_data);
+        bestFoodList = (RecyclerView)findViewById(R.id.list);
+        noDataText = (TextView)findViewById(R.id.no_data);
 
-        spinner = (Spinner) view.findViewById(R.id.spinner);
+        spinner = (Spinner)findViewById(R.id.spinner);
         //orderMeter = (TextView) view.findViewById(R.id.order_meter);
         //orderFavorite = (TextView) view.findViewById(R.id.order_favorite);
         //orderRecent = (TextView) view.findViewById(R.id.order_recent);
@@ -123,7 +97,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         //orderRecent.setOnClickListener(this);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getActivity(), android.R.layout.simple_spinner_item, items);
+                this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(
                 android.R.layout.simple_spinner_dropdown_item
         );
@@ -153,6 +127,60 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         listInfo(memberSeq, 0);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int curId = item.getItemId();
+        switch (curId) {
+            case R.id.menu_profile:
+                MyToast.s(this, "프로필 메뉴가 선택되었습니다.");
+                Intent intent = new Intent(CaseListActivity.this, ProfileActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_chat:
+                MyToast.s(this, "채팅 메뉴가 선택되었습니다.");
+                Intent intent2 = new Intent(CaseListActivity.this, ChatActivity.class);
+                startActivity(intent2);
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    /**
+     * CaseActivity를 실행하고 현재 액티비티를 종료한다.
+     */
+    public void startCase() {
+        Intent intent = new Intent(CaseListActivity.this, CaseActivity.class);
+        startActivity(intent);
+
+        //finish();
+    }
+
+    /**
+     * 프래그먼트가 일시 중지 상태가 되었다가 다시 보여질 때 호출된다.
+     * BestFoodInfoActivity가 실행된 후,
+     * 즐겨찾기 상태가 변경되었을 경우 이를 반영하는 용도로 사용한다.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        App app = ((App) this.getApplication());
+        CaseInfoItem currentInfoItem = app.getCaseInfoItem();
+
+        if (infoListAdapter != null && currentInfoItem != null) {
+            infoListAdapter.setItem(currentInfoItem);
+            app.setFoodInfoItem(null);
+        }
+    }
 
     /**
      * 맛집 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
@@ -204,6 +232,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
 
                     if (infoListAdapter.getItemCount() == 0) {
                         noDataText.setVisibility(View.VISIBLE);
+                        MyLog.d("noDataText VISIBLE");
                     } else {
                         noDataText.setVisibility(View.GONE);
                     }
@@ -218,36 +247,6 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         });
     }
 
-    /**
-     * 각종 버튼에 대한 클릭 처리를 정의한다.
-     * @param v 클릭한 뷰에 대한 정보
-     */
-    @Override
-    public void onClick(View v) {
-        /*
-            if (v.getId() == R.id.order_meter) {
-                orderType = Constant.ORDER_TYPE_METER;
-
-                setOrderTextColor(R.color.text_color_green,
-                        R.color.text_color_black, R.color.text_color_black);
-
-            } else if (v.getId() == R.id.order_favorite) {
-                orderType = Constant.ORDER_TYPE_FAVORITE;
-
-                setOrderTextColor(R.color.text_color_black,
-                        R.color.text_color_green, R.color.text_color_black);
-
-            } else if (v.getId() == R.id.order_recent) {
-                orderType = Constant.ORDER_TYPE_RECENT;
-
-                setOrderTextColor(R.color.text_color_black,
-                        R.color.text_color_black, R.color.text_color_green);
-            }
-
-            setRecyclerView();
-            listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, 0);
-*/
-    }
 
     /**
      * 맛집 정보 정렬 방식의 텍스트 색상을 설정한다.
@@ -275,4 +274,5 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         }
         setLayoutManager(listTypeValue);
     }
+
 }

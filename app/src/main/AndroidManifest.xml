@@ -63,6 +63,9 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ProfileIconActivity" />
         <activity android:name=".ChatActivity"/>
+        <activity android:name=".DetailActivity"/>
+        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".CaseListActivity"/>
     </application>
 
 </manifest>

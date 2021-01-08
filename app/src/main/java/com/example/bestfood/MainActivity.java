@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startMain();
+                startCase();
             }
         });
 
@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
 
         TabLayout tabs = findViewById(R.id.tabs);
-        tabs.addTab(tabs.newTab().setText("Case List"));
-        tabs.addTab(tabs.newTab().setText("Sample Cases"));
+        tabs.addTab(tabs.newTab().setText("명장"));
+        tabs.addTab(tabs.newTab().setText("명작"));
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -111,10 +111,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     /**
-     * MainActivity를 실행하고 현재 액티비티를 종료한다.
+     * CaseActivity를 실행하고 현재 액티비티를 종료한다.
      */
-    public void startMain() {
-        Intent intent = new Intent(MainActivity.this, CaseActivity.class);
+    public void startCase() {
+        Intent intent = new Intent(MainActivity.this, CaseListActivity.class);
         startActivity(intent);
 
         //finish();

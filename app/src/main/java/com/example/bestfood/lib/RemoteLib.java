@@ -32,6 +32,7 @@ import retrofit2.Response;
  * 네트워크와 서버와 관련된 라이브러리
  */
 public class RemoteLib {
+    boolean check;
     public static final String TAG = RemoteLib.class.getSimpleName();
 
     private volatile static RemoteLib instance;
@@ -54,7 +55,7 @@ public class RemoteLib {
      * @return 네트워크 연결여부
      */
 
-    public void isConnected(Context context) {
+    public boolean isConnected(Context context) {
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
@@ -62,21 +63,19 @@ public class RemoteLib {
 
             @Override
             public void onAvailable(@NonNull Network network) {
-                // 네트워크를 사용할 준비가 되었을 때
                 super.onAvailable(network);
-
-
+                // 네트워크를 사용할 준비가 되었을 때
+                check = true;
             }
 
             @Override
             public void onLost(@NonNull Network network) {
                 super.onLost(network);
-
                 // 네트워크가 끊겼을 때
+                check = false;
             }
         });
-        //System.out.println(check);
-        //return check;
+        return check;
     }
 
     /**

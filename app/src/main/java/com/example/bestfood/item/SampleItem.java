@@ -23,6 +23,7 @@ public class SampleItem {
     @SerializedName("mod_date") public String modDate;
     @SerializedName("before_image_filename") public String beforeImageFilename;
     @SerializedName("after_image_filename") public String afterImageFilename;
+    public String dot;
 
     @Override
     public String toString() {
@@ -42,6 +43,7 @@ public class SampleItem {
                 ", modDate='" + modDate + '\'' +
                 ", before_image_filename='" + beforeImageFilename + '\'' +
                 ", after_image_filename='" + afterImageFilename + '\'' +
+                ", dot='" + dot + '\'' +
                 '}';
     }
 }

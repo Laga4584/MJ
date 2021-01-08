@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 public class ImageItem {
     @SerializedName("seq") public int seq;
     @SerializedName("info_seq") public int infoSeq;
-    @SerializedName("file_name") public String fileName;
+    @SerializedName("filename") public String filename;
     @SerializedName("label") public String label;
     @SerializedName("reg_date") public String regDate;
 
@@ -16,10 +16,10 @@ public class ImageItem {
     public String toString() {
         return "ImageItem{" +
                 "seq=" + seq +
-                ", infoSeq=" + infoSeq +
-                ", fileName='" + fileName + '\'' +
+                ", info_seq=" + infoSeq +
+                ", filename='" + filename + '\'' +
                 ", label='" + label + '\'' +
-                ", regDate='" + regDate + '\'' +
+                ", reg_date='" + regDate + '\'' +
                 '}';
     }
 }

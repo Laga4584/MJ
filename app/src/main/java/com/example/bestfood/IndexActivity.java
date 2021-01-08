@@ -2,13 +2,8 @@ package com.example.bestfood;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.os.Handler;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Looper;
@@ -16,19 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.bestfood.item.MemberInfoItem;
-import com.example.bestfood.lib.EtcLib;
-import com.example.bestfood.lib.GeoLib;
-import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
-import com.example.bestfood.lib.StringLib;
-import com.example.bestfood.remote.RemoteService;
-import com.example.bestfood.remote.ServiceGenerator;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * 시작 액티비티이며 이 액티비티에서 사용자 정보를 조회해서
@@ -51,37 +34,9 @@ public class IndexActivity extends AppCompatActivity {
 
         context = this;
 
-        RemoteLib.getInstance().isConnected(context);
-        //if (!RemoteLib.getInstance().isConnected(context)) {
-        //    showNoService();
-        //    return;
-        //}
-    }
-
-    public void isConnected(Context context) {
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkRequest.Builder builder = new NetworkRequest.Builder();
-        cm.registerNetworkCallback(builder.build(), new ConnectivityManager.NetworkCallback() {
-
-            @Override
-            public void onAvailable(@NonNull Network network) {
-                // 네트워크를 사용할 준비가 되었을 때
-                super.onAvailable(network);
-
-
-            }
-
-            @Override
-            public void onLost(@NonNull Network network) {
-                super.onLost(network);
-                showNoService();
-
-                // 네트워크가 끊겼을 때
-            }
-        });
-        //System.out.println(check);
-        //return check;
+        if (!RemoteLib.getInstance().isConnected(context)) {
+            showNoService();
+        }
     }
 
     /**

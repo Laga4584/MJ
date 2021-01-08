@@ -10,10 +10,19 @@ import com.example.bestfood.item.CaseInfoItem;
 
 
 public class SampleAdapter extends FragmentStateAdapter {
+    int count;
+    int type;
 
-
-    public SampleAdapter(FragmentActivity fa) {
+    public SampleAdapter(FragmentActivity fa, int count, int type) {
         super(fa);
+        this.count = count;
+        this.type = type;
+    }
+
+    public SampleAdapter(@NonNull Fragment fragment, int count, int type) {
+        super(fragment);
+        this.count = count;
+        this.type = type;
     }
 
 
@@ -21,14 +30,15 @@ public class SampleAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         FragSample frag1 = new FragSample();
-        frag1 = FragSample.newInstance(position);
+        frag1 = FragSample.newInstance(position, type);
         return frag1;
+
     }
 
 
     @Override
     public int getItemCount() {
-        return 2;
+        return this.count;
     }
 
 }

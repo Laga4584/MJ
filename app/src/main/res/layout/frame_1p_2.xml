@@ -29,7 +29,7 @@
             android:layout_marginVertical="@dimen/activity_vertical_margin"
             android:text="요청 서비스"
             android:textColor="@android:color/darker_gray"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
 
         <TextView
@@ -78,13 +78,12 @@
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/image3-1"
+        <Button
+            android:id="@+id/button"
+            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            />
+            android:text="사진 확인"/>
 
         <TextView
             android:id="@+id/text4"

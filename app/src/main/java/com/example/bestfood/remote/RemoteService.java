@@ -3,6 +3,7 @@ package com.example.bestfood.remote;
 import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.item.FoodInfoItem;
+import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.item.KeepItem;
 import com.example.bestfood.item.MemberInfoItem;
 import com.example.bestfood.item.SampleItem;
@@ -42,13 +43,6 @@ public interface RemoteService {
     Call<ArrayList<SampleItem>> listSampleInfo(@Query("current_page") int currentPage);
 
     //채팅
-    /*
-    @GET("/chat/list")
-    Call<ArrayList<ChatItem>> selectChatInfo(@Query("user_seq") int memberSeq,
-                                             @Query("repairer_seq") int repairerSeq);
-
-     */
-
     @GET("/chat/list")
     Call<ArrayList<ChatItem>> selectChatInfo(@Query("user_seq") int userSeq,
                                              @Query("repairer_seq") int repairerSeq);
@@ -77,13 +71,16 @@ public interface RemoteService {
                                        @Part("label") RequestBody label,
                                        @Part MultipartBody.Part file);
 
+    @GET("/case/image/list")
+    Call<ArrayList<ImageItem>> listImageInfo(@Query("info_seq") int infoSeq);
+
     @POST("/case/info/dot")
     Call<String> uploadCaseDot(@Query("seq") int seq,
                                      @Query("dot") String dot);
 
     //사용자 정보
-    @GET("/member/{phone}")
-    Call<MemberInfoItem> selectMemberInfo(@Path("phone") String phone);
+    @GET("/member/email")
+    Call<MemberInfoItem> selectMemberInfo(@Query("email") String email);
 
     @POST("/member/info")
     Call<String> insertMemberInfo(@Body MemberInfoItem memberInfoItem);
@@ -96,6 +93,12 @@ public interface RemoteService {
     @POST("/member/icon_upload")
     Call<ResponseBody> uploadMemberIcon(@Part("member_seq") RequestBody memberSeq,
                                         @Part MultipartBody.Part file);
+
+    @POST("/member/register")
+    Call<String> registerMemberInfo(@Body MemberInfoItem memberInfoItem);
+
+    @GET("/member/login")
+    Call<MemberInfoItem> loginMemberInfo(@Query("email") String email, @Query("password") String password);
 
     //맛집 정보
     @GET("/food/info/{info_seq}")

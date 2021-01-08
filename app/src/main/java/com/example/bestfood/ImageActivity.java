@@ -170,7 +170,10 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                 }
                 RemoteLib.getInstance().uploadCaseDot(infoSeq, dot);
             }
-            if (nextCount >= 1) pointImage.setVisibility(View.GONE);
+            if (nextCount >= 1) {
+                pointImage.setVisibility(View.GONE);
+                prevButton.setVisibility(View.GONE);
+            }
             if (nextCount >= position_list_X.size()) completeButton.setVisibility(View.VISIBLE);
         } else if (v.getId() == R.id.complete){
             saveImage();
@@ -321,7 +324,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
          */
         if (nextCount == 0) imageItem.label = "main";
         else imageItem.label = "detail";
-        imageItem.fileName = imageFilename + ".png";
+        imageItem.filename = imageFilename + ".png";
     }
 
     /**
@@ -374,7 +377,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
             super.handleMessage(msg);
             isSavingImage = false;
             setImageItem();
-            Picasso.get().invalidate(RemoteService.IMAGE_URL + imageItem.fileName);
+            Picasso.get().invalidate(RemoteService.IMAGE_URL + imageItem.filename);
         }
     };
     Handler finishHandler = new Handler(Looper.getMainLooper()) {

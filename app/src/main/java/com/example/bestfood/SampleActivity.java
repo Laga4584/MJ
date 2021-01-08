@@ -23,8 +23,7 @@ public class SampleActivity extends AppCompatActivity {
     public static final String INFO_SEQ = "INFO_SEQ";
     private final String TAG = this.getClass().getSimpleName();
     public static SampleItem infoItem;
-    public static ViewPager2 mPager;
-    private FragmentStateAdapter pagerAdapter;
+    ViewPager2 mPager;
 
     int infoSeq;
 
@@ -48,11 +47,6 @@ public class SampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample);
         infoItem = new SampleItem();
         infoSeq = getIntent().getIntExtra(INFO_SEQ, 0);
-
-        mPager = findViewById(R.id.viewpager);
-        SampleAdapter adapter = new SampleAdapter(this);
-        mPager.setAdapter(adapter);
-        mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
         selectSampleInfo(infoSeq);
         //setView();
@@ -84,6 +78,10 @@ public class SampleActivity extends AppCompatActivity {
     }
 
     private void setView(){
+        mPager = findViewById(R.id.viewpager);
+        SampleAdapter adapter = new SampleAdapter(this, 2, 0);
+        mPager.setAdapter(adapter);
+        mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         //beforeImage = (ImageView)findViewById(R.id.before_image);
         //afterImage = (ImageView)findViewById(R.id.after_image);
         repairerText = (TextView)findViewById(R.id.repairer_text);

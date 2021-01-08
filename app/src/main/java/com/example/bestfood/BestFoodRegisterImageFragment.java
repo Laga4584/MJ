@@ -313,7 +313,7 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
         }
 
         //imageItem.imageMemo = imageMemo;
-        imageItem.fileName = imageFilename + ".png";
+        imageItem.filename = imageFilename + ".png";
     }
 
     /**
@@ -366,7 +366,7 @@ public class BestFoodRegisterImageFragment extends Fragment implements View.OnCl
             super.handleMessage(msg);
             isSavingImage = false;
             setImageItem();
-            Picasso.get().invalidate(RemoteService.IMAGE_URL + imageItem.fileName);
+            Picasso.get().invalidate(RemoteService.IMAGE_URL + imageItem.filename);
         }
     };
     Handler finishHandler = new Handler(Looper.getMainLooper()) {
