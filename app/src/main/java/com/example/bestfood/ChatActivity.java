@@ -30,10 +30,11 @@ import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
+    public static final String REPAIRER_SEQ = "REPAIRER_SEQ";
 
     public static ArrayList<ChatItem> rMessageList = new ArrayList<ChatItem>();
 
-    int currentMemberSeq;
+    int currentUserSeq;
     int currentRepairerSeq;
 
     TextView strRepairerName;
@@ -49,6 +50,9 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        currentUserSeq = ((App)getApplication()).getUserSeq();
+        currentRepairerSeq = getIntent().getIntExtra(REPAIRER_SEQ, 0);
 
         //rMessageList = new ArrayList<ChatItem>();
         strRepairerName = (TextView) findViewById(R.id.show_repairer_name);
@@ -72,14 +76,8 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        currentMemberSeq = 1;
-        currentRepairerSeq = 1;
-
-
         getList();
-
         getChatItem();
-
 
         btSend.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -103,7 +101,7 @@ public class ChatActivity extends AppCompatActivity {
     private void getList(){
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<ChatItem>> call = remoteService.selectChatInfo(currentMemberSeq, currentRepairerSeq);
+        Call<ArrayList<ChatItem>> call = remoteService.selectChatInfo(currentUserSeq, currentRepairerSeq);
 
         call.enqueue(new Callback<ArrayList<ChatItem>>() {
             @Override
@@ -126,7 +124,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setAdapter(){
-        MyLog.d(TAG, "here item " + rMessageList.toString());
         layoutManager = new LinearLayoutManager(this);
         message_list.setLayoutManager(layoutManager);
 
@@ -142,8 +139,8 @@ public class ChatActivity extends AppCompatActivity {
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd/hh/mm/ss");
 
         ChatItem item = new ChatItem();
-        item.userSeq = 1;
-        item.repairerSeq = 1;
+        item.userSeq = currentUserSeq;
+        item.repairerSeq = currentRepairerSeq;
         item.sending = 1;
         item.message = strmessage;
         item.regDate = simpleDate.format(mDate);

@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 @org.parceler.Parcel
 public class FoodInfoItem {
     public int seq;
-    @SerializedName("member_seq") public int memberSeq;
+    @SerializedName("user_seq") public int userSeq;
     public String name;
     public String tel;
     public String address;
@@ -25,7 +25,7 @@ public class FoodInfoItem {
     public String toString() {
         return "FoodInfoItem{" +
                 "seq=" + seq +
-                ", memberSeq=" + memberSeq +
+                ", userSeq=" + userSeq +
                 ", name='" + name + '\'' +
                 ", tel='" + tel + '\'' +
                 ", address='" + address + '\'' +

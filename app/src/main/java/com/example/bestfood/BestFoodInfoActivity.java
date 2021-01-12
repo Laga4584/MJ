@@ -50,7 +50,7 @@ public class BestFoodInfoActivity extends AppCompatActivity
 
     Context context;
 
-    int memberSeq;
+    int userSeq;
     int foodInfoSeq;
 
     FoodInfoItem item;
@@ -73,9 +73,9 @@ public class BestFoodInfoActivity extends AppCompatActivity
 
         loadingText = findViewById(R.id.loading_layout);
 
-        memberSeq = ((App)getApplication()).getMemberSeq();
+        userSeq = ((App)getApplication()).getUserSeq();
         foodInfoSeq = getIntent().getIntExtra(INFO_SEQ, 0);
-        selectFoodInfo(foodInfoSeq, memberSeq);
+        selectFoodInfo(foodInfoSeq, userSeq);
 
         setToolbar();
     }
@@ -127,11 +127,11 @@ public class BestFoodInfoActivity extends AppCompatActivity
     /**
      * 서버에서 맛집 정보를 조회한다.
      * @param foodInfoSeq 맛집 정보 시퀀스
-     * @param memberSeq 사용자 시퀀스
+     * @param userSeq 사용자 시퀀스
      */
-    private void selectFoodInfo(int foodInfoSeq, int memberSeq) {
+    private void selectFoodInfo(int foodInfoSeq, int userSeq) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-        Call<FoodInfoItem> call = remoteService.selectFoodInfo(foodInfoSeq, memberSeq);
+        Call<FoodInfoItem> call = remoteService.selectFoodInfo(foodInfoSeq, userSeq);
 
         call.enqueue(new Callback<FoodInfoItem>() {
             @Override
@@ -257,11 +257,11 @@ public class BestFoodInfoActivity extends AppCompatActivity
         if (v.getId() == R.id.keep) {
             if (item.isKeep) {
                 DialogLib.getInstance()
-                        .showKeepDeleteDialog(context, keepHandler, memberSeq, item.seq);
+                        .showKeepDeleteDialog(context, keepHandler, userSeq, item.seq);
                 keepImage.setImageResource(R.drawable.ic_keep_off);
             } else {
                 DialogLib.getInstance()
-                        .showKeepInsertDialog(context, keepHandler, memberSeq, item.seq);
+                        .showKeepInsertDialog(context, keepHandler, userSeq, item.seq);
                 keepImage.setImageResource(R.drawable.ic_keep_on);
             }
         } else if (v.getId() == R.id.location) {

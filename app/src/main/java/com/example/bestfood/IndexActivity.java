@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Looper;
@@ -37,6 +38,7 @@ public class IndexActivity extends AppCompatActivity {
         if (!RemoteLib.getInstance().isConnected(context)) {
             showNoService();
         }
+
     }
 
     /**

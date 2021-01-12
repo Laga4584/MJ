@@ -28,7 +28,7 @@ public class FragFirst extends Fragment implements View.OnClickListener {
     private final String TAG = this.getClass().getSimpleName();
 
     int iCount;
-    ViewPager2 viewPager2;
+    public static ViewPager2 viewPager2;
     MyAdapter adapter;
     Boolean clicked;
     Button nextButton;
@@ -51,7 +51,7 @@ public class FragFirst extends Fragment implements View.OnClickListener {
       if (getArguments() != null) {
           infoItem = Parcels.unwrap(getArguments().getParcelable(INFO_ITEM));
           if (infoItem.seq != 0) {
-              CaseActivity.currentItem = infoItem;
+              CaseActivity.infoItem = infoItem;
           }
           MyLog.d(TAG, "infoItem " + infoItem);
       }
@@ -80,7 +80,7 @@ public class FragFirst extends Fragment implements View.OnClickListener {
       if (infoItem.seq > 0)viewPager2.setCurrentItem(1);
       else viewPager2.setCurrentItem(0);
 
-
+      /*
       nextButton = rootView.findViewById(R.id.button);
       if (viewPager2.getCurrentItem()==0) {
           nextButton.setText("견적 요청하기");
@@ -88,6 +88,8 @@ public class FragFirst extends Fragment implements View.OnClickListener {
           nextButton.setText("수정하기");
 
       nextButton.setOnClickListener(this);
+
+       */
 
       return rootView;
   }
@@ -97,17 +99,19 @@ public class FragFirst extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         if (v.getId() == R.id.button) {
+            /*
             if (viewPager2.getCurrentItem()==0) {
                 viewPager2.setCurrentItem(1);
                 nextButton.setText("수정하기");
                 insertCaseInfo();
-                CaseActivity.currentItem = infoItem;
+                CaseActivity.infoItem = infoItem;
                 MyLog.d(TAG, "button clicked");
             }else{
                 viewPager2.setCurrentItem(0);
                 nextButton.setText("견적 요청하기");
-
             }
+
+             */
         }
     }
 

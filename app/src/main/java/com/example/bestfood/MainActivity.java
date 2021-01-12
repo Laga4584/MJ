@@ -15,15 +15,14 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bestfood.lib.MyToast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab;
     Toolbar toolbar;
 
-    BestFoodListFragment fragment1;
-    BestFoodSampleFragment fragment2;
+    RepairerListFragment fragment1;
+    SampleFragment fragment2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +43,11 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
 
-        actionBar.setLogo(R.drawable.ic_keep_off);
+        actionBar.setLogo(R.drawable.bg_logo_white);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
-        fragment1 = new BestFoodListFragment();
-        fragment2 = new BestFoodSampleFragment();
+        fragment1 = new RepairerListFragment();
+        fragment2 = new SampleFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
 
@@ -100,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.menu_chat:
-                MyToast.s(this, "채팅 메뉴가 선택되었습니다.");
-                Intent intent2 = new Intent(MainActivity.this, ChatActivity.class);
+            case R.id.menu_notice:
+                MyToast.s(this, "공지 메뉴가 선택되었습니다.");
+                Intent intent2 = new Intent(MainActivity.this, NoticeActivity.class);
                 startActivity(intent2);
             default:
                 break;

@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bestfood.item.MemberInfoItem;
+import com.example.bestfood.item.UserInfoItem;
 import com.example.bestfood.lib.EtcLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.MyToast;
@@ -48,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     EditText birthEdit;
     EditText phoneEdit;
 
-    MemberInfoItem currentItem;
+    UserInfoItem currentItem;
 
     /**
      * 액티비티를 생성하고 화면을 구성한다.
@@ -61,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         context = this;
 
-        currentItem = ((App) getApplication()).getMemberInfoItem();
+        currentItem = ((App) getApplication()).getUserInfoItem();
 
         setToolbar();
         setView();
@@ -74,13 +74,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
 
-        MyLog.d(TAG, RemoteService.MEMBER_ICON_URL + currentItem.memberIconFilename);
+        MyLog.d(TAG, RemoteService.USER_ICON_URL + currentItem.userIconFilename);
 
-        if (StringLib.getInstance().isBlank(currentItem.memberIconFilename)) {
+        if (StringLib.getInstance().isBlank(currentItem.userIconFilename)) {
             Picasso.get().load(R.drawable.ic_person).into(profileIconImage);
         } else {
             Picasso.get()
-                    .load(RemoteService.MEMBER_ICON_URL + currentItem.memberIconFilename)
+                    .load(RemoteService.USER_ICON_URL + currentItem.userIconFilename)
                     .into(profileIconImage);
         }
     }
@@ -230,11 +230,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     /**
-     * 사용자가 입력한 정보를 MemberInfoItem 객체에 저장해서 반환한다.
+     * 사용자가 입력한 정보를 UserInfoItem 객체에 저장해서 반환한다.
      * @return 사용자 정보 객체
      */
-    private MemberInfoItem getMemberInfoItem() {
-        MemberInfoItem item = new MemberInfoItem();
+    private UserInfoItem getUserInfoItem() {
+        UserInfoItem item = new UserInfoItem();
         item.phone = EtcLib.getInstance().getPhoneNumber(context);
         item.name = nameEdit.getText().toString();
         item.sextype = sextypeEdit.getText().toString();
@@ -248,7 +248,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * @param newItem 사용자 정보 객체
      * @return 변경되었다면 true, 변경되지 않았다면 false
      */
-    private boolean isChanged(MemberInfoItem newItem) {
+    private boolean isChanged(UserInfoItem newItem) {
         if (newItem.name.trim().equals(currentItem.name)
                 && newItem.sextype.trim().equals(currentItem.sextype)
                 && newItem.birthday.trim().equals(currentItem.birthday)) {
@@ -264,7 +264,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * @param newItem 사용자가 새로 입력한 정보 객체
      * @return 입력하지 않았다면 true, 입력했다면 false
      */
-    private boolean isNoName(MemberInfoItem newItem) {
+    private boolean isNoName(UserInfoItem newItem) {
         if (StringLib.getInstance().isBlank(newItem.name)) {
             return true;
         } else {
@@ -277,7 +277,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * 변경사항이 있다면 저장하고 없다면 화면을 닫는다.
      */
     private void close() {
-        MemberInfoItem newItem = getMemberInfoItem();
+        UserInfoItem newItem = getUserInfoItem();
 
         if (!isChanged(newItem) && !isNoName(newItem)) {
             finish();
@@ -306,7 +306,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * 사용자가 입력한 정보를 저장한다.
      */
     private void save() {
-        final MemberInfoItem newItem = getMemberInfoItem();
+        final UserInfoItem newItem = getUserInfoItem();
 
         if (!isChanged(newItem)) {
             MyToast.s(this, R.string.no_change);
@@ -319,7 +319,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         RemoteService remoteService =
                 ServiceGenerator.createService(RemoteService.class);
 
-        Call<String> call = remoteService.insertMemberInfo(newItem);
+        Call<String> call = remoteService.insertUserInfo(newItem);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -328,11 +328,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     try {
                         currentItem.seq = Integer.parseInt(seq);
                         if (currentItem.seq == 0) {
-                            MyToast.s(context, R.string.member_insert_fail_message);
+                            MyToast.s(context, R.string.user_insert_fail_message);
                             return;
                         }
                     } catch (Exception e) {
-                        MyToast.s(context, R.string.member_insert_fail_message);
+                        MyToast.s(context, R.string.user_insert_fail_message);
                         return;
                     }
                     currentItem.name = newItem.name;

@@ -7,14 +7,14 @@ import com.google.gson.annotations.SerializedName;
  */
 public class KeepItem extends FoodInfoItem{
     @SerializedName("keep_seq") public String keepSeq;
-    @SerializedName("keep_member_seq") public String keepMemberSeq;
+    @SerializedName("keep_user_seq") public String keepUserSeq;
     @SerializedName("keep_date") public String keepDate;
 
     @Override
     public String toString() {
         return "KeepItem{" +
                 "keepSeq='" + keepSeq + '\'' +
-                ", keepMemberSeq='" + keepMemberSeq + '\'' +
+                ", keepUserSeq='" + keepUserSeq + '\'' +
                 ", keepDate='" + keepDate + '\'' +
                 '}';
     }

@@ -30,14 +30,12 @@ import retrofit2.Response;
 public class CaseActivity extends FragmentActivity {
     public static final String INFO_SEQ = "INFO_SEQ";
     private final String TAG = this.getClass().getSimpleName();
-    public static CaseInfoItem currentItem = null;
 
     Context context;
     int userSeq;
     int caseInfoSeq;
     public static int iCount;
 
-    public Boolean clicked = false;
     public static ViewPager2 mPager;
     private FragmentStateAdapter pagerAdapter;
     private int num_page = 7;
@@ -52,17 +50,9 @@ public class CaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_case);
         infoItem = new CaseInfoItem();
-        userSeq = ((App)getApplication()).getMemberSeq();
-
+        userSeq = ((App)getApplication()).getUserSeq();
         caseInfoSeq = getIntent().getIntExtra(INFO_SEQ, 0);
-
-
-
-
-        //Fragment로 넘길 기본적인 정보를 저장한다.
-        //infoItem = new CaseInfoItem();
-        //infoItem.userSeq = userSeq;
-        //MyLog.d(TAG, "infoItem " + infoItem.toString());
+        MyLog.d("here caseInfoSeq "+caseInfoSeq);
 
         //ViewPager2
         mPager = findViewById(R.id.viewpager);
@@ -70,11 +60,7 @@ public class CaseActivity extends FragmentActivity {
         //adapterSetup();
         //settingTabLayout();
         //mPager.setCurrentItem(iCount);
-
-
     }
-
-
 
     /**
      * 서버에서 맛집 정보를 조회한다.
@@ -91,16 +77,10 @@ public class CaseActivity extends FragmentActivity {
 
                 if (response.isSuccessful() && item != null && item.seq > 0) {
                     infoItem = item;
-                    //infoItem.status = item.status;
-
-                    MyLog.d(TAG, "here item " + item.toString());
                     iCount = Arrays.asList(status_list).indexOf(infoItem.status);
-
                     adapterSetup();
-                    //setView();
                     //loadingText.setVisibility(View.GONE);
                 } else {
-                    //MyLog.d(TAG, "here item " + item.toString());
                     infoItem.userSeq = userSeq;
                     iCount = 0;
                     adapterSetup();
@@ -245,17 +225,5 @@ public class CaseActivity extends FragmentActivity {
         });
 
     }
-    /*
-    public void notifyToSlideToRespectivePage(int pageNumber) {
-
-        clicked = true;
-        MyLog.d("clicked check case", clicked.toString());
-        adapterSetup();
-    }
-    public boolean getClicked(){
-        return clicked;
-    }
-
-     */
 }
 

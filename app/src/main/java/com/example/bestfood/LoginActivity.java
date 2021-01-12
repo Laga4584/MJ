@@ -9,9 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bestfood.item.MemberInfoItem;
+import com.example.bestfood.item.UserInfoItem;
 import com.example.bestfood.lib.EtcLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.MyToast;
@@ -34,18 +35,45 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 public class LoginActivity extends AppCompatActivity {
-    MemberInfoItem newItem;
+    UserInfoItem newItem;
     Context context;
     private final String TAG = this.getClass().getSimpleName();
     private SessionCallback sessionCallback;
     private EditText login_email, login_password;
     private Button login_button, join_button;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //FCM 토큰
+        FirebaseApp.initializeApp(this);
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            MyLog.d(TAG, "Fetching FCM registration token failed " + task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        token = task.getResult();
+
+                        // Log and toast
+                        MyLog.d(TAG, "Firebase token " + token);
+                    }
+                });
+        //FCM 여기까지
 
         login_email = findViewById( R.id.login_email );
         login_password = findViewById( R.id.login_password );
@@ -71,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         //기존 코드
-        newItem = new MemberInfoItem();
+        newItem = new UserInfoItem();
         // 여기서부터 나중에 고쳐야함 임시로 추가
         newItem.phone = EtcLib.getInstance().getPhoneNumber(this);
         Log.i("newItem", newItem.toString());
@@ -85,14 +113,14 @@ public class LoginActivity extends AppCompatActivity {
     private void login(String email, String password){
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<MemberInfoItem> call = remoteService.loginMemberInfo(email, password);
-        call.enqueue(new Callback<MemberInfoItem>() {
+        Call<UserInfoItem> call = remoteService.loginUserInfo(email, password);
+        call.enqueue(new Callback<UserInfoItem>() {
             @Override
-            public void onResponse(Call<MemberInfoItem> call, Response<MemberInfoItem> response) {
-                MemberInfoItem item = response.body();
+            public void onResponse(Call<UserInfoItem> call, Response<UserInfoItem> response) {
+                UserInfoItem item = response.body();
 
                 if (response.isSuccessful() && !StringLib.getInstance().isBlank(item.name)) {
-                    setMemberInfoItem(item);
+                    setUserInfoItem(item);
                     MyLog.d(TAG, "success " + response.body().toString());
                     MyToast.s(context, "환영합니다");
                     Intent intent = new Intent( LoginActivity.this, MainActivity.class );
@@ -104,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<MemberInfoItem> call, Throwable t) {
+            public void onFailure(Call<UserInfoItem> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }
@@ -257,8 +285,8 @@ public class LoginActivity extends AppCompatActivity {
 
                      */
                     //여기까지가 추가된 부분.
-                    //selectMemberInfo(email_2);
-                    selectMemberInfo(newItem.email);
+                    //selectUserInfo(email_2);
+                    selectUserInfo(newItem.email);
                 }
             });
         }
@@ -271,32 +299,32 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 리트로핏을 활용해서 서버로부터 사용자 정보를 조회한다.
-     * 사용자 정보를 조회했다면 setMemberInfoItem() 메소드를 호출하고
+     * 사용자 정보를 조회했다면 setUserInfoItem() 메소드를 호출하고
      * 그렇지 않다면 goProfileActivity() 메소드를 호출한다.
      *
      * @param email 이메일
      */
-    public void selectMemberInfo(String email) {
+    public void selectUserInfo(String email) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<MemberInfoItem> call = remoteService.selectMemberInfo(email);
-        call.enqueue(new Callback<MemberInfoItem>() {
+        Call<UserInfoItem> call = remoteService.selectUserInfo(email);
+        call.enqueue(new Callback<UserInfoItem>() {
             @Override
-            public void onResponse(Call<MemberInfoItem> call, Response<MemberInfoItem> response) {
-                MemberInfoItem item = response.body();
+            public void onResponse(Call<UserInfoItem> call, Response<UserInfoItem> response) {
+                UserInfoItem item = response.body();
 
                 if (response.isSuccessful() && !StringLib.getInstance().isBlank(item.name)) {
                     MyLog.d(TAG, "success " + response.body().toString());
-                    setMemberInfoItem(item);
+                    setUserInfoItem(item);
                 } else {
                     MyLog.d(TAG, "not success");
                     MyLog.d(TAG, newItem.toString());
-                    insertMemberInfo(newItem);
+                    insertUserInfo(newItem);
                 }
             }
 
             @Override
-            public void onFailure(Call<MemberInfoItem> call, Throwable t) {
+            public void onFailure(Call<UserInfoItem> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }
@@ -304,13 +332,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * 전달받은 MemberInfoItem을 Application 객체에 저장한다.
+     * 전달받은 UserInfoItem을 Application 객체에 저장한다.
      * 그리고 startMain() 메소드를 호출한다.
      *
      * @param item 사용자 정보
      */
-    private void setMemberInfoItem(MemberInfoItem item) {
-        ((App) getApplicationContext()).setMemberInfoItem(item);
+    private void setUserInfoItem(UserInfoItem item) {
+        ((App) getApplicationContext()).setUserInfoItem(item);
 
         startMain();
     }
@@ -326,18 +354,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * 사용자 정보를 조회하지 못했다면 insertMemberPhone() 메소드를 통해
+     * 사용자 정보를 조회하지 못했다면 insertUserPhone() 메소드를 통해
      * 전화번호를 서버에 저장하고 MainActivity를 실행한 후 ProfileActivity를 실행한다.
      * 그리고 현재 액티비티를 종료한다.
      *
      * @param item 사용자 정보
      */
 
-    private void insertMemberInfo(MemberInfoItem item) {
+    private void insertUserInfo(UserInfoItem item) {
         RemoteService remoteService =
                 ServiceGenerator.createService(RemoteService.class);
 
-        Call<String> call = remoteService.insertMemberInfo(item);
+        Call<String> call = remoteService.insertUserInfo(item);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -346,14 +374,14 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         newItem.seq = Integer.parseInt(seq);
                         if (newItem.seq == 0) {
-                            MyToast.s(context, R.string.member_insert_fail_message);
+                            MyToast.s(context, R.string.user_insert_fail_message);
                             return;
                         }
                     } catch (Exception e) {
-                        MyToast.s(context, R.string.member_insert_fail_message);
+                        MyToast.s(context, R.string.user_insert_fail_message);
                         return;
                     }
-                    setMemberInfoItem(newItem);
+                    setUserInfoItem(newItem);
                 }
             }
             @Override

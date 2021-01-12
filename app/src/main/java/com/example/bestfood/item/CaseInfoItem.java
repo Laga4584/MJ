@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public class CaseInfoItem {
     public int seq;
     @SerializedName("user_seq") public int userSeq;
+    @SerializedName("repairer_seq") public int repairerSeq;
     public String service;
     public String product;
     public String brand;
@@ -36,6 +37,7 @@ public class CaseInfoItem {
         return "CaseInfoItem{" +
                 "seq=" + seq +
                 ", user_seq=" + userSeq +
+                ", repairer_seq=" + repairerSeq +
                 ", service='" + service + '\'' +
                 ", product='" + product + '\'' +
                 ", brand='" + brand + '\'' +

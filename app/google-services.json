@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "470733450690",
+    "project_id": "meongjang-55929",
+    "storage_bucket": "meongjang-55929.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470733450690:android:0b06d0bf45343eccc27a5b",
+        "android_client_info": {
+          "package_name": "com.example.bestfood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470733450690-8m4se6vsfdn2prf6a83167u4sm4ku7ur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeoCnhzJoKqVhULE1XJyajQ56BL8tpHB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470733450690-8m4se6vsfdn2prf6a83167u4sm4ku7ur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
