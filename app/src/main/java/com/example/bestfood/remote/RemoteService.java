@@ -5,6 +5,7 @@ import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.item.KeepItem;
+import com.example.bestfood.item.NoticeItem;
 import com.example.bestfood.item.UserInfoItem;
 import com.example.bestfood.item.SampleItem;
 
@@ -34,6 +35,10 @@ public interface RemoteService {
     String USER_ICON_URL = BASE_URL + "/user/";
     String IMAGE_URL = BASE_URL + "/img/";
     String SAMPLE_URL = BASE_URL + "/sample/";
+
+    //알림
+    @GET("/user/notice")
+    Call<ArrayList<NoticeItem>> listNoticeInfo(@Query("user_seq") int userSeq, @Query("current_page") int currentPage);
 
     //샘플
     @GET("/sample/info/{seq}")
@@ -86,7 +91,7 @@ public interface RemoteService {
     Call<UserInfoItem> selectUserInfo(@Query("email") String email);
 
     @POST("/user/info")
-    Call<String> insertUserInfo(@Body UserInfoItem userInfoItem);
+    Call<String> insertUserInfo(@Body UserInfoItem userInfoItem, @Query("token") String token);
 
     @FormUrlEncoded
     @POST("/user/phone")

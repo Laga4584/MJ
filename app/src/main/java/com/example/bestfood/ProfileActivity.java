@@ -319,7 +319,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         RemoteService remoteService =
                 ServiceGenerator.createService(RemoteService.class);
 
-        Call<String> call = remoteService.insertUserInfo(newItem);
+        Call<String> call = remoteService.insertUserInfo(newItem, LoginActivity.token);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

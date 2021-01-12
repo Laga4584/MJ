@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private SessionCallback sessionCallback;
     private EditText login_email, login_password;
     private Button login_button, join_button;
-    private String token;
+    public static String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
     private void login(String email, String password){
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<UserInfoItem> call = remoteService.loginUserInfo(email, password);
+        Call<UserInfoItem> call = remoteService.loginUserInfo(email, password, token);
         call.enqueue(new Callback<UserInfoItem>() {
             @Override
             public void onResponse(Call<UserInfoItem> call, Response<UserInfoItem> response) {
@@ -365,7 +365,7 @@ public class LoginActivity extends AppCompatActivity {
         RemoteService remoteService =
                 ServiceGenerator.createService(RemoteService.class);
 
-        Call<String> call = remoteService.insertUserInfo(item);
+        Call<String> call = remoteService.insertUserInfo(item, token);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
