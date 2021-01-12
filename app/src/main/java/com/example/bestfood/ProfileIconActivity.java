@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.bestfood.item.MemberInfoItem;
+import com.example.bestfood.item.UserInfoItem;
 import com.example.bestfood.lib.FileLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
@@ -40,7 +40,7 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
 
     ImageView profileIconImage;
 
-    MemberInfoItem memberInfoItem;
+    UserInfoItem userInfoItem;
 
     File profileIconFile;
     String profileIconFilename;
@@ -56,7 +56,7 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
 
         context = this;
 
-        memberInfoItem = ((App) getApplication()).getMemberInfoItem();
+        userInfoItem = ((App) getApplication()).getUserInfoItem();
 
         setToolbar();
         setView();
@@ -95,13 +95,13 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
      */
     private void setProfileIcon() {
         MyLog.d(TAG, "onResume " +
-                RemoteService.MEMBER_ICON_URL + memberInfoItem.memberIconFilename);
+                RemoteService.USER_ICON_URL + userInfoItem.userIconFilename);
 
-        if (StringLib.getInstance().isBlank(memberInfoItem.memberIconFilename)) {
+        if (StringLib.getInstance().isBlank(userInfoItem.userIconFilename)) {
             Picasso.get().load(R.drawable.ic_person).into(profileIconImage);
         } else {
             Picasso.get()
-                    .load(RemoteService.MEMBER_ICON_URL + memberInfoItem.memberIconFilename)
+                    .load(RemoteService.USER_ICON_URL + userInfoItem.userIconFilename)
                     .into(profileIconImage);
         }
     }
@@ -110,7 +110,7 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
      * 사용자가 선택한 프로필 아이콘을 저장할 파일 이름을 설정한다.
      */
     private void setProfileIconFile() {
-        profileIconFilename = memberInfoItem.seq + "_" + String.valueOf(System.currentTimeMillis());
+        profileIconFilename = userInfoItem.seq + "_" + String.valueOf(System.currentTimeMillis());
 
         profileIconFile = FileLib.getInstance().getProfileIconFile(context, profileIconFilename);
     }
@@ -258,8 +258,8 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
      * 프로필 아이콘을 서버에 업로드한다.
      */
     private void uploadProfileIcon() {
-        RemoteLib.getInstance().uploadMemberIcon(memberInfoItem.seq, profileIconFile);
+        RemoteLib.getInstance().uploadUserIcon(userInfoItem.seq, profileIconFile);
 
-        memberInfoItem.memberIconFilename = profileIconFilename + ".png";
+        userInfoItem.userIconFilename = profileIconFilename + ".png";
     }
 }

@@ -82,12 +82,17 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:textSize="@dimen/text_size_small2"
             />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
         <TextView
             android:id="@+id/text4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
             android:text="물품 사진을 등록해 주세요"
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/text_size_medium"
@@ -98,8 +103,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:text="사진 업로드" />
+    </LinearLayout>
 
         <TextView
             android:id="@+id/text5"
@@ -125,9 +130,14 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             />
-
-
-
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="견적 요청하기"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginVertical="@dimen/activity_vertical_margin"
+            />
 
     </LinearLayout>
 

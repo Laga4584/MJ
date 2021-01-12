@@ -5,7 +5,7 @@ import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.item.KeepItem;
-import com.example.bestfood.item.MemberInfoItem;
+import com.example.bestfood.item.UserInfoItem;
 import com.example.bestfood.item.SampleItem;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import retrofit2.http.Query;
 public interface RemoteService {
     //String BASE_URL = "http://192.168.1.134:3000";
     String BASE_URL = "http://ec2-54-180-82-94.ap-northeast-2.compute.amazonaws.com:3000";
-    String MEMBER_ICON_URL = BASE_URL + "/member/";
+    String USER_ICON_URL = BASE_URL + "/user/";
     String IMAGE_URL = BASE_URL + "/img/";
     String SAMPLE_URL = BASE_URL + "/sample/";
 
@@ -59,7 +59,7 @@ public interface RemoteService {
     Call<String> insertCaseInfo(@Body CaseInfoItem infoItem);
 
     @GET("/case/list")
-    Call<ArrayList<CaseInfoItem>> listCaseInfo(@Query("user_seq") int memberSeq,
+    Call<ArrayList<CaseInfoItem>> listCaseInfo(@Query("user_seq") int userSeq,
                                                @Query("current_page") int currentPage);
 
     @POST("/case/status")
@@ -71,6 +71,9 @@ public interface RemoteService {
                                        @Part("label") RequestBody label,
                                        @Part MultipartBody.Part file);
 
+    @POST("/case/image/delete")
+    Call<String> deleteImageInfo(@Query("seq") int seq);
+
     @GET("/case/image/list")
     Call<ArrayList<ImageItem>> listImageInfo(@Query("info_seq") int infoSeq);
 
@@ -79,31 +82,31 @@ public interface RemoteService {
                                      @Query("dot") String dot);
 
     //사용자 정보
-    @GET("/member/email")
-    Call<MemberInfoItem> selectMemberInfo(@Query("email") String email);
+    @GET("/user/email")
+    Call<UserInfoItem> selectUserInfo(@Query("email") String email);
 
-    @POST("/member/info")
-    Call<String> insertMemberInfo(@Body MemberInfoItem memberInfoItem);
+    @POST("/user/info")
+    Call<String> insertUserInfo(@Body UserInfoItem userInfoItem);
 
     @FormUrlEncoded
-    @POST("/member/phone")
-    Call<String> insertMemberPhone(@Field("phone") String phone);
+    @POST("/user/phone")
+    Call<String> insertUserPhone(@Field("phone") String phone);
 
     @Multipart
-    @POST("/member/icon_upload")
-    Call<ResponseBody> uploadMemberIcon(@Part("member_seq") RequestBody memberSeq,
+    @POST("/user/icon_upload")
+    Call<ResponseBody> uploadUserIcon(@Part("user_seq") RequestBody userSeq,
                                         @Part MultipartBody.Part file);
 
-    @POST("/member/register")
-    Call<String> registerMemberInfo(@Body MemberInfoItem memberInfoItem);
+    @POST("/user/register")
+    Call<String> registerUserInfo(@Body UserInfoItem userInfoItem);
 
-    @GET("/member/login")
-    Call<MemberInfoItem> loginMemberInfo(@Query("email") String email, @Query("password") String password);
+    @POST("/user/login")
+    Call<UserInfoItem> loginUserInfo(@Query("email") String email, @Query("password") String password, @Query("token") String token);
 
     //맛집 정보
     @GET("/food/info/{info_seq}")
     Call<FoodInfoItem> selectFoodInfo(@Path("info_seq") int foodInfoSeq,
-                                      @Query("member_seq") int memberSeq);
+                                      @Query("user_seq") int userSeq);
 
     @POST("/food/info")
     Call<String> insertFoodInfo(@Body FoodInfoItem infoItem);
@@ -115,7 +118,7 @@ public interface RemoteService {
                                        @Part MultipartBody.Part file);
 
     @GET("/food/list")
-    Call<ArrayList<FoodInfoItem>> listFoodInfo(@Query("member_seq") int memberSeq,
+    Call<ArrayList<FoodInfoItem>> listFoodInfo(@Query("user_seq") int userSeq,
                                                @Query("user_latitude") double userLatitude,
                                                @Query("user_longitude") double userLongitude,
                                                @Query("order_type") String orderType,
@@ -123,7 +126,7 @@ public interface RemoteService {
 
     //지도
     @GET("/food/map/list")
-    Call<ArrayList<FoodInfoItem>> listMap(@Query("member_seq") int memberSeq,
+    Call<ArrayList<FoodInfoItem>> listMap(@Query("user_seq") int userSeq,
                                           @Query("latitude") double latitude,
                                           @Query("longitude") double longitude,
                                           @Query("distance") int distance,
@@ -131,14 +134,14 @@ public interface RemoteService {
                                           @Query("user_longitude") double userLongitude);
 
     //즐겨찾기
-    @POST("/keep/{member_seq}/{info_seq}")
-    Call<String> insertKeep(@Path("member_seq") int memberSeq, @Path("info_seq") int infoSeq);
+    @POST("/keep/{user_seq}/{info_seq}")
+    Call<String> insertKeep(@Path("user_seq") int userSeq, @Path("info_seq") int infoSeq);
 
-    @DELETE("/keep/{member_seq}/{info_seq}")
-    Call<String> deleteKeep(@Path("member_seq") int memberSeq, @Path("info_seq") int infoSeq);
+    @DELETE("/keep/{user_seq}/{info_seq}")
+    Call<String> deleteKeep(@Path("user_seq") int userSeq, @Path("info_seq") int infoSeq);
 
     @GET("/keep/list")
-    Call<ArrayList<KeepItem>> listKeep(@Query("member_seq") int memberSeq,
+    Call<ArrayList<KeepItem>> listKeep(@Query("user_seq") int userSeq,
                                        @Query("user_latitude") double userLatitude,
                                        @Query("user_longitude") double userLongitude);
 

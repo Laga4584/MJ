@@ -5,9 +5,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bestfood.adapter.SampleAdapter;
 import com.example.bestfood.item.SampleItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.StringLib;
@@ -66,7 +66,7 @@ public class SampleActivity extends AppCompatActivity {
                     setView();
 
                 } else {
-                    //infoItem.memberSeq = memberSeq;
+                    //infoItem.userSeq = userSeq;
                 }
             }
             @Override

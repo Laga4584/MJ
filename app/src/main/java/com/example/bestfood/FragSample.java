@@ -5,12 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.bestfood.custom.CustomView;
-import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
@@ -18,7 +16,6 @@ import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -52,7 +49,7 @@ public class FragSample extends Fragment {
         }
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frag_sample_1, container, false);
+                R.layout.frag_sample, container, false);
 
         sampleImage = rootView.findViewById(R.id.image);
         dotImage = rootView.findViewById(R.id.dot);

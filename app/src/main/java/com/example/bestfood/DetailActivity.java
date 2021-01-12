@@ -1,12 +1,11 @@
 package com.example.bestfood;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bestfood.adapter.SampleAdapter;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.remote.RemoteService;

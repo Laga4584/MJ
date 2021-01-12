@@ -31,6 +31,12 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
+        <service android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
 
         <activity
             android:name=".PermissionActivity"
@@ -55,7 +61,6 @@
         <activity android:name=".IndexActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".BestFoodInfoActivity" />
-        <activity android:name=".BestFoodRegisterActivity" />
         <activity android:name=".CaseActivity"/>
         <activity android:name=".ImageActivity"/>
         <activity android:name=".SampleActivity"/>
@@ -63,6 +68,10 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ProfileIconActivity" />
         <activity android:name=".ChatActivity"/>
+        <activity android:name=".DetailActivity"/>
+        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".CaseListActivity"/>
+        <activity android:name=".NoticeActivity"/>
     </application>
 
 </manifest>

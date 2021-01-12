@@ -79,7 +79,7 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
         if (getArguments() != null) {
             infoItem = Parcels.unwrap(getArguments().getParcelable(INFO_ITEM));
             if (infoItem.seq != 0) {
-                CaseActivity.currentItem = infoItem;
+                CaseActivity.infoItem = infoItem;
             }
             MyLog.d(TAG, "infoItem " + infoItem);
         }
@@ -183,11 +183,10 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
         cameraButton.setOnClickListener(this);
 
 
-        //CaseActivity.currentItem = infoItem;
         FragFirst.currentItem = infoItem;
 
-        //nextButton = (Button) view.findViewById(R.id.button);
-        //nextButton.setOnClickListener(this);
+        nextButton = (Button) view.findViewById(R.id.button);
+        nextButton.setOnClickListener(this);
     }
 
 
@@ -207,6 +206,10 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
 
              */
         } else if (v.getId() == R.id.button) {
+
+            FragFirst.viewPager2.setCurrentItem(1);
+            insertCaseInfo();
+            CaseActivity.infoItem = infoItem;
             /*
             MainFragment mainFragment = (MainFragment) getFragmentManager().findFragmentById(R.id.ll_fragment);
             mainFragment.changeFragmentTextView("호호호");

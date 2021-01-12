@@ -4,11 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentActivity;
 
 import com.example.bestfood.BestFoodInfoActivity;
-import com.example.bestfood.BestFoodRegisterActivity;
 import com.example.bestfood.CaseActivity;
+import com.example.bestfood.ChatActivity;
 import com.example.bestfood.DetailActivity;
 import com.example.bestfood.ImageActivity;
 import com.example.bestfood.ProfileActivity;
@@ -77,16 +76,6 @@ public class GoLib {
         context.startActivity(intent);
     }
 
-    /**
-     * 맛집 정보 등록 액티비티를 실행한다.
-     * @param context 컨텍스트
-     */
-    public void goBestFoodRegisterActivity(Context context) {
-        Intent intent = new Intent(context, BestFoodRegisterActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
 
     /**
      * 맛집 정보 액티비티를 실행한다.
@@ -102,6 +91,12 @@ public class GoLib {
     public void goCaseActivity(Context context, int infoSeq) {
         Intent intent = new Intent(context, CaseActivity.class);
         intent.putExtra(CaseActivity.INFO_SEQ, infoSeq);
+        context.startActivity(intent);
+    }
+
+    public void goChatActivity(Context context, int repairerSeq) {
+        Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra(ChatActivity.REPAIRER_SEQ, repairerSeq);
         context.startActivity(intent);
     }
 

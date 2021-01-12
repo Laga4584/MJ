@@ -15,7 +15,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bestfood.item.MemberInfoItem;
+import com.example.bestfood.item.UserInfoItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.lib.StringLib;
@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean validate = false;
     private final String TAG = this.getClass().getSimpleName();
     Context context;
-    MemberInfoItem registerItem;
+    UserInfoItem registerItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         context = this;
 
-        registerItem = new MemberInfoItem();
+        registerItem = new UserInfoItem();
 
         //아이디값 찾아주기
         join_email = findViewById( R.id.join_email );
@@ -124,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
                 registerItem.password = UserPwd;
                 registerItem.sextype = sextypeEdit.getText().toString();
                 registerItem.birthday = birthEdit.getText().toString().replace(" ", "");
-                registerMemberInfo(registerItem);
+                registerUserInfo(registerItem);
             }
         });
     }
@@ -184,11 +184,11 @@ public class RegisterActivity extends AppCompatActivity {
     private void validateEmail(String email){
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<MemberInfoItem> call = remoteService.selectMemberInfo(email);
-        call.enqueue(new Callback<MemberInfoItem>() {
+        Call<UserInfoItem> call = remoteService.selectUserInfo(email);
+        call.enqueue(new Callback<UserInfoItem>() {
             @Override
-            public void onResponse(Call<MemberInfoItem> call, Response<MemberInfoItem> response) {
-                MemberInfoItem item = response.body();
+            public void onResponse(Call<UserInfoItem> call, Response<UserInfoItem> response) {
+                UserInfoItem item = response.body();
 
                 if (response.isSuccessful() && !StringLib.getInstance().isBlank(item.name)) {
                     MyLog.d(TAG, "success " + response.body().toString());
@@ -207,17 +207,17 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<MemberInfoItem> call, Throwable t) {
+            public void onFailure(Call<UserInfoItem> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }
         });
     }
 
-    private void registerMemberInfo(MemberInfoItem item){
+    private void registerUserInfo(UserInfoItem item){
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<String> call = remoteService.registerMemberInfo(item);
+        Call<String> call = remoteService.registerUserInfo(item);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -226,11 +226,11 @@ public class RegisterActivity extends AppCompatActivity {
                     try {
                         //newItem.seq = Integer.parseInt(seq);
                         if (Integer.parseInt(seq) == 0) {
-                            MyToast.s(context, R.string.member_insert_fail_message);
+                            MyToast.s(context, R.string.user_insert_fail_message);
                             return;
                         }
                     } catch (Exception e) {
-                        MyToast.s(context, R.string.member_insert_fail_message);
+                        MyToast.s(context, R.string.user_insert_fail_message);
                         return;
                     }
                     MyToast.s(context, "회원가입이 완료되었습니다");
@@ -241,7 +241,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                MyToast.s(context, R.string.member_insert_fail_message);
+                MyToast.s(context, R.string.user_insert_fail_message);
             }
         });
     }

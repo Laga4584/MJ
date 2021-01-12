@@ -97,10 +97,10 @@ public class RemoteLib {
     */
     /**
      * 사용자 프로필 아이콘을 서버에 업로드한다.
-     * @param memberSeq 사용자 일련번호
+     * @param userSeq 사용자 일련번호
      * @param file 파일 객체
      */
-    public void uploadMemberIcon(int memberSeq, File file) {
+    public void uploadUserIcon(int userSeq, File file) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
         RequestBody requestFile =
@@ -109,22 +109,22 @@ public class RemoteLib {
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
-        RequestBody memberSeqBody =
+        RequestBody userSeqBody =
                 RequestBody.create(
-                        "" + memberSeq, MediaType.parse("multipart/form-data"));
+                        "" + userSeq, MediaType.parse("multipart/form-data"));
 
         Call<ResponseBody> call =
-                remoteService.uploadMemberIcon(memberSeqBody, body);
+                remoteService.uploadUserIcon(userSeqBody, body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call,
                                    Response<ResponseBody> response) {
-                MyLog.d(TAG, "uploadMemberIcon success");
+                MyLog.d(TAG, "uploadUserIcon success");
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                MyLog.e(TAG, "uploadMemberIcon fail");
+                MyLog.e(TAG, "uploadUserIcon fail");
             }
         });
     }

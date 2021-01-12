@@ -22,17 +22,15 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_CHAT_MESSAGE_RECEIVED = 0;
 
     private Context mcontext;
-    ArrayList<ChatItem> messageList;
+    private ArrayList<ChatItem> messageList;
 
     public ChatMessageAdapter(Context mcontext, ArrayList<ChatItem> messageList) {
         this.mcontext = mcontext;
         this.messageList = messageList;
-        MyLog.d("here list " + this.messageList.toString());
     }
 
     @Override
     public int getItemCount() {
-        MyLog.d("here size " + this.messageList.size());
         return this.messageList.size();
     }
 
@@ -49,8 +47,6 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-
-        MyLog.d("here viewtype " + viewType);
 
         if (viewType == VIEW_TYPE_CHAT_MESSAGE_SENT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_message_sent, parent, false);
@@ -75,7 +71,6 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
         }
 
          */
-        MyLog.d("here viewtype2 " + holder.getItemViewType());
         if (holder.getItemViewType() == 1) {
             ((SentMessageHolder) holder).bind(position);
         } else if (holder.getItemViewType() == 0){
@@ -120,7 +115,6 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
     public void addItemList(ArrayList<ChatItem> itemList) {
         this.messageList.addAll(itemList);
         notifyDataSetChanged();
-        MyLog.d("here list " + this.messageList.toString());
     }
 
 

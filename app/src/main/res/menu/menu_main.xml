@@ -5,13 +5,13 @@
 
     <item
         android:id="@+id/menu_profile"
-        android:icon="@drawable/ic_profile"
+        android:icon="@drawable/ic_profile_white"
         android:title="profile"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/menu_chat"
-        android:icon="@drawable/ic_tell"
+        android:id="@+id/menu_notice"
+        android:icon="@drawable/ic_notice_white"
         android:title="profile"
         app:showAsAction="always" />
 

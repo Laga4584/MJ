@@ -37,7 +37,8 @@ public class FragFirst2 extends Fragment {
     TextView serviceText;
     TextView productText;
     TextView descriptionText;
-    Button button;
+    Button cameraButton;
+    Button nextButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,15 +55,22 @@ public class FragFirst2 extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         context = this.getActivity();
 
-        button = view.findViewById(R.id.button);
+        cameraButton = view.findViewById(R.id.camera_button);
+        nextButton = view.findViewById(R.id.button);
         serviceText = view.findViewById(R.id.textview1);
         productText = view.findViewById(R.id.textview2);
         descriptionText = view.findViewById(R.id.textview4);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 GoLib.getInstance().goDetailActivity(context);
+            }
+        });
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragFirst.viewPager2.setCurrentItem(0);
             }
         });
 

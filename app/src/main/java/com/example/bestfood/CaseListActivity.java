@@ -41,7 +41,7 @@ public class CaseListActivity extends AppCompatActivity {
 
     Context context;
 
-    int memberSeq;
+    int userSeq;
 
     RecyclerView bestFoodList;
     TextView noDataText;
@@ -61,7 +61,7 @@ public class CaseListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_caselist);
 
         context = this;
-        memberSeq = ((App)this.getApplication()).getMemberSeq();
+        userSeq = ((App)this.getApplication()).getUserSeq();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class CaseListActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
 
-        actionBar.setLogo(R.drawable.ic_keep_off);
+        actionBar.setLogo(R.drawable.bg_logo_white);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
         this.getSupportActionBar().setTitle(R.string.nav_list);
@@ -108,11 +108,11 @@ public class CaseListActivity extends AppCompatActivity {
                 if (i == 0) {
                     orderType = Constant.ORDER_TYPE_METER;
                     setRecyclerView();
-                    listInfo(memberSeq, 0);
+                    listInfo(userSeq, 0);
                 }else {
                     orderType = Constant.ORDER_TYPE_RECENT;
                     setRecyclerView();
-                    listInfo(memberSeq, 0);
+                    listInfo(userSeq, 0);
                 }
 
             }
@@ -124,7 +124,7 @@ public class CaseListActivity extends AppCompatActivity {
         });
         setRecyclerView();
 
-        listInfo(memberSeq, 0);
+        listInfo(userSeq, 0);
     }
 
 
@@ -144,9 +144,9 @@ public class CaseListActivity extends AppCompatActivity {
                 Intent intent = new Intent(CaseListActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.menu_chat:
-                MyToast.s(this, "채팅 메뉴가 선택되었습니다.");
-                Intent intent2 = new Intent(CaseListActivity.this, ChatActivity.class);
+            case R.id.menu_notice:
+                MyToast.s(this, "공지 메뉴가 선택되었습니다.");
+                Intent intent2 = new Intent(CaseListActivity.this, NoticeActivity.class);
                 startActivity(intent2);
             default:
                 break;
@@ -206,7 +206,7 @@ public class CaseListActivity extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listInfo(memberSeq, page);
+                listInfo(userSeq, page);
             }
         };
         bestFoodList.addOnScrollListener(scrollListener);
@@ -214,13 +214,13 @@ public class CaseListActivity extends AppCompatActivity {
 
     /**
      * 서버에서 맛집 정보를 조회한다.
-     * @param memberSeq 사용자 시퀀스
+     * @param userSeq 사용자 시퀀스
      * @param currentPage 현재 페이지
      */
-    private void listInfo(int memberSeq, final int currentPage) {
+    private void listInfo(int userSeq, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<CaseInfoItem>> call = remoteService.listCaseInfo(memberSeq, currentPage);
+        Call<ArrayList<CaseInfoItem>> call = remoteService.listCaseInfo(userSeq, currentPage);
         call.enqueue(new Callback<ArrayList<CaseInfoItem>>() {
             @Override
             public void onResponse(Call<ArrayList<CaseInfoItem>> call,
@@ -232,7 +232,6 @@ public class CaseListActivity extends AppCompatActivity {
 
                     if (infoListAdapter.getItemCount() == 0) {
                         noDataText.setVisibility(View.VISIBLE);
-                        MyLog.d("noDataText VISIBLE");
                     } else {
                         noDataText.setVisibility(View.GONE);
                     }

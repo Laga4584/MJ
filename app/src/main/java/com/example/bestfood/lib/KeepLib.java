@@ -30,13 +30,13 @@ public class KeepLib {
     /**
      * 즐겨찾기 추가를 서버에 요청한다.
      * @param handler 결과를 응답할 핸들러
-     * @param memberSeq 사용자 일련번호
+     * @param userSeq 사용자 일련번호
      * @param infoSeq 맛집 정보 일련번호
      */
-    public void insertKeep(final Handler handler, int memberSeq, final int infoSeq) {
+    public void insertKeep(final Handler handler, int userSeq, final int infoSeq) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<String> call = remoteService.insertKeep(memberSeq, infoSeq);
+        Call<String> call = remoteService.insertKeep(userSeq, infoSeq);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -58,13 +58,13 @@ public class KeepLib {
     /**
      * 즐겨찾기 삭제를 서버에 요청한다.
      * @param handler 결과를 응답할 핸들러
-     * @param memberSeq 사용자 일련번호
+     * @param userSeq 사용자 일련번호
      * @param infoSeq 맛집 정보 일련번호
      */
-    public void deleteKeep(final Handler handler, int memberSeq, final int infoSeq) {
+    public void deleteKeep(final Handler handler, int userSeq, final int infoSeq) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<String> call = remoteService.deleteKeep(memberSeq, infoSeq);
+        Call<String> call = remoteService.deleteKeep(userSeq, infoSeq);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

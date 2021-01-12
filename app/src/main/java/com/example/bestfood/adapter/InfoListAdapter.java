@@ -1,6 +1,7 @@
 package com.example.bestfood.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -11,12 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bestfood.CaseActivity;
+import com.example.bestfood.CaseListActivity;
+import com.example.bestfood.ChatActivity;
 import com.example.bestfood.Constant;
 import com.example.bestfood.App;
 import com.example.bestfood.R;
 import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.item.FoodInfoItem;
-import com.example.bestfood.item.MemberInfoItem;
+import com.example.bestfood.item.UserInfoItem;
 import com.example.bestfood.lib.DialogLib;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
@@ -35,7 +39,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
     private Context context;
     private int resource;
     private ArrayList<CaseInfoItem> itemList;
-    private MemberInfoItem memberInfoItem;
+    private UserInfoItem userInfoItem;
 
     /**
      * 어댑터 생성자
@@ -48,7 +52,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
         this.resource = resource;
         this.itemList = itemList;
 
-        memberInfoItem = ((App) context.getApplicationContext()).getMemberInfoItem();
+        userInfoItem = ((App) context.getApplicationContext()).getUserInfoItem();
     }
 
     /**
@@ -141,21 +145,24 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
                 GoLib.getInstance().goCaseActivity(context, item.seq);
             }
         });
-        /*
+
         holder.keep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GoLib.getInstance().goChatActivity(context, item.repairerSeq);
+                /*
                 if (item.isKeep) {
                     DialogLib.getInstance().showKeepDeleteDialog(context,
-                            keepDeleteHandler, memberInfoItem.seq, item.seq);
+                            keepDeleteHandler, userInfoItem.seq, item.seq);
                 } else {
                     DialogLib.getInstance().showKeepInsertDialog(context,
-                            keepInsertHandler, memberInfoItem.seq, item.seq);
+                            keepInsertHandler, userInfoItem.seq, item.seq);
                 }
+                 */
             }
         });
 
-         */
+
     }
 
     /**

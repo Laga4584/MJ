@@ -3,24 +3,16 @@ package com.example.bestfood;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.bestfood.item.CaseInfoItem;
-import com.google.android.gms.maps.model.LatLng;
-import com.example.bestfood.adapter.InfoListAdapter;
+import com.example.bestfood.item.SampleItem;
+import com.example.bestfood.adapter.SampleListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
-import com.example.bestfood.item.FoodInfoItem;
-import com.example.bestfood.item.GeoItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
@@ -34,36 +26,43 @@ import retrofit2.Response;
 /**
  * 맛집 정보 리스트를 보여주는 프래그먼트
  */
-public class BestFoodListFragment extends Fragment implements View.OnClickListener {
+public class SampleFragment extends Fragment implements View.OnClickListener {
     private final String TAG = this.getClass().getSimpleName();
 
     Context context;
 
-    int memberSeq;
+    int userSeq;
 
     RecyclerView bestFoodList;
     TextView noDataText;
-    Spinner spinner;
-    ImageView listType;
-    InfoListAdapter infoListAdapter;
+
+    //Spinner spinner;
+    //TextView orderMeter;
+    //TextView orderFavorite;
+    //TextView orderRecent;
+
+    //ImageView listType;
+
+    SampleListAdapter infoListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
     int listTypeValue = 1;
     String orderType;
+
     String[] items = {"완료 케이스 보기", "완료 케이스 숨기기"};
 
     /**
      * BestFoodListFragment 인스턴스를 생성한다.
      * @return BestFoodListFragment 인스턴스
      */
-    public static BestFoodListFragment newInstance() {
-        BestFoodListFragment f = new BestFoodListFragment();
+    public static SampleFragment newInstance() {
+        SampleFragment f = new SampleFragment();
         return f;
     }
 
     /**
-     * fragment_bestfood_list.xml 기반으로 뷰를 생성한다.
+     * fragment_repairer_list.xml 기반으로 뷰를 생성한다.
      * @param inflater XML를 객체로 변환하는 LayoutInflater 객체
      * @param container null이 아니라면 부모 뷰
      * @param savedInstanceState null이 아니라면 이전에 저장된 상태를 가진 객체
@@ -73,9 +72,9 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = this.getActivity();
 
-        memberSeq = ((App)this.getActivity().getApplication()).getMemberSeq();
+        userSeq = ((App)this.getActivity().getApplication()).getUserSeq();
 
-        View layout = inflater.inflate(R.layout.fragment_bestfood_list, container, false);
+        View layout = inflater.inflate(R.layout.fragment_sample, container, false);
 
         return layout;
     }
@@ -88,14 +87,17 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-
+        /*
         App app = ((App) getActivity().getApplication());
-        CaseInfoItem currentInfoItem = app.getCaseInfoItem();
+        SampleItem currentInfoItem = app.getSampleItem();
 
         if (infoListAdapter != null && currentInfoItem != null) {
             infoListAdapter.setItem(currentInfoItem);
-            app.setFoodInfoItem(null);
+            app.setSampleItem(null);
+
         }
+
+         */
     }
 
     /**
@@ -113,7 +115,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         bestFoodList = (RecyclerView) view.findViewById(R.id.list);
         noDataText = (TextView) view.findViewById(R.id.no_data);
 
-        spinner = (Spinner) view.findViewById(R.id.spinner);
+        //spinner = (Spinner) view.findViewById(R.id.spinner);
         //orderMeter = (TextView) view.findViewById(R.id.order_meter);
         //orderFavorite = (TextView) view.findViewById(R.id.order_favorite);
         //orderRecent = (TextView) view.findViewById(R.id.order_recent);
@@ -122,35 +124,10 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         //orderFavorite.setOnClickListener(this);
         //orderRecent.setOnClickListener(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getActivity(), android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
-        );
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    orderType = Constant.ORDER_TYPE_METER;
-                    setRecyclerView();
-                    listInfo(memberSeq, 0);
-                }else {
-                    orderType = Constant.ORDER_TYPE_RECENT;
-                    setRecyclerView();
-                    listInfo(memberSeq, 0);
-                }
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
         setRecyclerView();
 
-        listInfo(memberSeq, 0);
+        listInfo(userSeq, 0);
     }
 
 
@@ -171,14 +148,14 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
     private void setRecyclerView() {
         setLayoutManager(listTypeValue);
 
-        infoListAdapter = new InfoListAdapter(context,
-                R.layout.row_bestfood_list, new ArrayList<CaseInfoItem>());
+        infoListAdapter = new SampleListAdapter(context,
+                R.layout.row_bestfood_list, new ArrayList<SampleItem>());
         bestFoodList.setAdapter(infoListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listInfo(memberSeq, page);
+                listInfo(userSeq, page);
             }
         };
         bestFoodList.addOnScrollListener(scrollListener);
@@ -186,18 +163,18 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
 
     /**
      * 서버에서 맛집 정보를 조회한다.
-     * @param memberSeq 사용자 시퀀스
+     * @param userSeq 사용자 시퀀스
      * @param currentPage 현재 페이지
      */
-    private void listInfo(int memberSeq, final int currentPage) {
+    private void listInfo(int userSeq, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<CaseInfoItem>> call = remoteService.listCaseInfo(memberSeq, currentPage);
-        call.enqueue(new Callback<ArrayList<CaseInfoItem>>() {
+        Call<ArrayList<SampleItem>> call = remoteService.listSampleInfo(currentPage);
+        call.enqueue(new Callback<ArrayList<SampleItem>>() {
             @Override
-            public void onResponse(Call<ArrayList<CaseInfoItem>> call,
-                                   Response<ArrayList<CaseInfoItem>> response) {
-                ArrayList<CaseInfoItem> list = response.body();
+            public void onResponse(Call<ArrayList<SampleItem>> call,
+                                   Response<ArrayList<SampleItem>> response) {
+                ArrayList<SampleItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
                     infoListAdapter.addItemList(list);
@@ -211,7 +188,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
             }
 
             @Override
-            public void onFailure(Call<ArrayList<CaseInfoItem>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<SampleItem>> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }
@@ -245,7 +222,7 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
             }
 
             setRecyclerView();
-            listInfo(memberSeq, GeoItem.getKnownLocation(), orderType, 0);
+            listInfo(userSeq, GeoItem.getKnownLocation(), orderType, 0);
 */
     }
 
@@ -261,18 +238,5 @@ public class BestFoodListFragment extends Fragment implements View.OnClickListen
         //orderRecent.setTextColor(ContextCompat.getColor(context, color3));
     }
 
-    /**
-     * 리사이클러뷰의 리스트 형태를 변경한다.
-     */
-    private void changeListType() {
-        if (listTypeValue == 1) {
-            listTypeValue = 2;
-            listType.setImageResource(R.drawable.ic_list2);
-        } else {
-            listTypeValue = 1;
-            listType.setImageResource(R.drawable.ic_list);
 
-        }
-        setLayoutManager(listTypeValue);
-    }
 }

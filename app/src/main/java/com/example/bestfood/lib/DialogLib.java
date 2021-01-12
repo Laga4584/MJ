@@ -29,11 +29,11 @@ public class DialogLib {
      * 즐겨찾기 추가 다이얼로그 화면을 보여준다.
      * @param context 컨텍스트 객체
      * @param handler 핸들러 객체
-     * @param memberSeq 사용자 일련번호
+     * @param userSeq 사용자 일련번호
      * @param infoSeq 맛집 정보 일련번호
      */
     public void showKeepInsertDialog(Context context, final Handler handler,
-                                     final int memberSeq, final int infoSeq) {
+                                     final int userSeq, final int infoSeq) {
         new AlertDialog.Builder(context)
                 .setTitle(R.string.keep_insert)
                 .setMessage(R.string.keep_insert_message)
@@ -46,7 +46,7 @@ public class DialogLib {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        KeepLib.getInstance().insertKeep(handler, memberSeq, infoSeq);
+                        KeepLib.getInstance().insertKeep(handler, userSeq, infoSeq);
                     }
                 })
                 .show();
@@ -56,11 +56,11 @@ public class DialogLib {
      * 즐겨찾기 삭제 다이얼로그 화면을 보여준다.
      * @param context 컨텍스트 객체
      * @param handler 핸들러 객체
-     * @param memberSeq 사용자 일련번호
+     * @param userSeq 사용자 일련번호
      * @param infoSeq 맛집 정보 일련번호
      */
     public void showKeepDeleteDialog(Context context, final Handler handler,
-                                     final int memberSeq, final int infoSeq) {
+                                     final int userSeq, final int infoSeq) {
         new AlertDialog.Builder(context)
                 .setTitle(R.string.keep_delete)
                 .setMessage(R.string.keep_delete_message)
@@ -73,7 +73,7 @@ public class DialogLib {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        KeepLib.getInstance().deleteKeep(handler, memberSeq, infoSeq);
+                        KeepLib.getInstance().deleteKeep(handler, userSeq, infoSeq);
                     }
                 })
                 .show();
