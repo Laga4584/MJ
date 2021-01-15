@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.bestfood.adapter.SampleAdapter;
+import com.example.bestfood.adapter.ImageAdapter;
 import com.example.bestfood.item.SampleItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.StringLib;
@@ -79,7 +79,7 @@ public class SampleActivity extends AppCompatActivity {
 
     private void setView(){
         mPager = findViewById(R.id.viewpager);
-        SampleAdapter adapter = new SampleAdapter(this, 2, 0);
+        ImageAdapter adapter = new ImageAdapter(this, 2, 0);
         mPager.setAdapter(adapter);
         mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         //beforeImage = (ImageView)findViewById(R.id.before_image);
@@ -99,15 +99,15 @@ public class SampleActivity extends AppCompatActivity {
         //setImage(beforeImage, infoItem.beforeImageFilename);
         //setImage(afterImage, infoItem.afterImageFilename);
 
-        repairerText.setText(infoItem.repairer);
+        //repairerText.setText(infoItem.repairerSeq);
         brandText.setText(infoItem.brand);
         serviceText.setText(infoItem.service);
         productText.setText(infoItem.product);
         descriptionText.setText(infoItem.description);
         methodText.setText(infoItem.method);
         priceText.setText(infoItem.price);
-        timeText.setText(infoItem.result_time);
-        resultDescriptionText.setText(infoItem.result_description);
+        timeText.setText(infoItem.resultTime);
+        resultDescriptionText.setText(infoItem.resultDescription);
         reviewText.setText(infoItem.review);
         String score = Float.toString(infoItem.score);
         scoreText.setText(score);
@@ -120,4 +120,6 @@ public class SampleActivity extends AppCompatActivity {
             Picasso.get().load(RemoteService.SAMPLE_URL + fileName).into(imageView);
         }
     }
+
+
 }

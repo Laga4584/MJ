@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bestfood.item.UserInfoItem;
+import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.EtcLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.MyToast;
@@ -48,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     EditText birthEdit;
     EditText phoneEdit;
 
-    UserInfoItem currentItem;
+    UserItem currentItem;
 
     /**
      * 액티비티를 생성하고 화면을 구성한다.
@@ -61,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         context = this;
 
-        currentItem = ((App) getApplication()).getUserInfoItem();
+        currentItem = ((App) getApplication()).getUserItem();
 
         setToolbar();
         setView();
@@ -233,8 +233,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * 사용자가 입력한 정보를 UserInfoItem 객체에 저장해서 반환한다.
      * @return 사용자 정보 객체
      */
-    private UserInfoItem getUserInfoItem() {
-        UserInfoItem item = new UserInfoItem();
+    private UserItem getUserInfoItem() {
+        UserItem item = new UserItem();
         item.phone = EtcLib.getInstance().getPhoneNumber(context);
         item.name = nameEdit.getText().toString();
         item.sextype = sextypeEdit.getText().toString();
@@ -248,7 +248,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * @param newItem 사용자 정보 객체
      * @return 변경되었다면 true, 변경되지 않았다면 false
      */
-    private boolean isChanged(UserInfoItem newItem) {
+    private boolean isChanged(UserItem newItem) {
         if (newItem.name.trim().equals(currentItem.name)
                 && newItem.sextype.trim().equals(currentItem.sextype)
                 && newItem.birthday.trim().equals(currentItem.birthday)) {
@@ -264,7 +264,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * @param newItem 사용자가 새로 입력한 정보 객체
      * @return 입력하지 않았다면 true, 입력했다면 false
      */
-    private boolean isNoName(UserInfoItem newItem) {
+    private boolean isNoName(UserItem newItem) {
         if (StringLib.getInstance().isBlank(newItem.name)) {
             return true;
         } else {
@@ -277,7 +277,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * 변경사항이 있다면 저장하고 없다면 화면을 닫는다.
      */
     private void close() {
-        UserInfoItem newItem = getUserInfoItem();
+        UserItem newItem = getUserInfoItem();
 
         if (!isChanged(newItem) && !isNoName(newItem)) {
             finish();
@@ -306,7 +306,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * 사용자가 입력한 정보를 저장한다.
      */
     private void save() {
-        final UserInfoItem newItem = getUserInfoItem();
+        final UserItem newItem = getUserInfoItem();
 
         if (!isChanged(newItem)) {
             MyToast.s(this, R.string.no_change);

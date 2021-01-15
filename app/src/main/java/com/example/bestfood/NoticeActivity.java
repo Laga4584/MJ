@@ -38,7 +38,7 @@ public class NoticeActivity extends AppCompatActivity {
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
-    int listTypeValue = 1;
+    int listTypeValue = 2;
     String orderType;
 
     @Override
@@ -70,28 +70,7 @@ public class NoticeActivity extends AppCompatActivity {
     }
 
     /**
-     * 프래그먼트가 일시 중지 상태가 되었다가 다시 보여질 때 호출된다.
-     * BestFoodInfoActivity가 실행된 후,
-     * 즐겨찾기 상태가 변경되었을 경우 이를 반영하는 용도로 사용한다.
-     */
-    /*
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        App app = ((App) this.getApplication());
-        NoticeItem currentInfoItem = app.getNoticeItem();
-
-        if (infoListAdapter != null && currentInfoItem != null) {
-            infoListAdapter.setItem(currentInfoItem);
-            app.setFoodInfoItem(null);
-        }
-    }
-
-     */
-
-    /**
-     * 맛집 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
+     * 공지 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
@@ -121,7 +100,7 @@ public class NoticeActivity extends AppCompatActivity {
     }
 
     /**
-     * 서버에서 맛집 정보를 조회한다.
+     * 서버에서 공지 정보를 조회한다.
      * @param userSeq 사용자 시퀀스
      * @param currentPage 현재 페이지
      */

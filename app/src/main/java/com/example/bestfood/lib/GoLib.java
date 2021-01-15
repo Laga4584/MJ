@@ -11,6 +11,7 @@ import com.example.bestfood.ChatActivity;
 import com.example.bestfood.DetailActivity;
 import com.example.bestfood.ImageActivity;
 import com.example.bestfood.ProfileActivity;
+import com.example.bestfood.RepairerActivity;
 import com.example.bestfood.SampleActivity;
 
 /**
@@ -85,6 +86,12 @@ public class GoLib {
     public void goBestFoodInfoActivity(Context context, int infoSeq) {
         Intent intent = new Intent(context, BestFoodInfoActivity.class);
         intent.putExtra(BestFoodInfoActivity.INFO_SEQ, infoSeq);
+        context.startActivity(intent);
+    }
+
+    public void goRepairerActivity(Context context, int infoSeq) {
+        Intent intent = new Intent(context, RepairerActivity.class);
+        intent.putExtra(RepairerActivity.INFO_SEQ, infoSeq);
         context.startActivity(intent);
     }
 

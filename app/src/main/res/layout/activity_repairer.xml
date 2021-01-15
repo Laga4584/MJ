@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <FrameLayout
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@color/colorLightGray"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        </LinearLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center|bottom"
+            android:src="@drawable/ic_person"
+            app:civ_border_color="#FFFFFF"
+            app:civ_border_width="5dp" />
+    </FrameLayout>
+    <LinearLayout
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="김엠제이"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:layout_marginVertical="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/case_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="완료 "
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorDarkGray"/>
+            <TextView
+                android:id="@+id/case_count_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="43"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorDarkGray" />
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=" | 평점 "
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorDarkGray" />
+            <TextView
+                android:id="@+id/score_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="4.2"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorDarkGray" />
+            <TextView
+                android:id="@+id/reply_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=" | 견적 응답 "
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorDarkGray" />
+            <TextView
+                android:id="@+id/reply_period_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1일"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/colorDarkGray" />
+        </LinearLayout>
+        <android.widget.Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="견적 요청"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/btn_blue"/>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="175dp"
+                android:orientation="horizontal"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="20dp">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:elevation="3dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginHorizontal="15dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="명장 정보"
+                            android:textSize="@dimen/text_size_medium2"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:text="전문 분야"
+                            android:textSize="@dimen/text_size_small2"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/service"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:text="핸드백, 지갑"
+                            android:textSize="@dimen/text_size_small2"
+                            android:textColor="@color/colorPrimaryDark" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:text="명장 소개"
+                            android:textSize="@dimen/text_size_small2"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="계롱산에서 가방 10년, 금강산에서 하이힐 20년을 수련하고 20년 전부터 성수동을 접수한 가방의 달인 37세 김엠제이입니다 :)"
+                            android:textSize="@dimen/text_size_small2"
+                            android:textColor="@color/colorPrimaryDark" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:elevation="3dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginHorizontal="15dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="리뷰 블럭"
+                            android:textSize="@dimen/text_size_medium2"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textStyle="bold"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tag1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="5dp"
+                                android:layout_marginEnd="7dp"
+                                android:text="그때 그때 바로 연락주세요!"
+                                android:background="@drawable/edge"
+                                android:layout_marginBottom="10dp"/>
+                            <TextView
+                                android:id="@+id/tag2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="5dp"
+                                android:text="전체적으로 만족스러워요"
+                                android:background="@drawable/edge"
+                                android:layout_marginBottom="10dp"/>
+                            <TextView
+                                android:id="@+id/tag3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="5dp"
+                                android:layout_marginEnd="7dp"
+                                android:text="조금 비싸요"
+                                android:background="@drawable/edge"
+                                android:layout_marginBottom="10dp"/>
+                            <TextView
+                                android:id="@+id/tag4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="5dp"
+                                android:text="또 맡기고 싶어요 추천해요!"
+                                android:background="@drawable/edge"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:elevation="3dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginVertical="15dp"
+                        android:layout_marginHorizontal="15dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="최근 댓글"
+                            android:textSize="@dimen/text_size_medium2"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/review"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="좋아요"
+                            android:textSize="@dimen/text_size_small2"
+                            android:textColor="@color/colorPrimaryDark" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

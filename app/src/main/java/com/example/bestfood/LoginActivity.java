@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bestfood.item.UserInfoItem;
+import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.EtcLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.MyToast;
@@ -41,7 +41,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity {
-    UserInfoItem newItem;
+    UserItem newItem;
     Context context;
     private final String TAG = this.getClass().getSimpleName();
     private SessionCallback sessionCallback;
@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         //기존 코드
-        newItem = new UserInfoItem();
+        newItem = new UserItem();
         // 여기서부터 나중에 고쳐야함 임시로 추가
         newItem.phone = EtcLib.getInstance().getPhoneNumber(this);
         Log.i("newItem", newItem.toString());
@@ -113,11 +113,11 @@ public class LoginActivity extends AppCompatActivity {
     private void login(String email, String password){
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<UserInfoItem> call = remoteService.loginUserInfo(email, password, token);
-        call.enqueue(new Callback<UserInfoItem>() {
+        Call<UserItem> call = remoteService.loginUserInfo(email, password, token);
+        call.enqueue(new Callback<UserItem>() {
             @Override
-            public void onResponse(Call<UserInfoItem> call, Response<UserInfoItem> response) {
-                UserInfoItem item = response.body();
+            public void onResponse(Call<UserItem> call, Response<UserItem> response) {
+                UserItem item = response.body();
 
                 if (response.isSuccessful() && !StringLib.getInstance().isBlank(item.name)) {
                     setUserInfoItem(item);
@@ -132,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserInfoItem> call, Throwable t) {
+            public void onFailure(Call<UserItem> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }
@@ -307,11 +307,11 @@ public class LoginActivity extends AppCompatActivity {
     public void selectUserInfo(String email) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<UserInfoItem> call = remoteService.selectUserInfo(email);
-        call.enqueue(new Callback<UserInfoItem>() {
+        Call<UserItem> call = remoteService.selectUserInfo(email);
+        call.enqueue(new Callback<UserItem>() {
             @Override
-            public void onResponse(Call<UserInfoItem> call, Response<UserInfoItem> response) {
-                UserInfoItem item = response.body();
+            public void onResponse(Call<UserItem> call, Response<UserItem> response) {
+                UserItem item = response.body();
 
                 if (response.isSuccessful() && !StringLib.getInstance().isBlank(item.name)) {
                     MyLog.d(TAG, "success " + response.body().toString());
@@ -324,7 +324,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserInfoItem> call, Throwable t) {
+            public void onFailure(Call<UserItem> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }
@@ -337,8 +337,8 @@ public class LoginActivity extends AppCompatActivity {
      *
      * @param item 사용자 정보
      */
-    private void setUserInfoItem(UserInfoItem item) {
-        ((App) getApplicationContext()).setUserInfoItem(item);
+    private void setUserInfoItem(UserItem item) {
+        ((App) getApplicationContext()).setUserItem(item);
 
         startMain();
     }
@@ -361,7 +361,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param item 사용자 정보
      */
 
-    private void insertUserInfo(UserInfoItem item) {
+    private void insertUserInfo(UserItem item) {
         RemoteService remoteService =
                 ServiceGenerator.createService(RemoteService.class);
 

@@ -63,8 +63,8 @@ public class CaseActivity extends FragmentActivity {
     }
 
     /**
-     * 서버에서 맛집 정보를 조회한다.
-     * @param caseInfoSeq 맛집 정보 시퀀스
+     * 서버에서 케이스 정보를 조회한다.
+     * @param caseInfoSeq 케이스 정보 시퀀스
      */
     private void selectCaseInfo(int caseInfoSeq) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);

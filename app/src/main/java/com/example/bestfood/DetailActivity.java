@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.bestfood.adapter.SampleAdapter;
+import com.example.bestfood.adapter.ImageAdapter;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.remote.RemoteService;
@@ -70,7 +70,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void setAdapter(){
         mPager = (ViewPager2)findViewById(R.id.viewpager);
-        SampleAdapter adapter = new SampleAdapter(this, images.size()+1, 1);
+        ImageAdapter adapter = new ImageAdapter(this, images.size()+1, 1);
         mPager.setAdapter(adapter);
         mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
     }

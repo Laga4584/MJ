@@ -72,6 +72,7 @@
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".CaseListActivity"/>
         <activity android:name=".NoticeActivity"/>
+        <activity android:name=".RepairerActivity"/>
     </application>
 
 </manifest>

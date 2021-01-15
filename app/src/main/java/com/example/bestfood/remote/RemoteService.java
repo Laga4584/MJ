@@ -6,7 +6,8 @@ import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.item.KeepItem;
 import com.example.bestfood.item.NoticeItem;
-import com.example.bestfood.item.UserInfoItem;
+import com.example.bestfood.item.RepairerItem;
+import com.example.bestfood.item.UserItem;
 import com.example.bestfood.item.SampleItem;
 
 import java.util.ArrayList;
@@ -40,12 +41,22 @@ public interface RemoteService {
     @GET("/user/notice")
     Call<ArrayList<NoticeItem>> listNoticeInfo(@Query("user_seq") int userSeq, @Query("current_page") int currentPage);
 
+    //명장
+    @GET("/repairer/info/{seq}")
+    Call<RepairerItem> selectRepairerInfo(@Path("seq") int seq);
+
+    @GET("/repairer/list")
+    Call<ArrayList<RepairerItem>> listRepairerInfo(@Query("query") String query, @Query("current_page") int currentPage);
+
     //샘플
     @GET("/sample/info/{seq}")
     Call<SampleItem> selectSampleInfo(@Path("seq") int seq);
 
     @GET("/sample/list")
     Call<ArrayList<SampleItem>> listSampleInfo(@Query("current_page") int currentPage);
+
+    @GET("/sample/repairer")
+    Call<ArrayList<SampleItem>> repairerSampleInfo(@Query("repairer_seq") int repairerSeq, @Query("current_page") int currentPage);
 
     //채팅
     @GET("/chat/list")
@@ -88,10 +99,10 @@ public interface RemoteService {
 
     //사용자 정보
     @GET("/user/email")
-    Call<UserInfoItem> selectUserInfo(@Query("email") String email);
+    Call<UserItem> selectUserInfo(@Query("email") String email);
 
     @POST("/user/info")
-    Call<String> insertUserInfo(@Body UserInfoItem userInfoItem, @Query("token") String token);
+    Call<String> insertUserInfo(@Body UserItem userItem, @Query("token") String token);
 
     @FormUrlEncoded
     @POST("/user/phone")
@@ -103,10 +114,10 @@ public interface RemoteService {
                                         @Part MultipartBody.Part file);
 
     @POST("/user/register")
-    Call<String> registerUserInfo(@Body UserInfoItem userInfoItem);
+    Call<String> registerUserInfo(@Body UserItem userItem);
 
     @POST("/user/login")
-    Call<UserInfoItem> loginUserInfo(@Query("email") String email, @Query("password") String password, @Query("token") String token);
+    Call<UserItem> loginUserInfo(@Query("email") String email, @Query("password") String password, @Query("token") String token);
 
     //맛집 정보
     @GET("/food/info/{info_seq}")

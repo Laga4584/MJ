@@ -1,25 +1,32 @@
 package com.example.bestfood;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.bestfood.lib.MyToast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
+    EditText search;
     FloatingActionButton fab;
-    Toolbar toolbar;
+    ImageButton repairerButton;
+    ImageButton sampleButton;
+    ImageButton noticeButton;
+    ImageButton profileButton;
 
     RepairerListFragment fragment1;
     SampleFragment fragment2;
@@ -29,7 +36,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        search = findViewById(R.id.search);
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (EditorInfo.IME_ACTION_SEARCH == i) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(textView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    String query = search.getText().toString();
+                    fragment1 = new RepairerListFragment();
+                    fragment1 = RepairerListFragment.newInstance(query);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
+
+                } else {
+                    return false;
+                }
+                return true;
+            }
+        });
+
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -37,78 +63,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-
-        actionBar.setLogo(R.drawable.bg_logo_white);
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
+        repairerButton = findViewById(R.id.repairer_button);
+        sampleButton = findViewById(R.id.sample_button);
+        noticeButton = findViewById(R.id.notice_button);
+        profileButton = findViewById(R.id.profile_button);
 
         fragment1 = new RepairerListFragment();
         fragment2 = new SampleFragment();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
-
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.addTab(tabs.newTab().setText("명장"));
-        tabs.addTab(tabs.newTab().setText("명작"));
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        repairerButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                Log.d("MainActivity", "선택된 탭 : " + position);
-
-                Fragment selected = null;
-                if (position == 0) {
-                    selected = fragment1;
-                } else if (position == 1) {
-                    selected = fragment2;
-                }
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, selected).commit();
+            public void onClick(View view) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
             }
-
+        });
+        sampleButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+            public void onClick(View view) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
             }
-
+        });
+        noticeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, NoticeActivity.class);
+                startActivity(intent);
+            }
+        });
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
             }
         });
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
     }
 
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int curId = item.getItemId();
-        switch (curId) {
-            case R.id.menu_profile:
-                MyToast.s(this, "프로필 메뉴가 선택되었습니다.");
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_notice:
-                MyToast.s(this, "공지 메뉴가 선택되었습니다.");
-                Intent intent2 = new Intent(MainActivity.this, NoticeActivity.class);
-                startActivity(intent2);
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     /**
      * CaseActivity를 실행하고 현재 액티비티를 종료한다.
      */

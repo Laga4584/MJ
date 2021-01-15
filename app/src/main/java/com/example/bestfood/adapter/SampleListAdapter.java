@@ -1,9 +1,6 @@
 package com.example.bestfood.adapter;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bestfood.Constant;
 import com.example.bestfood.App;
 import com.example.bestfood.R;
 import com.example.bestfood.item.SampleItem;
-import com.example.bestfood.item.FoodInfoItem;
-import com.example.bestfood.item.UserInfoItem;
-import com.example.bestfood.lib.DialogLib;
+import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.StringLib;
@@ -27,7 +21,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
- * 맛집 정보 리스트의 아이템을 처리하는 어댑터
+ * 명작 리스트의 아이템을 처리하는 어댑터
  */
 public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.ViewHolder> {
     private final String TAG = this.getClass().getSimpleName();
@@ -35,7 +29,7 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
     private Context context;
     private int resource;
     private ArrayList<SampleItem> itemList;
-    private UserInfoItem userInfoItem;
+    private UserItem userItem;
 
     /**
      * 어댑터 생성자
@@ -48,7 +42,7 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
         this.resource = resource;
         this.itemList = itemList;
 
-        userInfoItem = ((App) context.getApplicationContext()).getUserInfoItem();
+        userItem = ((App) context.getApplicationContext()).getUserItem();
     }
 
     /**
@@ -74,21 +68,6 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
     public void addItemList(ArrayList<SampleItem> itemList) {
         this.itemList.addAll(itemList);
         notifyDataSetChanged();
-    }
-
-    /**
-     * 즐겨찾기 상태를 변경한다.
-     * @param seq 맛집 정보 시퀀스
-     * @param keep 즐겨찾기 추가 유무
-     */
-    private void changeItemKeep(int seq, boolean keep) {
-        for (int i=0; i < itemList.size(); i++) {
-            if (itemList.get(i).seq == seq) {
-                //itemList.get(i).isKeep = keep;
-                notifyItemChanged(i);
-                break;
-            }
-        }
     }
 
     /**
@@ -122,18 +101,10 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SampleItem item = itemList.get(position);
         MyLog.d(TAG, "getView " + item);
-        /*
-        if (item.isKeep) {
-            holder.keep.setImageResource(R.drawable.ic_keep_on);
-        } else {
-            holder.keep.setImageResource(R.drawable.ic_keep_off);
-        }
-        */
-        holder.name.setText(item.product);
-        holder.description.setText(StringLib.getInstance().getSubString(context,
-                item.description, Constant.MAX_LENGTH_DESCRIPTION));
 
-        setImage(holder.image, item.afterImageFilename);
+        holder.name.setText(item.product);
+        setImage(holder.image, item.afterImageFilename, 0);
+        setImage(holder.profile, item.profileImageFilename, 1);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,21 +112,6 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
                 GoLib.getInstance().goSampleActivity(context, item.seq);
             }
         });
-        /*
-        holder.keep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (item.isKeep) {
-                    DialogLib.getInstance().showKeepDeleteDialog(context,
-                            keepDeleteHandler, userInfoItem.seq, item.seq);
-                } else {
-                    DialogLib.getInstance().showKeepInsertDialog(context,
-                            keepInsertHandler, userInfoItem.seq, item.seq);
-                }
-            }
-        });
-
-         */
     }
 
     /**
@@ -163,55 +119,30 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
      * @param imageView  이미지를 설정할 뷰
      * @param fileName 이미지 파일이름
      */
-    private void setImage(ImageView imageView, String fileName) {
+    private void setImage(ImageView imageView, String fileName, int path) {
         MyLog.d(TAG, "fileName " + fileName);
         if (StringLib.getInstance().isBlank(fileName)) {
             Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
         } else {
-            Picasso.get().load(RemoteService.SAMPLE_URL + fileName).into(imageView);
+            if (path == 0) Picasso.get().load(RemoteService.SAMPLE_URL + fileName).into(imageView);
+            else Picasso.get().load(RemoteService.USER_ICON_URL + fileName).into(imageView);
         }
     }
-
-    /**
-     * 즐겨찾기 추가가 성공한 경우를 처리하는 핸들러
-     */
-    Handler keepInsertHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            changeItemKeep(msg.what, true);
-        }
-    };
-
-    /**
-     * 즐겨찾기 삭제가 성공한 경우를 처리하는 핸들러
-     */
-    Handler keepDeleteHandler = new Handler(Looper.getMainLooper()){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            changeItemKeep(msg.what, false);
-        }
-    };
 
     /**
      * 아이템을 보여주기 위한 뷰홀더 클래스
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
-        ImageView keep;
         TextView name;
-        TextView description;
+        ImageView profile;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            image = (ImageView) itemView.findViewById(R.id.image);
-            keep = (ImageView) itemView.findViewById(R.id.keep);
-            name = (TextView) itemView.findViewById(R.id.name);
-            description = (TextView) itemView.findViewById(R.id.description);
+            image = itemView.findViewById(R.id.image);
+            name = itemView.findViewById(R.id.name);
+            profile = itemView.findViewById(R.id.profile_icon);
         }
     }
 }

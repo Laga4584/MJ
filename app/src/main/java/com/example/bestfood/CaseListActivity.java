@@ -164,26 +164,9 @@ public class CaseListActivity extends AppCompatActivity {
         //finish();
     }
 
-    /**
-     * 프래그먼트가 일시 중지 상태가 되었다가 다시 보여질 때 호출된다.
-     * BestFoodInfoActivity가 실행된 후,
-     * 즐겨찾기 상태가 변경되었을 경우 이를 반영하는 용도로 사용한다.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        App app = ((App) this.getApplication());
-        CaseInfoItem currentInfoItem = app.getCaseInfoItem();
-
-        if (infoListAdapter != null && currentInfoItem != null) {
-            infoListAdapter.setItem(currentInfoItem);
-            app.setFoodInfoItem(null);
-        }
-    }
 
     /**
-     * 맛집 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
+     * 케이스 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
@@ -213,7 +196,7 @@ public class CaseListActivity extends AppCompatActivity {
     }
 
     /**
-     * 서버에서 맛집 정보를 조회한다.
+     * 서버에서 케이스 정보를 조회한다.
      * @param userSeq 사용자 시퀀스
      * @param currentPage 현재 페이지
      */
@@ -245,33 +228,4 @@ public class CaseListActivity extends AppCompatActivity {
             }
         });
     }
-
-
-    /**
-     * 맛집 정보 정렬 방식의 텍스트 색상을 설정한다.
-     * @param color1 거리순 색상
-     * @param color2 인기순 색상
-     * @param color3 최근순 색상
-     */
-    private void setOrderTextColor(int color1, int color2, int color3) {
-        //orderMeter.setTextColor(ContextCompat.getColor(context, color1));
-        //orderFavorite.setTextColor(ContextCompat.getColor(context, color2));
-        //orderRecent.setTextColor(ContextCompat.getColor(context, color3));
-    }
-
-    /**
-     * 리사이클러뷰의 리스트 형태를 변경한다.
-     */
-    private void changeListType() {
-        if (listTypeValue == 1) {
-            listTypeValue = 2;
-            listType.setImageResource(R.drawable.ic_list2);
-        } else {
-            listTypeValue = 1;
-            listType.setImageResource(R.drawable.ic_list);
-
-        }
-        setLayoutManager(listTypeValue);
-    }
-
 }

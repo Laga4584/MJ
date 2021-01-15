@@ -6,16 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bestfood.item.UserInfoItem;
+import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.lib.StringLib;
@@ -36,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean validate = false;
     private final String TAG = this.getClass().getSimpleName();
     Context context;
-    UserInfoItem registerItem;
+    UserItem registerItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         context = this;
 
-        registerItem = new UserInfoItem();
+        registerItem = new UserItem();
 
         //아이디값 찾아주기
         join_email = findViewById( R.id.join_email );
@@ -184,11 +182,11 @@ public class RegisterActivity extends AppCompatActivity {
     private void validateEmail(String email){
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<UserInfoItem> call = remoteService.selectUserInfo(email);
-        call.enqueue(new Callback<UserInfoItem>() {
+        Call<UserItem> call = remoteService.selectUserInfo(email);
+        call.enqueue(new Callback<UserItem>() {
             @Override
-            public void onResponse(Call<UserInfoItem> call, Response<UserInfoItem> response) {
-                UserInfoItem item = response.body();
+            public void onResponse(Call<UserItem> call, Response<UserItem> response) {
+                UserItem item = response.body();
 
                 if (response.isSuccessful() && !StringLib.getInstance().isBlank(item.name)) {
                     MyLog.d(TAG, "success " + response.body().toString());
@@ -207,14 +205,14 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserInfoItem> call, Throwable t) {
+            public void onFailure(Call<UserItem> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }
         });
     }
 
-    private void registerUserInfo(UserInfoItem item){
+    private void registerUserInfo(UserItem item){
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
         Call<String> call = remoteService.registerUserInfo(item);

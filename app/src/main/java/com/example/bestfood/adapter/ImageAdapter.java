@@ -5,22 +5,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.bestfood.FragFirst1;
 import com.example.bestfood.FragSample;
-import com.example.bestfood.item.CaseInfoItem;
 
 
-public class SampleAdapter extends FragmentStateAdapter {
+public class ImageAdapter extends FragmentStateAdapter {
     int count;
     int type;
 
-    public SampleAdapter(FragmentActivity fa, int count, int type) {
+    public ImageAdapter(FragmentActivity fa, int count, int type) {
         super(fa);
         this.count = count;
         this.type = type;
     }
 
-    public SampleAdapter(@NonNull Fragment fragment, int count, int type) {
+    public ImageAdapter(@NonNull Fragment fragment, int count, int type) {
         super(fragment);
         this.count = count;
         this.type = type;

@@ -50,12 +50,6 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
     String[] products = {"핸드백", "지갑"};
     String[] brands = {"브랜드1", "브랜드2"};
 
-    /**
-     * FoodInfoItem 객체를 인자로 저장하는
-     * BestFoodRegisterInputFragment 인스턴스를 생성해서 반환한다.
-     * @param infoItem 맛집 정보를 저장하는 객체
-     * @return BestFoodRegisterInputFragment 인스턴스
-     */
     public static FragFirst1 newInstance(CaseInfoItem infoItem) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(INFO_ITEM, Parcels.wrap(infoItem));
@@ -65,11 +59,7 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
 
         return fragment;
     }
-    /**
-     * 프래그먼트가 생성될 때 호출되며 인자에 저장된 FoodInfoItem를
-     * BestFoodRegisterActivity에 currentItem를 저장한다.
-     * @param savedInstanceState 프래그먼트가 새로 생성되었을 경우, 이전 상태 값을 가지는 객체
-     */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,11 +86,6 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
         return rootView;
     }
 
-    /**
-     * onCreateView() 메소드 뒤에 호출되며 맛집 정보를 입력할 뷰들을 생성한다.
-     * @param view onCreateView() 메소드에 의해 반환된 뷰
-     * @param savedInstanceState null이 아니라면 이전에 저장된 상태를 가진 객체
-     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -270,6 +255,4 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
         MyLog.d(TAG, "onClick button go");
         GoLib.getInstance().goImageActivity(context, infoItem.seq);
     }
-
-
 }

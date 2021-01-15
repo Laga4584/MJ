@@ -2,16 +2,18 @@ package com.example.bestfood.adapter;
 
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bestfood.Constant;
 import com.example.bestfood.App;
 import com.example.bestfood.R;
-import com.example.bestfood.item.NoticeItem;
+import com.example.bestfood.item.RepairerItem;
 import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
@@ -22,14 +24,14 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
- * 알림 리스트의 아이템을 처리하는 어댑터
+ * 명장 리스트의 아이템을 처리하는 어댑터
  */
-public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.ViewHolder> {
+public class RepairerListAdapter extends RecyclerView.Adapter<RepairerListAdapter.ViewHolder> {
     private final String TAG = this.getClass().getSimpleName();
 
     private Context context;
     private int resource;
-    private ArrayList<NoticeItem> itemList;
+    private ArrayList<RepairerItem> itemList;
     private UserItem userItem;
 
     /**
@@ -38,7 +40,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
      * @param resource 아이템을 보여주기 위해 사용할 리소스 아이디
      * @param itemList 아이템 리스트
      */
-    public NoticeListAdapter(Context context, int resource, ArrayList<NoticeItem> itemList) {
+    public RepairerListAdapter(Context context, int resource, ArrayList<RepairerItem> itemList) {
         this.context = context;
         this.resource = resource;
         this.itemList = itemList;
@@ -50,9 +52,9 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
      * 특정 아이템의 변경사항을 적용하기 위해 기본 아이템을 새로운 아이템으로 변경한다.
      * @param newItem 새로운 아이템
      */
-    public void setItem(NoticeItem newItem) {
+    public void setItem(RepairerItem newItem) {
         for (int i=0; i < itemList.size(); i++) {
-            NoticeItem item = itemList.get(i);
+            RepairerItem item = itemList.get(i);
 
             if (item.seq == newItem.seq) {
                 itemList.set(i, newItem);
@@ -66,10 +68,11 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
      * 현재 아이템 리스트에 새로운 아이템 리스트를 추가한다.
      * @param itemList 새로운 아이템 리스트
      */
-    public void addItemList(ArrayList<NoticeItem> itemList) {
+    public void addItemList(ArrayList<RepairerItem> itemList) {
         this.itemList.addAll(itemList);
         notifyDataSetChanged();
     }
+
 
     /**
      * 아이템 크기를 반환한다.
@@ -100,22 +103,22 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final NoticeItem item = itemList.get(position);
+        final RepairerItem item = itemList.get(position);
         MyLog.d(TAG, "getView " + item);
 
-        holder.name.setText(item.title);
-        holder.description.setText(StringLib.getInstance().getSubString(context,
-                item.body, Constant.MAX_LENGTH_DESCRIPTION));
+        holder.name.setText(item.name);
+        holder.caseCount.setText(item.caseCount);
+        holder.score.setText(Float.toString(item.score));
+        holder.product.setText(item.product);
 
-        setImage(holder.image, "default");
+        setImage(holder.image, item.profileImgFilename);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GoLib.getInstance().goCaseActivity(context, item.seq);
+                GoLib.getInstance().goRepairerActivity(context, item.seq);
             }
         });
-
 
 
     }
@@ -126,10 +129,10 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
      * @param fileName 이미지 파일이름
      */
     private void setImage(ImageView imageView, String fileName) {
-        if (fileName=="default") {
+        if (StringLib.getInstance().isBlank(fileName)) {
             Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
         } else {
-            Picasso.get().load(RemoteService.IMAGE_URL + fileName).into(imageView);
+            Picasso.get().load(RemoteService.USER_ICON_URL + fileName).into(imageView);
         }
     }
 
@@ -140,14 +143,26 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name;
-        TextView description;
+        TextView caseCount;
+        TextView score;
+        TextView product;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            image = (ImageView) itemView.findViewById(R.id.image);
-            name = (TextView) itemView.findViewById(R.id.name);
-            description = (TextView) itemView.findViewById(R.id.description);
+            image = itemView.findViewById(R.id.profile_image);
+            name = itemView.findViewById(R.id.name_content);
+            caseCount = itemView.findViewById(R.id.case_count_content);
+            score = itemView.findViewById(R.id.score_content);
+            product = itemView.findViewById(R.id.product_content);
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            windowManager.getDefaultDisplay().getMetrics(metrics);
+            ViewGroup.LayoutParams params = image.getLayoutParams();
+            params.width = metrics.widthPixels/4;
+            params.height = metrics.widthPixels/4;
+            image.setLayoutParams(params);
         }
     }
 }

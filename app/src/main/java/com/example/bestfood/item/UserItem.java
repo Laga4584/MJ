@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * 사용자 정보를 저장하는 객체
  */
-public class UserInfoItem {
+public class UserItem {
     public int seq;
     public String phone;
     public String name;

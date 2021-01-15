@@ -24,7 +24,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * 맛집 정보 리스트를 보여주는 프래그먼트
+ * 명작 정보 리스트를 보여주는 프래그먼트
  */
 public class SampleFragment extends Fragment implements View.OnClickListener {
     private final String TAG = this.getClass().getSimpleName();
@@ -36,21 +36,13 @@ public class SampleFragment extends Fragment implements View.OnClickListener {
     RecyclerView bestFoodList;
     TextView noDataText;
 
-    //Spinner spinner;
-    //TextView orderMeter;
-    //TextView orderFavorite;
-    //TextView orderRecent;
-
-    //ImageView listType;
-
     SampleListAdapter infoListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
-    int listTypeValue = 1;
+    int listTypeValue = 2;
     String orderType;
 
-    String[] items = {"완료 케이스 보기", "완료 케이스 숨기기"};
 
     /**
      * BestFoodListFragment 인스턴스를 생성한다.
@@ -108,7 +100,7 @@ public class SampleFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.nav_list);
+        //((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.nav_list);
 
         orderType = Constant.ORDER_TYPE_METER;
 
@@ -132,7 +124,7 @@ public class SampleFragment extends Fragment implements View.OnClickListener {
 
 
     /**
-     * 맛집 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
+     * 명작 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
@@ -149,7 +141,7 @@ public class SampleFragment extends Fragment implements View.OnClickListener {
         setLayoutManager(listTypeValue);
 
         infoListAdapter = new SampleListAdapter(context,
-                R.layout.row_bestfood_list, new ArrayList<SampleItem>());
+                R.layout.row_sample_list, new ArrayList<SampleItem>());
         bestFoodList.setAdapter(infoListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
@@ -162,7 +154,7 @@ public class SampleFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * 서버에서 맛집 정보를 조회한다.
+     * 서버에서 명작 정보를 조회한다.
      * @param userSeq 사용자 시퀀스
      * @param currentPage 현재 페이지
      */
@@ -227,7 +219,7 @@ public class SampleFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * 맛집 정보 정렬 방식의 텍스트 색상을 설정한다.
+     * 명작 정보 정렬 방식의 텍스트 색상을 설정한다.
      * @param color1 거리순 색상
      * @param color2 인기순 색상
      * @param color3 최근순 색상

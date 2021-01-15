@@ -5,7 +5,7 @@ import android.os.StrictMode;
 
 import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.item.FoodInfoItem;
-import com.example.bestfood.item.UserInfoItem;
+import com.example.bestfood.item.UserItem;
 
 import android.content.Context;
 
@@ -21,7 +21,7 @@ import com.kakao.auth.KakaoSDK;
  * 앱 전역에서 사용할 수 있는 클래스
  */
 public class App extends Application {
-    private UserInfoItem userInfoItem;
+    private UserItem userItem;
     private FoodInfoItem foodInfoItem;
     private CaseInfoItem caseInfoItem;
 
@@ -119,18 +119,18 @@ public class App extends Application {
     }
 
 
-    public UserInfoItem getUserInfoItem() {
-        if (userInfoItem == null) userInfoItem = new UserInfoItem();
+    public UserItem getUserItem() {
+        if (userItem == null) userItem = new UserItem();
 
-        return userInfoItem;
+        return userItem;
     }
 
-    public void setUserInfoItem(UserInfoItem item) {
-        this.userInfoItem = item;
+    public void setUserItem(UserItem item) {
+        this.userItem = item;
     }
 
     public int getUserSeq() {
-        return userInfoItem.seq;
+        return userItem.seq;
     }
 
     public void setFoodInfoItem(FoodInfoItem foodInfoItem) {

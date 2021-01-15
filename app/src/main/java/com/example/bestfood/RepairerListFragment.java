@@ -15,11 +15,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.bestfood.item.CaseInfoItem;
-import com.example.bestfood.adapter.InfoListAdapter;
+import com.example.bestfood.adapter.RepairerListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
+import com.example.bestfood.item.RepairerItem;
 import com.example.bestfood.lib.MyLog;
+import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -28,24 +32,25 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * 맛집 정보 리스트를 보여주는 프래그먼트
+ * 명장 정보 리스트를 보여주는 프래그먼트
  */
 public class RepairerListFragment extends Fragment implements View.OnClickListener {
+    public static final String QUERY = "QUERY";
     private final String TAG = this.getClass().getSimpleName();
 
     Context context;
-
+    String query;
     int userSeq;
 
     RecyclerView bestFoodList;
     TextView noDataText;
     Spinner spinner;
     ImageView listType;
-    InfoListAdapter infoListAdapter;
+    RepairerListAdapter infoListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
-    int listTypeValue = 1;
+    int listTypeValue = 3;
     String orderType;
     String[] items = {"완료 케이스 보기", "완료 케이스 숨기기"};
 
@@ -53,8 +58,11 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
      * BestFoodListFragment 인스턴스를 생성한다.
      * @return BestFoodListFragment 인스턴스
      */
-    public static RepairerListFragment newInstance() {
+    public static RepairerListFragment newInstance(String query) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(QUERY, Parcels.wrap(query));
         RepairerListFragment f = new RepairerListFragment();
+        f.setArguments(bundle);
         return f;
     }
 
@@ -67,6 +75,9 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            query = Parcels.unwrap(getArguments().getParcelable(QUERY));
+        }else query = "";
         context = this.getActivity();
 
         userSeq = ((App)this.getActivity().getApplication()).getUserSeq();
@@ -76,23 +87,6 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
         return layout;
     }
 
-    /**
-     * 프래그먼트가 일시 중지 상태가 되었다가 다시 보여질 때 호출된다.
-     * BestFoodInfoActivity가 실행된 후,
-     * 즐겨찾기 상태가 변경되었을 경우 이를 반영하는 용도로 사용한다.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        App app = ((App) getActivity().getApplication());
-        CaseInfoItem currentInfoItem = app.getCaseInfoItem();
-
-        if (infoListAdapter != null && currentInfoItem != null) {
-            infoListAdapter.setItem(currentInfoItem);
-            app.setFoodInfoItem(null);
-        }
-    }
 
     /**
      * onCreateView() 메소드 뒤에 호출되며 화면 뷰들을 설정한다.
@@ -102,56 +96,23 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.nav_list);
+        //((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.nav_list);
 
         orderType = Constant.ORDER_TYPE_METER;
 
         bestFoodList = (RecyclerView) view.findViewById(R.id.list);
-        noDataText = (TextView) view.findViewById(R.id.no_data);
+        //noDataText = (TextView) view.findViewById(R.id.no_data);
 
-        spinner = (Spinner) view.findViewById(R.id.spinner);
-        //orderMeter = (TextView) view.findViewById(R.id.order_meter);
-        //orderFavorite = (TextView) view.findViewById(R.id.order_favorite);
-        //orderRecent = (TextView) view.findViewById(R.id.order_recent);
+        //spinner = (Spinner) view.findViewById(R.id.spinner);
 
-        //orderMeter.setOnClickListener(this);
-        //orderFavorite.setOnClickListener(this);
-        //orderRecent.setOnClickListener(this);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getActivity(), android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
-        );
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    orderType = Constant.ORDER_TYPE_METER;
-                    setRecyclerView();
-                    listInfo(userSeq, 0);
-                }else {
-                    orderType = Constant.ORDER_TYPE_RECENT;
-                    setRecyclerView();
-                    listInfo(userSeq, 0);
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
         setRecyclerView();
 
-        listInfo(userSeq, 0);
+        listInfo(query, 0);
     }
 
 
     /**
-     * 맛집 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
+     * 명장 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
@@ -167,47 +128,46 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
     private void setRecyclerView() {
         setLayoutManager(listTypeValue);
 
-        infoListAdapter = new InfoListAdapter(context,
-                R.layout.row_bestfood_list, new ArrayList<CaseInfoItem>());
+        infoListAdapter = new RepairerListAdapter(context,
+                R.layout.row_repairer_list, new ArrayList<RepairerItem>());
         bestFoodList.setAdapter(infoListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listInfo(userSeq, page);
+                listInfo(query, page);
             }
         };
         bestFoodList.addOnScrollListener(scrollListener);
     }
 
     /**
-     * 서버에서 맛집 정보를 조회한다.
-     * @param userSeq 사용자 시퀀스
+     * 서버에서 명장 정보를 조회한다.
      * @param currentPage 현재 페이지
      */
-    private void listInfo(int userSeq, final int currentPage) {
+    private void listInfo(String query, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<CaseInfoItem>> call = remoteService.listCaseInfo(userSeq, currentPage);
-        call.enqueue(new Callback<ArrayList<CaseInfoItem>>() {
+        Call<ArrayList<RepairerItem>> call = remoteService.listRepairerInfo(query, currentPage);
+        call.enqueue(new Callback<ArrayList<RepairerItem>>() {
             @Override
-            public void onResponse(Call<ArrayList<CaseInfoItem>> call,
-                                   Response<ArrayList<CaseInfoItem>> response) {
-                ArrayList<CaseInfoItem> list = response.body();
+            public void onResponse(Call<ArrayList<RepairerItem>> call,
+                                   Response<ArrayList<RepairerItem>> response) {
+                ArrayList<RepairerItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
                     infoListAdapter.addItemList(list);
 
                     if (infoListAdapter.getItemCount() == 0) {
-                        noDataText.setVisibility(View.VISIBLE);
+                        //noDataText.setVisibility(View.VISIBLE);
                     } else {
-                        noDataText.setVisibility(View.GONE);
+                        //noDataText.setVisibility(View.GONE);
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<CaseInfoItem>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<RepairerItem>> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }
@@ -243,32 +203,5 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
             setRecyclerView();
             listInfo(userSeq, GeoItem.getKnownLocation(), orderType, 0);
 */
-    }
-
-    /**
-     * 맛집 정보 정렬 방식의 텍스트 색상을 설정한다.
-     * @param color1 거리순 색상
-     * @param color2 인기순 색상
-     * @param color3 최근순 색상
-     */
-    private void setOrderTextColor(int color1, int color2, int color3) {
-        //orderMeter.setTextColor(ContextCompat.getColor(context, color1));
-        //orderFavorite.setTextColor(ContextCompat.getColor(context, color2));
-        //orderRecent.setTextColor(ContextCompat.getColor(context, color3));
-    }
-
-    /**
-     * 리사이클러뷰의 리스트 형태를 변경한다.
-     */
-    private void changeListType() {
-        if (listTypeValue == 1) {
-            listTypeValue = 2;
-            listType.setImageResource(R.drawable.ic_list2);
-        } else {
-            listTypeValue = 1;
-            listType.setImageResource(R.drawable.ic_list);
-
-        }
-        setLayoutManager(listTypeValue);
     }
 }

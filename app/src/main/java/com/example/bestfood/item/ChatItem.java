@@ -3,7 +3,7 @@ package com.example.bestfood.item;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * 맛집 정보를 저장하는 객체
+ * 채팅 정보를 저장하는 객체
  */
 @org.parceler.Parcel
 public class ChatItem {
