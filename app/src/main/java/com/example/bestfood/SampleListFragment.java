@@ -26,7 +26,7 @@ import retrofit2.Response;
 /**
  * 명작 정보 리스트를 보여주는 프래그먼트
  */
-public class SampleFragment extends Fragment implements View.OnClickListener {
+public class SampleListFragment extends Fragment implements View.OnClickListener {
     private final String TAG = this.getClass().getSimpleName();
 
     Context context;
@@ -48,8 +48,8 @@ public class SampleFragment extends Fragment implements View.OnClickListener {
      * BestFoodListFragment 인스턴스를 생성한다.
      * @return BestFoodListFragment 인스턴스
      */
-    public static SampleFragment newInstance() {
-        SampleFragment f = new SampleFragment();
+    public static SampleListFragment newInstance() {
+        SampleListFragment f = new SampleListFragment();
         return f;
     }
 
@@ -66,7 +66,7 @@ public class SampleFragment extends Fragment implements View.OnClickListener {
 
         userSeq = ((App)this.getActivity().getApplication()).getUserSeq();
 
-        View layout = inflater.inflate(R.layout.fragment_sample, container, false);
+        View layout = inflater.inflate(R.layout.fragment_sample_list, container, false);
 
         return layout;
     }

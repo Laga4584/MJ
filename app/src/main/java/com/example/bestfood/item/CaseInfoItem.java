@@ -31,6 +31,7 @@ public class CaseInfoItem {
     @SerializedName("reg_date") public String regDate;
     @SerializedName("image_filename") public String imageFilename;
     @SerializedName("repair_image_filename") public String repairImageFilename;
+    @SerializedName("repairer_image_filename") public String repairerImageFilename;
 
     @Override
     public String toString() {
@@ -59,6 +60,7 @@ public class CaseInfoItem {
                 ", regDate='" + regDate + '\'' +
                 ", image_filename='" + imageFilename + '\'' +
                 ", repair_image_filename='" + repairImageFilename + '\'' +
+                ", repairerImageFilename='" + repairerImageFilename + '\'' +
                 '}';
     }
 }

@@ -9,13 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -26,7 +25,6 @@ import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -36,13 +34,10 @@ import retrofit2.Response;
 
 public class CaseListActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
-    FloatingActionButton fab;
-    Toolbar toolbar;
-
     Context context;
-
     int userSeq;
 
+    ImageButton backButton, addButton;
     RecyclerView bestFoodList;
     TextView noDataText;
     Spinner spinner;
@@ -63,24 +58,20 @@ public class CaseListActivity extends AppCompatActivity {
         context = this;
         userSeq = ((App)this.getApplication()).getUserSeq();
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        addButton = findViewById(R.id.add_button);
+        backButton = findViewById(R.id.back_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startCase();
             }
         });
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-
-        actionBar.setLogo(R.drawable.bg_logo_white);
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
-
-        this.getSupportActionBar().setTitle(R.string.nav_list);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         orderType = Constant.ORDER_TYPE_METER;
 
@@ -183,7 +174,7 @@ public class CaseListActivity extends AppCompatActivity {
         setLayoutManager(listTypeValue);
 
         infoListAdapter = new InfoListAdapter(context,
-                R.layout.row_bestfood_list, new ArrayList<CaseInfoItem>());
+                R.layout.row_case_list, new ArrayList<CaseInfoItem>());
         bestFoodList.setAdapter(infoListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {

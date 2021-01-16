@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.bestfood.FragSample;
+import com.example.bestfood.ImageFragment;
 
 
 public class ImageAdapter extends FragmentStateAdapter {
@@ -28,8 +28,8 @@ public class ImageAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        FragSample frag1 = new FragSample();
-        frag1 = FragSample.newInstance(position, type);
+        ImageFragment frag1 = new ImageFragment();
+        frag1 = ImageFragment.newInstance(position, type);
         return frag1;
 
     }

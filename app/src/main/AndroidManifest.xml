@@ -60,7 +60,6 @@
         <activity android:name=".JoinActivity"/>
         <activity android:name=".IndexActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".BestFoodInfoActivity" />
         <activity android:name=".CaseActivity"/>
         <activity android:name=".ImageActivity"/>
         <activity android:name=".SampleActivity"/>

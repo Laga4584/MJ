@@ -35,8 +35,8 @@ public class DetailActivity extends AppCompatActivity {
         if (CaseActivity.infoItem.seq > 0){
             selectImageInfo(CaseActivity.infoItem.seq);
         }else{
-            MyLog.d(TAG, "currentItem " + FragFirst.currentItem.toString());
-            selectImageInfo(FragFirst.currentItem.seq);
+            MyLog.d(TAG, "currentItem " + CaseFragment1.currentItem.toString());
+            selectImageInfo(CaseFragment1.currentItem.seq);
         }
 
     }

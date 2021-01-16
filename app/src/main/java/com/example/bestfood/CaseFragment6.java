@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 
-public class FragSixth extends Fragment {
+public class CaseFragment6 extends Fragment {
 
     TextView stateText;
     TextView addressText;
@@ -29,7 +29,7 @@ public class FragSixth extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frame_6p, container, false);
+                R.layout.fragment_case_6, container, false);
         ViewPager2 viewPager2 = rootView.findViewById(R.id.viewPager2);
 
         /*

@@ -169,46 +169,6 @@ public class RemoteLib {
         });
     }
 
-    /**
-     * 맛집 이미지를 서버에 업로드한다.
-     * @param infoSeq 맛집 정보 일련번호
-     * @param imageMemo 이미지 설명
-     * @param file 파일 객체
-     * @param handler 처리 결과를 응답할 핸들러
-     */
-    public void uploadFoodImage(int infoSeq, String imageMemo, File file, final Handler handler) {
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-
-        RequestBody requestFile =
-                RequestBody.create(file, MediaType.parse("multipart/form-data"));
-
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-
-        RequestBody infoSeqBody =
-                RequestBody.create(
-                        "" + infoSeq, MediaType.parse("multipart/form-data"));
-        RequestBody imageMemoBody =
-                RequestBody.create(
-                        imageMemo, MediaType.parse("multipart/form-data"));
-
-        Call<ResponseBody> call =
-                remoteService.uploadFoodImage(infoSeqBody, imageMemoBody, body);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call,
-                                   Response<ResponseBody> response) {
-                MyLog.d(TAG, "uploadFoodImage success");
-                handler.sendEmptyMessage(0);
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                MyLog.e(TAG, "uploadFoodImage fail");
-            }
-        });
-    }
-
     public void updateCaseStatus(int index1, int index2){
         final String status1 = status_list_1[index1];
         final String status2;

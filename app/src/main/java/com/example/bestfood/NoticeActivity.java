@@ -38,7 +38,7 @@ public class NoticeActivity extends AppCompatActivity {
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
-    int listTypeValue = 2;
+    int listTypeValue = 1;
     String orderType;
 
     @Override

@@ -5,7 +5,6 @@ import android.content.Intent;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.bestfood.BestFoodInfoActivity;
 import com.example.bestfood.CaseActivity;
 import com.example.bestfood.ChatActivity;
 import com.example.bestfood.DetailActivity;
@@ -74,18 +73,6 @@ public class GoLib {
     public void goProfileActivity(Context context) {
         Intent intent = new Intent(context, ProfileActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
-
-    /**
-     * 맛집 정보 액티비티를 실행한다.
-     * @param context 컨텍스트
-     * @param infoSeq 맛집 정보 일련번호
-     */
-    public void goBestFoodInfoActivity(Context context, int infoSeq) {
-        Intent intent = new Intent(context, BestFoodInfoActivity.class);
-        intent.putExtra(BestFoodInfoActivity.INFO_SEQ, infoSeq);
         context.startActivity(intent);
     }
 

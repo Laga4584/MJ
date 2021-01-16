@@ -18,17 +18,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.bestfood.item.CaseInfoItem;
-import com.example.bestfood.lib.MyLog;
-import com.example.bestfood.remote.RemoteService;
-import com.example.bestfood.remote.ServiceGenerator;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
-public class FragFourth1 extends Fragment {
+public class CaseFragment4_1 extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
     Context context;
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
@@ -42,7 +34,7 @@ public class FragFourth1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frame_4p_1, container, false);
+                R.layout.fragment_case_4_1, container, false);
 
         context = this.getActivity();
 

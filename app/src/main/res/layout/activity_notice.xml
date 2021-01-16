@@ -4,7 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
+    <androidx.cardview.widget.CardView
+        android:layout_marginHorizontal="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:elevation="3dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="알림"
+            android:textSize="@dimen/text_size_medium2"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -12,7 +25,7 @@
         android:layout_below="@+id/top_layout"
         android:layout_marginTop="-6dp"
         android:dividerHeight="@dimen/spacing_small" />
-
+    </androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/no_data"
         android:layout_width="match_parent"

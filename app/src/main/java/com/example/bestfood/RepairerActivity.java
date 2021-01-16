@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,6 +54,7 @@ public class RepairerActivity extends AppCompatActivity {
     TextView tag1, tag2, tag3, tag4;
     TextView review;
     Button requestButton;
+    ImageButton backButton;
 
     String[] tag1_list = {"그때 그때 바로 연락주세요!", ""};
     String[] tag2_list = {"전체적으로 만족스러워요", ""};
@@ -116,6 +118,13 @@ public class RepairerActivity extends AppCompatActivity {
         tag3 = findViewById(R.id.tag3);
         tag4 = findViewById(R.id.tag4);
         review = findViewById(R.id.review);
+        backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         setImage(profileImage, infoItem.profileImgFilename);
         name.setText(infoItem.name);

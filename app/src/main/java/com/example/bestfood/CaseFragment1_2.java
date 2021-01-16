@@ -11,25 +11,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.bestfood.item.CaseInfoItem;
-import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FragFirst2 extends Fragment {
+public class CaseFragment1_2 extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
     Context context;
 
@@ -44,7 +39,7 @@ public class FragFirst2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frame_1p_2, container, false);
+                R.layout.fragment_case_1_2, container, false);
 
 
         return rootView;
@@ -70,7 +65,7 @@ public class FragFirst2 extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragFirst.viewPager2.setCurrentItem(0);
+                CaseFragment1.viewPager2.setCurrentItem(0);
             }
         });
 
@@ -85,8 +80,8 @@ public class FragFirst2 extends Fragment {
             infoItem = CaseActivity.infoItem;
             //selectImageInfo(CaseActivity.infoItem.seq);
         }else{
-            MyLog.d(TAG, "currentItem " + FragFirst.currentItem.toString());
-            selectCaseInfo(FragFirst.currentItem.seq);
+            MyLog.d(TAG, "currentItem " + CaseFragment1.currentItem.toString());
+            selectCaseInfo(CaseFragment1.currentItem.seq);
             //selectImageInfo(FragFirst.currentItem.seq);
         }
 

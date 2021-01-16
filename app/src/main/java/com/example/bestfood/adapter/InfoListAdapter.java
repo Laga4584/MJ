@@ -131,7 +131,8 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
         holder.description.setText(StringLib.getInstance().getSubString(context,
                 item.description, Constant.MAX_LENGTH_DESCRIPTION));
 
-        setImage(holder.image, item.imageFilename);
+        setImage(holder.image, item.imageFilename, 0);
+        setImage(holder.repairerImage, item.repairerImageFilename, 1);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,11 +165,12 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
      * @param imageView  이미지를 설정할 뷰
      * @param fileName 이미지 파일이름
      */
-    private void setImage(ImageView imageView, String fileName) {
+    private void setImage(ImageView imageView, String fileName, int path) {
         if (StringLib.getInstance().isBlank(fileName)) {
             Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
         } else {
-            Picasso.get().load(RemoteService.IMAGE_URL + fileName).into(imageView);
+            if (path == 0) Picasso.get().load(RemoteService.IMAGE_URL + fileName).into(imageView);
+            else Picasso.get().load(RemoteService.USER_ICON_URL + fileName).into(imageView);
         }
     }
 
@@ -204,6 +206,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
         ImageView keep;
         TextView name;
         TextView description;
+        ImageView repairerImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -212,6 +215,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.ViewHo
             keep = (ImageView) itemView.findViewById(R.id.keep);
             name = (TextView) itemView.findViewById(R.id.name);
             description = (TextView) itemView.findViewById(R.id.description);
+            repairerImage = (ImageView) itemView.findViewById(R.id.profile_icon);
         }
     }
 }

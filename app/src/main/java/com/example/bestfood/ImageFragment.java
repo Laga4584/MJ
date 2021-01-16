@@ -19,7 +19,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 
 
-public class FragSample extends Fragment {
+public class ImageFragment extends Fragment {
     public static final String INFO_SEQ = "INFO_SEQ";
     public static final String TYPE = "TYPE";
     private final String TAG = this.getClass().getSimpleName();
@@ -29,12 +29,12 @@ public class FragSample extends Fragment {
     ImageView sampleImage;
     CustomView dotImage;
 
-    public static FragSample newInstance(int infoSeq, int type) {
+    public static ImageFragment newInstance(int infoSeq, int type) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(INFO_SEQ, Parcels.wrap(infoSeq));
         bundle.putParcelable(TYPE, Parcels.wrap(type));
 
-        FragSample fragment = new FragSample();
+        ImageFragment fragment = new ImageFragment();
         fragment.setArguments(bundle);
 
         return fragment;
@@ -49,7 +49,7 @@ public class FragSample extends Fragment {
         }
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frag_sample, container, false);
+                R.layout.fragment_image, container, false);
 
         sampleImage = rootView.findViewById(R.id.image);
         dotImage = rootView.findViewById(R.id.dot);

@@ -8,7 +8,6 @@
     card_view:cardUseCompatPadding="true"
     card_view:cardCornerRadius="@dimen/cardview_round_basic"
     android:elevation="1dp">
-
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
@@ -52,5 +51,4 @@
             android:textColor="@color/text_color_gray"
             android:textSize="@dimen/text_size_medium" />
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

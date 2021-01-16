@@ -22,7 +22,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FragSeventh extends Fragment {
+public class CaseFragment7 extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
     EditText reviewEdit;
     Button nextButton;
@@ -32,7 +32,7 @@ public class FragSeventh extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frame_7p, container, false);
+                R.layout.fragment_case_7, container, false);
 
         infoItem = new CaseInfoItem();
         infoItem = CaseActivity.infoItem;

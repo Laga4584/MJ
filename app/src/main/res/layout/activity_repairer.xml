@@ -22,6 +22,14 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
         </LinearLayout>
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:background="@drawable/bg_transparent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"/>
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/profile_icon"

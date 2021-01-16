@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -15,9 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import com.example.bestfood.lib.MyToast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton profileButton;
 
     RepairerListFragment fragment1;
-    SampleFragment fragment2;
+    SampleListFragment fragment2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         profileButton = findViewById(R.id.profile_button);
 
         fragment1 = new RepairerListFragment();
-        fragment2 = new SampleFragment();
+        fragment2 = new SampleListFragment();
 
         repairerButton.setOnClickListener(new View.OnClickListener() {
             @Override

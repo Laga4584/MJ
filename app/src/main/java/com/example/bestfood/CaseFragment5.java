@@ -14,7 +14,7 @@ import com.example.bestfood.remote.RemoteService;
 import com.squareup.picasso.Picasso;
 
 
-public class FragFifth extends Fragment {
+public class CaseFragment5 extends Fragment {
     ImageView repairImage;
     TextView repairText;
     TextView stateText;
@@ -23,7 +23,7 @@ public class FragFifth extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frame_5p, container, false);
+                R.layout.fragment_case_5, container, false);
 
         repairImage = rootView.findViewById(R.id.image);
         repairText = rootView.findViewById(R.id.text2);

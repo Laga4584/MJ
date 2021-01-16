@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -14,36 +13,26 @@ import com.example.bestfood.lib.RemoteLib;
 import java.util.Objects;
 
 
-public class FragSecond extends Fragment {
-    TextView methodText;
-    TextView priceText;
-    TextView timeText;
+public class CaseFragment3 extends Fragment {
     Button nextButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frame_2p, container, false);
+                R.layout.fragment_case_3, container, false);
 
-        methodText = rootView.findViewById(R.id.description1);
-        priceText = rootView.findViewById(R.id.description2);
-        timeText = rootView.findViewById(R.id.description3);
         nextButton = rootView.findViewById(R.id.button);
-
-        methodText.setText(CaseActivity.infoItem.method);
-        priceText.setText(CaseActivity.infoItem.price);
-        timeText.setText(CaseActivity.infoItem.time);
-
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CaseActivity.iCount = 2;
+                CaseActivity.iCount = 3;
                 (Objects.requireNonNull((CaseActivity)getActivity())).adapterSetup();
-                RemoteLib.getInstance().updateCaseStatus(2, 0);
+                RemoteLib.getInstance().updateCaseStatus(3, 0);
             }
         });
 
         return rootView;
     }
+
 }

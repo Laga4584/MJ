@@ -1,7 +1,6 @@
 package com.example.bestfood;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -13,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.example.bestfood.adapter.ViewpagerAdapter;
 import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.remote.RemoteService;
@@ -21,7 +21,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.Arrays;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -100,9 +99,9 @@ public class CaseActivity extends FragmentActivity {
 
     public void adapterSetup(){
         //Adapter
-        pagerAdapter = new MyAdapter(this, 8, iCount);
-        ((MyAdapter) pagerAdapter).setType(MyAdapter.TYPE_HORIZONTAL_VIEWPAGER);
-        ((MyAdapter) pagerAdapter).setInfoItem(infoItem);
+        pagerAdapter = new ViewpagerAdapter(this, 8, iCount);
+        ((ViewpagerAdapter) pagerAdapter).setType(ViewpagerAdapter.TYPE_HORIZONTAL_VIEWPAGER);
+        ((ViewpagerAdapter) pagerAdapter).setInfoItem(infoItem);
         mPager.setAdapter(pagerAdapter);
 
         //Indicator

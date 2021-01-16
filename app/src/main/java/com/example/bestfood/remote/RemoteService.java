@@ -2,9 +2,7 @@ package com.example.bestfood.remote;
 
 import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.item.ChatItem;
-import com.example.bestfood.item.FoodInfoItem;
 import com.example.bestfood.item.ImageItem;
-import com.example.bestfood.item.KeepItem;
 import com.example.bestfood.item.NoticeItem;
 import com.example.bestfood.item.RepairerItem;
 import com.example.bestfood.item.UserItem;
@@ -118,50 +116,4 @@ public interface RemoteService {
 
     @POST("/user/login")
     Call<UserItem> loginUserInfo(@Query("email") String email, @Query("password") String password, @Query("token") String token);
-
-    //맛집 정보
-    @GET("/food/info/{info_seq}")
-    Call<FoodInfoItem> selectFoodInfo(@Path("info_seq") int foodInfoSeq,
-                                      @Query("user_seq") int userSeq);
-
-    @POST("/food/info")
-    Call<String> insertFoodInfo(@Body FoodInfoItem infoItem);
-
-    @Multipart
-    @POST("/food/info/image")
-    Call<ResponseBody> uploadFoodImage(@Part("info_seq") RequestBody infoSeq,
-                                       @Part("image_memo") RequestBody imageMemo,
-                                       @Part MultipartBody.Part file);
-
-    @GET("/food/list")
-    Call<ArrayList<FoodInfoItem>> listFoodInfo(@Query("user_seq") int userSeq,
-                                               @Query("user_latitude") double userLatitude,
-                                               @Query("user_longitude") double userLongitude,
-                                               @Query("order_type") String orderType,
-                                               @Query("current_page") int currentPage);
-
-    //지도
-    @GET("/food/map/list")
-    Call<ArrayList<FoodInfoItem>> listMap(@Query("user_seq") int userSeq,
-                                          @Query("latitude") double latitude,
-                                          @Query("longitude") double longitude,
-                                          @Query("distance") int distance,
-                                          @Query("user_latitude") double userLatitude,
-                                          @Query("user_longitude") double userLongitude);
-
-    //즐겨찾기
-    @POST("/keep/{user_seq}/{info_seq}")
-    Call<String> insertKeep(@Path("user_seq") int userSeq, @Path("info_seq") int infoSeq);
-
-    @DELETE("/keep/{user_seq}/{info_seq}")
-    Call<String> deleteKeep(@Path("user_seq") int userSeq, @Path("info_seq") int infoSeq);
-
-    @GET("/keep/list")
-    Call<ArrayList<KeepItem>> listKeep(@Query("user_seq") int userSeq,
-                                       @Query("user_latitude") double userLatitude,
-                                       @Query("user_longitude") double userLongitude);
-
-
-
-
 }

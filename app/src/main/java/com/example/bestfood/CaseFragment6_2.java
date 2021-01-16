@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 
-public class FragSixth2 extends Fragment {
+public class CaseFragment6_2 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frame_6p_2, container, false);
+                R.layout.fragment_case_6_2, container, false);
 
         return rootView;
     }

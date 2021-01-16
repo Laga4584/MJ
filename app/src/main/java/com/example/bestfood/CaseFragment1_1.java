@@ -12,14 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
-import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 
@@ -31,7 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FragFirst1 extends Fragment implements View.OnClickListener{
+public class CaseFragment1_1 extends Fragment implements View.OnClickListener{
     public static final String INFO_ITEM = "INFO_ITEM";
     private final String TAG = this.getClass().getSimpleName();
 
@@ -50,11 +48,11 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
     String[] products = {"핸드백", "지갑"};
     String[] brands = {"브랜드1", "브랜드2"};
 
-    public static FragFirst1 newInstance(CaseInfoItem infoItem) {
+    public static CaseFragment1_1 newInstance(CaseInfoItem infoItem) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(INFO_ITEM, Parcels.wrap(infoItem));
 
-        FragFirst1 fragment = new FragFirst1();
+        CaseFragment1_1 fragment = new CaseFragment1_1();
         fragment.setArguments(bundle);
 
         return fragment;
@@ -81,7 +79,7 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         context = this.getActivity();
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frame_1p_1, container, false);
+                R.layout.fragment_case_1_1, container, false);
 
         return rootView;
     }
@@ -168,7 +166,7 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
         cameraButton.setOnClickListener(this);
 
 
-        FragFirst.currentItem = infoItem;
+        CaseFragment1.currentItem = infoItem;
 
         nextButton = (Button) view.findViewById(R.id.button);
         nextButton.setOnClickListener(this);
@@ -192,7 +190,7 @@ public class FragFirst1 extends Fragment implements View.OnClickListener{
              */
         } else if (v.getId() == R.id.button) {
 
-            FragFirst.viewPager2.setCurrentItem(1);
+            CaseFragment1.viewPager2.setCurrentItem(1);
             insertCaseInfo();
             CaseActivity.infoItem = infoItem;
             /*

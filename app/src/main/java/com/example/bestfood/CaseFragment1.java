@@ -6,11 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bestfood.adapter.ViewpagerAdapter;
 import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.remote.RemoteService;
@@ -23,23 +22,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FragFirst extends Fragment implements View.OnClickListener {
+public class CaseFragment1 extends Fragment implements View.OnClickListener {
     public static final String INFO_ITEM = "INFO_ITEM";
     private final String TAG = this.getClass().getSimpleName();
 
     int iCount;
     public static ViewPager2 viewPager2;
-    MyAdapter adapter;
+    ViewpagerAdapter adapter;
     Boolean clicked;
     Button nextButton;
     CaseInfoItem infoItem;
     public static CaseInfoItem currentItem = null;
 
-    public static FragFirst newInstance(CaseInfoItem infoItem) {
+    public static CaseFragment1 newInstance(CaseInfoItem infoItem) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(INFO_ITEM, Parcels.wrap(infoItem));
 
-        FragFirst fragment = new FragFirst();
+        CaseFragment1 fragment = new CaseFragment1();
         fragment.setArguments(bundle);
 
         return fragment;
@@ -61,9 +60,9 @@ public class FragFirst extends Fragment implements View.OnClickListener {
       else iCount = 1;
 
       ViewGroup rootView = (ViewGroup) inflater.inflate(
-              R.layout.frame_1p, container, false);
+              R.layout.fragment_case_1, container, false);
       viewPager2 = rootView.findViewById(R.id.viewPager2);
-      MyAdapter adapter = new MyAdapter(this, 1, iCount);
+      ViewpagerAdapter adapter = new ViewpagerAdapter(this, 1, iCount);
       /*
       clicked = ((CaseActivity)getActivity()).getClicked();
       MyLog.d("clicked check", clicked.toString());
@@ -72,7 +71,7 @@ public class FragFirst extends Fragment implements View.OnClickListener {
       }
     */
 
-      adapter.setType(MyAdapter.TYPE_VERTICAL_VIEWPAGER);
+      adapter.setType(ViewpagerAdapter.TYPE_VERTICAL_VIEWPAGER);
       adapter.setInfoItem(infoItem);
       viewPager2.setAdapter(adapter);
       viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);

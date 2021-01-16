@@ -9,6 +9,7 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bestfood.adapter.ViewpagerAdapter;
 import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
@@ -23,7 +24,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FragFourth extends Fragment {
+public class CaseFragment4 extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
     Button nextButton;
     CaseInfoItem infoItem;
@@ -35,7 +36,7 @@ public class FragFourth extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.frame_4p, container, false);
+                R.layout.fragment_case_4, container, false);
 
         infoItem = new CaseInfoItem();
         infoItem = CaseActivity.infoItem;
@@ -45,8 +46,8 @@ public class FragFourth extends Fragment {
 
         viewPager2 = rootView.findViewById(R.id.viewPager2);
 
-        MyAdapter adapter = new MyAdapter(this, 4, iCount);
-        adapter.setType(MyAdapter.TYPE_VERTICAL_VIEWPAGER);
+        ViewpagerAdapter adapter = new ViewpagerAdapter(this, 4, iCount);
+        adapter.setType(ViewpagerAdapter.TYPE_VERTICAL_VIEWPAGER);
         viewPager2.setAdapter(adapter);
         viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         MyLog.d(TAG, "here Case iCount " + CaseActivity.iCount);
