@@ -105,7 +105,7 @@ public class KakaoPay {
                 int stat = http.getResponseCode();
                 if (stat <= 300 && stat <= 307 && stat != 306 && stat != HttpURLConnection.HTTP_NOT_MODIFIED) {
                     URL base = http.getURL();
-                    String loc = KakaoPayReadyResult.getNext_redirect_app_url();
+                    String loc = kakaoPayReadyVO.getNext_redirect_app_url();
                     URL target = null;
                     if (loc != null) {
                         target = new URL(base, loc);
@@ -131,7 +131,7 @@ public class KakaoPay {
         is.close();
     }
 
-    public void kakaoPayApprove() throws IOException {
+    public void kakaoPayApprove(String pg_token) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded;charset=utf-8");
@@ -140,7 +140,7 @@ public class KakaoPay {
                 .add("tid", kakaoPayReadyVO.getTid())
                 .add("partner_order_id", "partner_order_id")
                 .add("partner_user_id", "partner_user_id")
-                .add("pg_token", "pg_token")
+                .add("pg_token", pg_token)
                 .build();
         Request request = new Request.Builder()
                 .url("https://kapi.kakao.com/v1/payment/approve")

@@ -1,5 +1,7 @@
 package com.example.bestfood;
 
+import java.net.URLConnection;
+
 public class KakaoPayReadyVO {
     private String tid;
     private String next_redirect_app_url;
