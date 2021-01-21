@@ -3,7 +3,6 @@ package com.example.bestfood;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -15,7 +14,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -28,13 +26,8 @@ import okhttp3.Response;
 
 public class KakaoPay {
     /*HttpURLConnection*/
-
-    private KakaoPayReadyVO kakaoPayReadyVO;
-
-    public KakaoPayReadyVO kakaoPayReady() throws IOException {
-        kakaoPayReadyVO = new KakaoPayReadyVO();
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
+    public void kakaoPayReady(final KakaoPayReadyVO kakaoPayReadyVO) throws IOException {
+        final OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
         RequestBody body = new FormBody.Builder()
                 .add("cid", "TC0ONETIME")
@@ -43,18 +36,18 @@ public class KakaoPay {
                 .add("item_name", "초코파이")
                 .add("quantity", "1")
                 .add("total_amount", "2200")
-                .add("vat_amount", "200")
                 .add("tax_free_amount", "0")
-                .add("approval_url", "https://developers.kakao.com")
-                .add("fail_url", "https://developers.kakao.com")
-                .add("cancel_url", "https://developers.kakao.com")
+                .add("approval_url", "http://192.168.0.9")
+                .add("fail_url", "http://192.168.0.9")
+                .add("cancel_url", "http://192.168.0.9")
                 .build();
-        Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                 .url("https://kapi.kakao.com/v1/payment/ready")
                 .method("POST", body)
-                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
                 .addHeader("Authorization", "KakaoAK ceb9ff5abc3653edac21733f89a1f68f")
                 .build();
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -62,35 +55,24 @@ public class KakaoPay {
             }
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Gson gson = new Gson();
-                try {
-                    kakaoPayReadyVO = gson.fromJson(String.valueOf(response.body()), KakaoPayReadyVO.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (response.isSuccessful()) {
+                    String responseData = response.body().string();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        Log.d("Success check", responseData);
+                        kakaoPayReadyVO.setTid(jsonObject.getString("tid"));
+                        kakaoPayReadyVO.setNext_redirect_app_url(jsonObject.getString("next_redirect_app_url"));
+                        kakaoPayReadyVO.setAndroid_app_scheme(jsonObject.getString("android_app_scheme"));
+                        kakaoPayReadyVO.setCreated_at(jsonObject.getString("created_at"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            });
-        return kakaoPayReadyVO;
-        /*client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.d("Error", "Error Message: " + e.getMessage());
-            }
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                final String responseData = response.body().string();
-                processResponse(responseData);
-                Log.d("Success", "ResponseData: " + responseData);
-            }
-        });*/
+        });
     }
 
-    /*public void processResponse(String response) {
-        Gson gson = new Gson();
-        KakaoPayReadyVO kakaoPayReadyVO = gson.fromJson(response, KakaoPayReadyVO.class);
-    }*/
-
-    public InputStream openConnectionCheckRedirects(URLConnection c) throws IOException {
+    /*public InputStream openConnectionCheckRedirects(URLConnection c) throws IOException {
         boolean redir;
         int redirects = 0;
         InputStream in = null;
@@ -129,7 +111,7 @@ public class KakaoPay {
         InputStream is = openConnectionCheckRedirects(conn);
 
         is.close();
-    }
+    }*/
 
     public void kakaoPayApprove(String pg_token) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -137,7 +119,7 @@ public class KakaoPay {
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded;charset=utf-8");
         RequestBody body = new FormBody.Builder()
                 .add("cid", "TC0ONETIME")
-                .add("tid", kakaoPayReadyVO.getTid())
+                .add("tid", "tid")
                 .add("partner_order_id", "partner_order_id")
                 .add("partner_user_id", "partner_user_id")
                 .add("pg_token", pg_token)

@@ -3,10 +3,10 @@ package com.example.bestfood;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -15,9 +15,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bestfood.lib.RemoteLib;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -43,13 +46,18 @@ public class CaseFragment3 extends Fragment {
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kakaoPayReadyVO = new KakaoPayReadyVO();
                 kakaoPay = new KakaoPay();
+                kakaoPayReadyVO = new KakaoPayReadyVO();
                 try {
-                    kakaoPayReadyVO = kakaoPay.kakaoPayReady();
+                    kakaoPay.kakaoPayReady(kakaoPayReadyVO);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                boolean flag = true;
+                while (flag) {
+                    if (kakaoPayReadyVO.getTid() != null) flag = false;
+                }
+                Log.d("Success result", kakaoPayReadyVO.toString());
 
                 try {
                     URL redirect = new URL(kakaoPayReadyVO.getNext_redirect_app_url());
@@ -58,11 +66,11 @@ public class CaseFragment3 extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                /*try {
-                    kakaoPay.kakaoPayApprove();
+                try {
+                    kakaoPay.kakaoPayApprove(kakaoPayReadyVO.getTid());
                 } catch (IOException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
         });
     }
