@@ -1,5 +1,8 @@
 package com.example.bestfood;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -37,9 +40,9 @@ public class KakaoPay {
                 .add("quantity", "1")
                 .add("total_amount", "2200")
                 .add("tax_free_amount", "0")
-                .add("approval_url", "http://192.168.0.9")
-                .add("fail_url", "http://192.168.0.9")
-                .add("cancel_url", "http://192.168.0.9")
+                .add("approval_url", "http://ec2-54-180-82-94.ap-northeast-2.compute.amazonaws.com:3000")
+                .add("fail_url", "http://ec2-54-180-82-94.ap-northeast-2.compute.amazonaws.com:3000")
+                .add("cancel_url", "http://ec2-54-180-82-94.ap-northeast-2.compute.amazonaws.com:3000")
                 .build();
         final Request request = new Request.Builder()
                 .url("https://kapi.kakao.com/v1/payment/ready")
@@ -72,7 +75,7 @@ public class KakaoPay {
         });
     }
 
-    /*public InputStream openConnectionCheckRedirects(URLConnection c) throws IOException {
+    public InputStream openConnectionCheckRedirects(URLConnection c) throws IOException {
         boolean redir;
         int redirects = 0;
         InputStream in = null;
@@ -87,7 +90,7 @@ public class KakaoPay {
                 int stat = http.getResponseCode();
                 if (stat <= 300 && stat <= 307 && stat != 306 && stat != HttpURLConnection.HTTP_NOT_MODIFIED) {
                     URL base = http.getURL();
-                    String loc = kakaoPayReadyVO.getNext_redirect_app_url();
+                    String loc = http.getHeaderField("Location");
                     URL target = null;
                     if (loc != null) {
                         target = new URL(base, loc);
@@ -111,15 +114,15 @@ public class KakaoPay {
         InputStream is = openConnectionCheckRedirects(conn);
 
         is.close();
-    }*/
+    }
 
-    public void kakaoPayApprove(String pg_token) throws IOException {
+    public void kakaoPayApprove(String tid, String pg_token) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded;charset=utf-8");
         RequestBody body = new FormBody.Builder()
                 .add("cid", "TC0ONETIME")
-                .add("tid", "tid")
+                .add("tid", tid)
                 .add("partner_order_id", "partner_order_id")
                 .add("partner_user_id", "partner_user_id")
                 .add("pg_token", pg_token)
@@ -138,7 +141,7 @@ public class KakaoPay {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String responseData = response.body().string();
-                Log.d("Success", "ResponseData: " + responseData);
+                Log.d("Success Approve", "ResponseData: " + responseData);
             }
         });
     }

@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -20,6 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".KakaoPayActivity"></activity>
 
         <meta-data
             android:name="com.google.android.actions"
@@ -33,10 +34,9 @@
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
 
         <activity
             android:name=".PermissionActivity"
@@ -50,28 +50,30 @@
         </activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <data android:scheme="@string/kakao_app_key" android:host="oauth"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="@string/kakao_app_key" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name=".JoinActivity"/>
+        <activity android:name=".JoinActivity" />
         <activity android:name=".IndexActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".CaseActivity"/>
-        <activity android:name=".ImageActivity"/>
-        <activity android:name=".SampleActivity"/>
-        <activity android:name=".AddressActivity"/>
+        <activity android:name=".CaseActivity" />
+        <activity android:name=".ImageActivity" />
+        <activity android:name=".SampleActivity" />
+        <activity android:name=".AddressActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ProfileIconActivity" />
-        <activity android:name=".ChatActivity"/>
-        <activity android:name=".DetailActivity"/>
-        <activity android:name=".RegisterActivity"/>
-        <activity android:name=".CaseListActivity"/>
-        <activity android:name=".NoticeActivity"/>
-        <activity android:name=".RepairerActivity"/>
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".DetailActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".CaseListActivity" />
+        <activity android:name=".NoticeActivity" />
+        <activity android:name=".RepairerActivity" />
     </application>
 
 </manifest>

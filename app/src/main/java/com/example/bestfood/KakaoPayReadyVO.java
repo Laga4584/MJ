@@ -1,12 +1,16 @@
 package com.example.bestfood;
 
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class KakaoPayReadyVO {
     private String tid;
     private String next_redirect_app_url;
     private String android_app_scheme;
     private String created_at;
+    private String pg_token;
 
     public void setTid(String tid) {
         this.tid = tid;
