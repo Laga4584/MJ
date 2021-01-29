@@ -1,6 +1,7 @@
 package com.example.bestfood;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +93,7 @@ public class CaseFragment2 extends Fragment {
                     caseItem.repairerSeq = selectedItem.repairerSeq;
                     caseItem.price = selectedItem.price;
                     insertCaseInfo();
+                    getActivity().startActivity(new Intent(getActivity(), KakaoPayActivity.class));
                 }
             }
         });
@@ -194,7 +196,7 @@ public class CaseFragment2 extends Fragment {
                         //goNextPage();
                         CaseActivity.caseItem = caseItem;
                         ((CaseActivity) getActivity()).replaceFragment(1);
-                        RemoteLib.getInstance().updateCaseStatus(2, 0);
+                        //RemoteLib.getInstance().updateCaseStatus(2, 0);
                     }
                 } else { // 등록 실패
                     int statusCode = response.code();
