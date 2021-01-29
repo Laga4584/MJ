@@ -81,7 +81,6 @@ public class CaseFragment4 extends Fragment {
         }else {
             rootView = (ViewGroup) inflater.inflate(
                     R.layout.fragment_case_4_2, container, false);
-            selectRepairerInfo(caseItem.repairerSeq);
         }
         return rootView;
     }
@@ -111,6 +110,7 @@ public class CaseFragment4 extends Fragment {
             edit4.setVisibility(View.GONE);
             edit5 = view.findViewById(R.id.edit5);
             edit5.setVisibility(View.GONE);
+
             image1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -226,16 +226,20 @@ public class CaseFragment4 extends Fragment {
             title = view.findViewById(R.id.title);
             price = view.findViewById(R.id.price);
 
-            String nameText = repairerItem.name + " 명장";
-            name.setText(nameText);
-            int dotCount = caseItem.dot.split("/ ").length - 1;
-            String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + dotCount + " 건";
-            info.setText(infoText);
-            String titleText = "완료 " + repairerItem.caseCount + " | 평점 " + repairerItem.score + " | " + repairerItem.product + " 분야";
-            title.setText(titleText);
-            String priceText = "예상 견적 " + caseItem.price;
-            price.setText(priceText);
+            selectRepairerInfo(caseItem.repairerSeq);
         }
+    }
+
+    private void setView(){
+        String nameText = repairerItem.name + " 명장";
+        name.setText(nameText);
+        int dotCount = caseItem.dot.split("/ ").length - 1;
+        String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + dotCount + " 건";
+        info.setText(infoText);
+        String titleText = "완료 " + repairerItem.caseCount + " | 평점 " + repairerItem.score + " | " + repairerItem.product + " 분야";
+        title.setText(titleText);
+        String priceText = "예상 견적 " + caseItem.price + "원 | " + caseItem.time + "일";
+        price.setText(priceText);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -292,6 +296,7 @@ public class CaseFragment4 extends Fragment {
 
                 if (response.isSuccessful() && item != null && item.seq > 0) {
                     repairerItem = item;
+                    setView();
                     //loadingText.setVisibility(View.GONE);
                 } else {
                     //loadingText.setVisibility(View.VISIBLE);

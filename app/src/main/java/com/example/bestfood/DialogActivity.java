@@ -20,10 +20,7 @@ public class DialogActivity extends Activity {
 
     Context context;
     ImageButton select, close;
-    String[] items_1 = {"test1", "test2", "test3", "test4", "test5", "test6"};
-    String[] items_2 = {"수선", "리폼", "염색", "클리닝", "직접 입력"};
-    String[] items_3 = {"test1", "test2", "test3", "test4", "test5", "test6", "test7"};
-    String[] items_4 = {"test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"};
+    String[] items;
     DialogListAdapter dialogListAdapter;
     SliderLayoutManager layoutManager;
     RecyclerView dialogView;
@@ -35,27 +32,14 @@ public class DialogActivity extends Activity {
         setContentView(R.layout.activity_dialog);
 
         requestCode = getIntent().getIntExtra("requestCode", 0);
+        items = getIntent().getStringArrayExtra("itemList");
         dialogView = findViewById(R.id.viewpager);
         layoutManager = new SliderLayoutManager(this);
         //StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         //layoutManager
         //        .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         dialogView.setLayoutManager(layoutManager);
-        switch (requestCode)
-        {
-            case 0 :
-                dialogListAdapter = new DialogListAdapter(this, R.layout.row_dialog_list,  new ArrayList<String>(Arrays.asList(items_1)));
-                break;
-            case 1 :
-                dialogListAdapter = new DialogListAdapter(this, R.layout.row_dialog_list,  new ArrayList<String>(Arrays.asList(items_2)));
-                break;
-            case 2 :
-                dialogListAdapter = new DialogListAdapter(this, R.layout.row_dialog_list,  new ArrayList<String>(Arrays.asList(items_3)));
-                break;
-            case 3 :
-                dialogListAdapter = new DialogListAdapter(this, R.layout.row_dialog_list,  new ArrayList<String>(Arrays.asList(items_4)));
-                break;
-        }
+        dialogListAdapter = new DialogListAdapter(this, R.layout.row_dialog_list,  new ArrayList<String>(Arrays.asList(items)));
         dialogView.setAdapter(dialogListAdapter);
 
 

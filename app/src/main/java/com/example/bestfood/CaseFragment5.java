@@ -56,7 +56,7 @@ public class CaseFragment5 extends Fragment {
     Context context;
     CaseItem caseItem;
     RepairerItem repairerItem;
-    TextView name, info, title, price, description1, description2, next;
+    TextView name, info, title, price, description1, description2, next, sequence;
     TextView text1, text2, text3, text4, text5, option2;
     TextView finish, restart;
     EditText edit1, edit2, edit3, edit4, edit5;
@@ -100,7 +100,6 @@ public class CaseFragment5 extends Fragment {
         if (count < 4) {
             rootView = (ViewGroup) inflater.inflate(
                     R.layout.fragment_case_5, container, false);
-            selectRepairerInfo(caseItem.repairerSeq);
         }else if (count == 4){
             rootView = (ViewGroup) inflater.inflate(
                     R.layout.fragment_case_5_2, container, false);
@@ -128,78 +127,19 @@ public class CaseFragment5 extends Fragment {
             title = view.findViewById(R.id.title);
             price = view.findViewById(R.id.price);
 
-            String nameText = repairerItem.name + " 명장";
-            name.setText(nameText);
-            int dotCount = caseItem.dot.split("/ ").length - 1;
-            String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + dotCount + " 건";
-            info.setText(infoText);
-            String titleText = "완료 " + repairerItem.caseCount + " | 평점 " + repairerItem.score + " | " + repairerItem.product + " 분야";
-            title.setText(titleText);
-            String priceText = "예상 견적 " + caseItem.price;
-            price.setText(priceText);
-
-            if (count == 1) {
-                price.setTextColor(context.getColor(R.color.colorAccent));
-                content1.setVisibility(View.GONE);
-                content2.setVisibility(View.VISIBLE);
-                description1.setText("최종 견적 금액이 처음의 견적보다 낮을 시");
-                description2.setText("차액은 3~4 영업일 이내 자동 환불됩니다");
-            } else if (count == 2) {
-                price.setVisibility(View.GONE);
-                description1.setText("명장님이 고객님의 요청 사항에 맞춰 수선을 진행중이에요");
-                description2.setVisibility(View.GONE);
-            } else if (count == 3) {
-                price.setVisibility(View.GONE);
-                description1.setText("명장님이 수선을 종료하고 결과물 사진을 올려주셨어요");
-                description2.setVisibility(View.GONE);
-            }
-
             image = view.findViewById(R.id.image);
             image.setClipToOutline(true);
+            sequence = view.findViewById(R.id.sequence);
             prevButton = view.findViewById(R.id.button_prev);
             prevButton.setVisibility(View.GONE);
-            prevButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    imageCount -= 1;
-                    setImage(image, requests.get(imageCount).filename);
-                    if (imageCount < 1) {
-                        prevButton.setVisibility(View.GONE);
-                    }
-                    if (imageCount < requests.size() - 1) {
-                        nextButton.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
             nextButton = view.findViewById(R.id.button_next);
             nextButton.setVisibility(View.VISIBLE);
-            nextButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    imageCount += 1;
-                    setImage(image, requests.get(imageCount).filename);
-                    if (imageCount > 0) {
-                        prevButton.setVisibility(View.VISIBLE);
-                    }
-                    if (imageCount == requests.size() - 1) {
-                        nextButton.setVisibility(View.GONE);
-                    }
-                }
-            });
 
             requestList = view.findViewById(R.id.request_list);
-            setRecyclerView();
-            listInfo(caseItem.seq);
-
             next = view.findViewById(R.id.next);
-            next.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CaseActivity.caseItem = caseItem;
-                    RemoteLib.getInstance().updateCaseStatus(4, 4);
-                    ((CaseActivity) getActivity()).replaceFragment(3);
-                }
-            });
+
+            selectRepairerInfo(caseItem.repairerSeq);
+
         }else if (count == 4){
             edit1 = view.findViewById(R.id.edit1);
             option2 = view.findViewById(R.id.option2);
@@ -289,6 +229,87 @@ public class CaseFragment5 extends Fragment {
         }
     }
 
+    private void setView(){
+
+        MyLog.d("here repairerItem " + repairerItem.toString());
+        String nameText = repairerItem.name + " 명장";
+        name.setText(nameText);
+        int dotCount = caseItem.dot.split("/ ").length - 1;
+        String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + dotCount + " 건";
+        info.setText(infoText);
+        String titleText = "완료 " + repairerItem.caseCount + " | 평점 " + repairerItem.score + " | " + repairerItem.product + " 분야";
+        title.setText(titleText);
+        String priceText = "예상 견적 " + caseItem.price+ "원 | " + caseItem.time + "일";
+        price.setText(priceText);
+
+        if (count == 0) {
+
+            sequence.setVisibility(View.GONE);
+            prevButton.setVisibility(View.GONE);
+            nextButton.setVisibility(View.GONE);
+        } else if (count == 1){
+            priceText = "최종 견적 " + caseItem.price+ "원 | " + caseItem.time + "일";
+            price.setText(priceText);
+            price.setTextColor(context.getColor(R.color.colorAccent));
+            content1.setVisibility(View.GONE);
+            content2.setVisibility(View.VISIBLE);
+            description1.setText("최종 견적 금액이 처음의 견적보다 낮을 시");
+            description2.setText("차액은 3~4 영업일 이내 자동 환불됩니다");
+        } else if (count == 2) {
+            price.setVisibility(View.GONE);
+            description1.setText("명장님이 고객님의 요청 사항에 맞춰 수선을 진행중이에요");
+            description2.setVisibility(View.GONE);
+        } else if (count == 3) {
+            price.setVisibility(View.GONE);
+            description1.setText("명장님이 수선을 종료하고 결과물 사진을 올려주셨어요");
+            description2.setVisibility(View.GONE);
+        }
+
+        sequence.setText(String.valueOf(imageCount+1));
+
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageCount -= 1;
+                setImage(image, requests.get(imageCount).filename);
+                sequence.setText(String.valueOf(imageCount+1));
+                if (imageCount < 1) {
+                    prevButton.setVisibility(View.GONE);
+                }
+                if (imageCount < requests.size() - 1) {
+                    nextButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageCount += 1;
+                setImage(image, requests.get(imageCount).filename);
+                sequence.setText(String.valueOf(imageCount+1));
+                if (imageCount > 0) {
+                    prevButton.setVisibility(View.VISIBLE);
+                }
+                if (imageCount == requests.size() - 1) {
+                    nextButton.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        setRecyclerView();
+        listInfo(caseItem.seq);
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CaseActivity.caseItem = caseItem;
+                RemoteLib.getInstance().updateCaseStatus(4, 4);
+                ((CaseActivity) getActivity()).replaceFragment(3);
+            }
+        });
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode, resultCode, intent);
         switch (requestCode) {
@@ -350,9 +371,11 @@ public class CaseFragment5 extends Fragment {
                 ArrayList<ImageItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
+                    if(count != 0){
+                        list.remove(0);
+                    }
                     requests = list;
                     setImage(image, requests.get(0).filename);
-                    list.remove(0);
                     requestListAdapter.addItemList(list);
 
                     if (requestListAdapter.getItemCount() == 0) {
@@ -382,6 +405,7 @@ public class CaseFragment5 extends Fragment {
 
                 if (response.isSuccessful() && item != null && item.seq > 0) {
                     repairerItem = item;
+                    setView();
                     //loadingText.setVisibility(View.GONE);
                 } else {
                     //loadingText.setVisibility(View.VISIBLE);

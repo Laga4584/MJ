@@ -20,12 +20,15 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.bestfood.item.CaseItem;
+import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -44,7 +47,7 @@ public class CaseFragment1 extends Fragment {
     CaseItem caseItem;
     int status;
 
-    CardView cardView1, cardView2, cardView3, cardView4;
+    CardView cardView1, cardView2, cardView3, cardView4, cardView4_2;
     TextView text1, text2, text3, text4, next, option1, option2, option3, option4;
     ImageView image1, image2, image3, image4;
     EditText edit1, edit2, edit3;
@@ -74,13 +77,13 @@ public class CaseFragment1 extends Fragment {
     }
 
     @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-      ViewGroup rootView = (ViewGroup) inflater.inflate(
-              R.layout.fragment_case_1, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        ViewGroup rootView = (ViewGroup) inflater.inflate(
+                R.layout.fragment_case_1, container, false);
 
-      return rootView;
-  }
+        return rootView;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -90,6 +93,8 @@ public class CaseFragment1 extends Fragment {
         cardView2 = view.findViewById(R.id.card_view_2);
         cardView3 = view.findViewById(R.id.card_view_3);
         cardView4 = view.findViewById(R.id.card_view_4);
+        cardView4_2 = view.findViewById(R.id.card_view_4_2);
+        cardView4_2.setVisibility(View.GONE);
 
         final DisplayMetrics metrics = ((App) this.getActivity().getApplication()).getMetrics();
         /*
@@ -116,6 +121,7 @@ public class CaseFragment1 extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(context, DialogActivity.class);
                 intent.putExtra("requestCode", REQUEST_CODE_1);
+                intent.putExtra("itemList", items_1);
                 startActivityForResult(intent, REQUEST_CODE_1);
             }
         });
@@ -125,6 +131,7 @@ public class CaseFragment1 extends Fragment {
                 if(status > 0) {
                     Intent intent = new Intent(context, DialogActivity.class);
                     intent.putExtra("requestCode", REQUEST_CODE_2);
+                    intent.putExtra("itemList", items_2);
                     startActivityForResult(intent, REQUEST_CODE_2);
                 }
             }
@@ -135,6 +142,7 @@ public class CaseFragment1 extends Fragment {
                 if(status > 1) {
                     Intent intent = new Intent(context, DialogActivity.class);
                     intent.putExtra("requestCode", REQUEST_CODE_3);
+                    intent.putExtra("itemList", items_3);
                     startActivityForResult(intent, REQUEST_CODE_3);
                 }
             }
@@ -163,11 +171,11 @@ public class CaseFragment1 extends Fragment {
         option3 = view.findViewById(R.id.option3);
         option4 = view.findViewById(R.id.option4);
         edit1 = view.findViewById(R.id.edit1);
-        edit1.setVisibility(View.INVISIBLE);
+        edit1.setVisibility(View.GONE);
         edit2 = view.findViewById(R.id.edit2);
-        edit2.setVisibility(View.INVISIBLE);
+        edit2.setVisibility(View.GONE);
         edit3 = view.findViewById(R.id.edit3);
-        edit3.setVisibility(View.INVISIBLE);
+        edit3.setVisibility(View.GONE);
         next = view.findViewById(R.id.next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,7 +236,7 @@ public class CaseFragment1 extends Fragment {
             }
             int sendText = data.getExtras().getInt("sendText");
             if(sendText == items_1.length-1){
-                option1.setVisibility(View.INVISIBLE);
+                option1.setVisibility(View.GONE);
                 edit1.setVisibility(View.VISIBLE);
                 edit1.requestFocus();
                 edit1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -237,19 +245,20 @@ public class CaseFragment1 extends Fragment {
                         if (EditorInfo.IME_ACTION_DONE == i) {
                             caseItem.product = edit1.getText().toString();
                             edit1.clearFocus();
+                            edit1.setVisibility(View.GONE);
+                            option1.setVisibility(View.VISIBLE);
+                            option1.setText(edit1.getText().toString());
                         }
                         return false;
                     }
                 });
             }else{
+                caseItem.product = items_1[sendText];
                 option1.setText(items_1[sendText]);
             }
-            image1.setVisibility(View.INVISIBLE);
-            MyLog.d("here status" + status);
-            MyLog.d("here requestCode" + requestCode);
+            image1.setVisibility(View.GONE);
             if(status == requestCode) status += 1;
             setText(status);
-            MyLog.d("here status2" + status);
         }
         else if (requestCode == REQUEST_CODE_2) {
             if (resultCode != Activity.RESULT_OK) {
@@ -257,7 +266,7 @@ public class CaseFragment1 extends Fragment {
             }
             int sendText = data.getExtras().getInt("sendText");
             if(sendText == items_2.length-1){
-                option2.setVisibility(View.INVISIBLE);
+                option2.setVisibility(View.GONE);
                 edit2.setVisibility(View.VISIBLE);
                 edit2.requestFocus();
                 edit2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -266,19 +275,21 @@ public class CaseFragment1 extends Fragment {
                         if (EditorInfo.IME_ACTION_DONE == i) {
                             caseItem.service = edit2.getText().toString();
                             edit2.clearFocus();
+                            edit2.setVisibility(View.GONE);
+                            option2.setVisibility(View.VISIBLE);
+                            option2.setText(edit2.getText().toString());
                         }
                         return false;
                     }
                 });
             }else{
+                caseItem.service = items_2[sendText];
                 option2.setText(items_2[sendText]);
+
             }
-            image2.setVisibility(View.INVISIBLE);
-            MyLog.d("here status" + status);
-            MyLog.d("here requestCode" + requestCode);
+            image2.setVisibility(View.GONE);
             if(status == requestCode) status += 1;
             setText(status);
-            MyLog.d("here status2" + status);
         }
         else if (requestCode == REQUEST_CODE_3) {
             if (resultCode != Activity.RESULT_OK) {
@@ -286,7 +297,7 @@ public class CaseFragment1 extends Fragment {
             }
             int sendText = data.getExtras().getInt("sendText");
             if(sendText == items_3.length-1){
-                option3.setVisibility(View.INVISIBLE);
+                option3.setVisibility(View.GONE);
                 edit3.setVisibility(View.VISIBLE);
                 edit3.requestFocus();
                 edit3.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -295,32 +306,31 @@ public class CaseFragment1 extends Fragment {
                         if (EditorInfo.IME_ACTION_DONE == i) {
                             caseItem.brand = edit3.getText().toString();
                             edit3.clearFocus();
+                            edit3.setVisibility(View.GONE);
+                            option3.setVisibility(View.VISIBLE);
+                            option3.setText(edit3.getText().toString());
                         }
                         return false;
                     }
                 });
             }else{
+                caseItem.brand = items_3[sendText];
                 option3.setText(items_3[sendText]);
             }
-            image3.setVisibility(View.INVISIBLE);
-            MyLog.d("here status" + status);
-            MyLog.d("here requestCode" + requestCode);
+            image3.setVisibility(View.GONE);
             if(status == requestCode) status += 1;
             setText(status);
-            MyLog.d("here status2" + status);
         }
         else if (requestCode == REQUEST_CODE_4) {
             if (resultCode != Activity.RESULT_OK) {
                 return;
             }
-            int sendText = data.getExtras().getInt("sendText");
-            option4.setText(items_4[sendText]);
-            image4.setVisibility(View.INVISIBLE);
-            MyLog.d("here status" + status);
-            MyLog.d("here requestCode" + requestCode);
+
+            //ArrayList<ImageItem> sendText = data.getParcelableArrayListExtra("Images");
+            cardView4.setVisibility(View.GONE);
+            cardView4_2.setVisibility(View.VISIBLE);
             if(status == requestCode) status += 1;
             setText(status);
-            MyLog.d("here status2" + status);
         }
     }
 

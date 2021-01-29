@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.bestfood.R;
+
 import java.util.ArrayList;
 
 public class CustomView extends androidx.appcompat.widget.AppCompatImageView {
@@ -18,8 +20,8 @@ public class CustomView extends androidx.appcompat.widget.AppCompatImageView {
     Bitmap mBitmap;
     Paint mPaint;
 
-    public ArrayList position_list_X;
-    public ArrayList position_list_Y;
+    public ArrayList<Integer> position_list_X;
+    public ArrayList<Integer> position_list_Y;
     int X;
     int Y;
 
@@ -38,27 +40,27 @@ public class CustomView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     private void init(Context context){
-        this.position_list_X = new ArrayList();
-        this.position_list_Y = new ArrayList();
+        this.position_list_X = new ArrayList<Integer>();
+        this.position_list_Y = new ArrayList<Integer>();
         this.mPaint = new Paint();
-        this.mPaint.setColor(Color.WHITE);
+        this.mPaint.setColor(context.getColor(R.color.colorAccent));
+        this.mPaint.setAlpha(70);
 }
 
 
     @Override
     protected void onSizeChanged(int w, int h , int oldw, int oldh){
         //Bitmap img = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas();
         //canvas.setBitmap(img);
         //canvas.drawColor(Color.GRAY);
 
         //mBitmap = mBitmap;
-        mCanvas = canvas;
+        mCanvas = new Canvas();
     }
     @Override
     protected void onDraw(Canvas canvas){
         for (int i=0; i<position_list_X.size(); i++){
-            canvas.drawCircle((int) position_list_X.get(i), (int) position_list_Y.get(i), 20, mPaint);}
+            canvas.drawCircle((int) position_list_X.get(i), (int) position_list_Y.get(i), 30, mPaint);}
     }
 
     /*

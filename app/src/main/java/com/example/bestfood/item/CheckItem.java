@@ -16,6 +16,7 @@ public class CheckItem {
 
     public String description;
     public String price;
+    public String time;
     @SerializedName("reg_date") public String regDate;
 
     @Override
@@ -30,6 +31,7 @@ public class CheckItem {
                 ", profileImgFilename='" + profileImgFilename + '\'' +
                 ", description='" + description + '\'' +
                 ", price='" + price + '\'' +
+                ", time='" + time + '\'' +
                 ", regDate='" + regDate + '\'' +
                 '}';
     }

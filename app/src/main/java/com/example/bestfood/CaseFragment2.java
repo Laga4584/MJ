@@ -92,6 +92,7 @@ public class CaseFragment2 extends Fragment {
                 if (selectedItem != null){
                     caseItem.repairerSeq = selectedItem.repairerSeq;
                     caseItem.price = selectedItem.price;
+                    caseItem.time = selectedItem.time;
                     insertCaseInfo();
                     getActivity().startActivity(new Intent(getActivity(), KakaoPayActivity.class));
                 }

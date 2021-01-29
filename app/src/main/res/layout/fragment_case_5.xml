@@ -1,196 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <androidx.cardview.widget.CardView
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
-            app:cardCornerRadius="10dp"
-            app:contentPadding="15dp"
-            android:elevation="3dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_person" />
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="10dp">
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="김엠제이 명장"
-                        android:textSize="12dp"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="7dp"/>
-                    <TextView
-                        android:id="@+id/info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="완료 41 | 평점 4.9 | 가방 분야"
-                        android:textSize="11dp"
-                        android:textColor="@color/colorGray" />
-                    <TextView
-                        android:id="@+id/title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="[발렌시아가] 핸드백 스트링 수선 외 4건"
-                        android:textSize="11dp"
-                        android:textColor="@color/colorPrimaryDark" />
-                    <TextView
-                        android:id="@+id/price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="예상 견적 23,500원"
-                        android:textSize="12dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorPrimaryDark" />
-                </LinearLayout>
-                <ImageButton
-                    android:layout_gravity="top"
-                    android:id="@+id/chat"
-                    android:layout_width="28dp"
-                    android:layout_height="23dp"
-                    android:src="@drawable/ic_message"
-                    />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical">
+
             <androidx.cardview.widget.CardView
-                android:id="@+id/content1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
+                android:elevation="3dp"
                 app:cardCornerRadius="10dp"
-                android:elevation="3dp">
+                app:contentPadding="15dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="20dp">
-                        <ImageView
-                            android:id="@+id/image"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/bg_bestfood_drawer"
-                            android:scaleType="centerCrop"
-                            android:background="@drawable/round_white"/>
-                        <ImageButton
-                            android:id="@+id/button_prev"
-                            android:layout_width="24dp"
-                            android:layout_height="49dp"
-                            android:layout_gravity="center|start"
-                            android:src="@drawable/ic_prev"
-                            android:background="@drawable/bg_transparent"/>
-                        <ImageButton
-                            android:id="@+id/button_next"
-                            android:layout_width="24dp"
-                            android:layout_height="49dp"
-                            android:layout_gravity="center|end"
-                            android:src="@drawable/ic_next"
-                            android:background="@drawable/bg_transparent"/>
-                    </FrameLayout>
-                    <TextView
-                        android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_person" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="52dp"
-                        android:layout_marginBottom="20dp"
-                        android:text="수선 요청 리스트"
-                        android:textSize="12dp"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textStyle="bold"/>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/request_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginBottom="5dp"
-                        android:nestedScrollingEnabled="false"/>
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:text="김엠제이 명장"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="완료 41 | 평점 4.9 | 가방 분야"
+                            android:textColor="@color/colorGray"
+                            android:textSize="11dp" />
+
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="[발렌시아가] 핸드백 스트링 수선 외 4건"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="11dp" />
+
+                        <TextView
+                            android:id="@+id/price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="예상 견적 23,500원"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/chat"
+                        android:layout_width="28dp"
+                        android:layout_height="23dp"
+                        android:layout_gravity="top"
+                        android:src="@drawable/ic_message" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-            <LinearLayout
-                android:id="@+id/content2"
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/content1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:elevation="3dp"
+                    app:cardCornerRadius="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_marginBottom="20dp">
+
+                            <ImageView
+                                android:id="@+id/image"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/round_white"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/bg_bestfood_drawer" />
+                            <TextView
+                                android:id="@+id/sequence"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_margin="15dp"
+                                android:gravity="center"
+                                android:textColor="@color/colorPrimary"
+                                android:background="@drawable/text_circle_blue" />
+                            <ImageButton
+                                android:id="@+id/button_prev"
+                                android:layout_width="24dp"
+                                android:layout_height="49dp"
+                                android:layout_gravity="center|start"
+
+                                android:src="@drawable/ic_prev" />
+
+                            <ImageButton
+                                android:id="@+id/button_next"
+                                android:layout_width="24dp"
+                                android:layout_height="49dp"
+                                android:layout_gravity="center|end"
+
+                                android:src="@drawable/ic_next" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="52dp"
+                            android:layout_marginBottom="20dp"
+                            android:text="수선 요청 리스트"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/request_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginBottom="5dp"
+                            android:nestedScrollingEnabled="false" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/content2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/round_blue"
+                        android:gravity="center"
+                        android:text="추가 결제 진행"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/round_white"
+                        android:gravity="center"
+                        android:text="수선 취소 / 반환"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/description1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/round_blue"
-                    android:gravity="center"
-                    android:text="추가 결제 진행"
-                    android:textSize="12dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/round_white"
-                    android:gravity="center"
-                    android:text="수선 취소 / 반환"
-                    android:textSize="12dp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-        </FrameLayout>
-        <TextView
-            android:id="@+id/description1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="명장님과 링크 되었어요 :)"
-            android:textSize="11dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/description2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="상품과 수선 요청 내용을 확인하고 최종 견적을 진행중이에요"
-            android:textSize="11dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:gravity="center"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/next"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_gravity="bottom"
-            android:gravity="center"
-            android:text="견적 승인하고 결제할게요"
-            android:textSize="15dp"
-            android:textColor="@color/colorPrimary"
-            android:background="@color/colorGray"
-            android:paddingTop="20dp"
-            android:paddingBottom="30dp"/>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="명장님과 링크 되었어요 :)"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="11dp" />
+
+            <TextView
+                android:id="@+id/description2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="상품과 수선 요청 내용을 확인하고 최종 견적을 진행중이에요"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="11dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingBottom="30dp"
+        android:text="확인했어요. 상품 보내주세요."
+        android:textColor="@color/colorPrimary"
+        android:textSize="15dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

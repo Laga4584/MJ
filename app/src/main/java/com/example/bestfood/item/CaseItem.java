@@ -24,9 +24,11 @@ public class CaseItem {
     @SerializedName("addressee_phone") public String addresseePhone;
     public String memo;
     public String descriptionAdd;
-    public String priceAdd;
+    @SerializedName("price_final") public String priceFinal;
+    @SerializedName("time_final") public String timeFinal;
     @SerializedName("repair_description") public String repairDescription;
     public String repairState;
+    public String tag;
     public String review;
     public float score;
     public String status;
@@ -57,9 +59,11 @@ public class CaseItem {
                 ", description_add='" + descriptionAdd + '\'' +
                 ", addresseePhone='" + addresseePhone + '\'' +
                 ", memo='" + memo + '\'' +
-                ", price_add='" + priceAdd + '\'' +
+                ", priceFinal='" + priceFinal + '\'' +
+                ", timeFinal='" + timeFinal + '\'' +
                 ", repair_description='" + repairDescription + '\'' +
                 ", repair_state='" + repairState + '\'' +
+                ", tag='" + tag + '\'' +
                 ", review='" + review + '\'' +
                 ", score='" + score + '\'' +
                 ", status='" + status + '\'' +
