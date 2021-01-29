@@ -6,6 +6,8 @@
     <color name="colorDarkGray">#727272</color>
     <color name="colorGray">#C6C6C6</color>
     <color name="colorLightGray">#F2F2F2</color>
+    <color name="colorStartGray">#C4C4C4</color>
+    <color name="colorLightYellow">#FFE815</color>
 
     <color name="text_color_black">#000000</color>
     <color name="text_color_red">#aa0000</color>

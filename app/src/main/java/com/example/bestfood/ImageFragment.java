@@ -63,8 +63,8 @@ public class ImageFragment extends Fragment {
             }
         }else{
             if (infoSeq == 0){
-                setImage(sampleImage, CaseActivity.infoItem.imageFilename);
-                setDot(CaseActivity.infoItem.dot);
+                setImage(sampleImage, CaseActivity.caseItem.imageFilename);
+                setDot(CaseActivity.caseItem.dot);
             }else{
                 setImage(sampleImage, DetailActivity.images.get(infoSeq-1).filename);
             }

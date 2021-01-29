@@ -9,6 +9,8 @@ public class ImageItem {
     @SerializedName("seq") public int seq;
     @SerializedName("info_seq") public int infoSeq;
     @SerializedName("filename") public String filename;
+    public String request;
+    public int check;
     @SerializedName("label") public String label;
     @SerializedName("reg_date") public String regDate;
 
@@ -18,6 +20,8 @@ public class ImageItem {
                 "seq=" + seq +
                 ", info_seq=" + infoSeq +
                 ", filename='" + filename + '\'' +
+                ", request='" + request + '\'' +
+                ", check='" + check + '\'' +
                 ", label='" + label + '\'' +
                 ", reg_date='" + regDate + '\'' +
                 '}';

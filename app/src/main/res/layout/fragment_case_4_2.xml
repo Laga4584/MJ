@@ -1,82 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="15dp"
+        android:elevation="3dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_person" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp">
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="김엠제이 명장"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="7dp"/>
+                <TextView
+                    android:id="@+id/info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="완료 41 | 평점 4.9 | 가방 분야"
+                    android:textSize="11dp"
+                    android:textColor="@color/colorGray" />
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="[발렌시아가] 핸드백 스트링 수선 외 4건"
+                    android:textSize="11dp"
+                    android:textColor="@color/colorPrimaryDark" />
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="예상 견적 23,500원"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/pageMarginAndOffset"
-        android:layout_marginRight="@dimen/pageMarginAndOffset"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:background="@drawable/card_dash"
+        android:paddingVertical="15dp"
+        android:paddingHorizontal="60dp"
         android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:text="발송"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_large"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:text="발송 중입니다."
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="주소: 서울시 서대문구..."
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/text3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="설명"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/text4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="금액"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold" />
-
         <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:text="발송 신청" />
-
-
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorLightGray"/>
+        <View
+            android:layout_width="70dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorLightGray"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorLightGray"/>
     </LinearLayout>
-
-
-</FrameLayout>
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="명장님이 상품을 기다리는 중이에요"
+        android:textSize="11dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/description2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="픽업 상품의 위치가 궁금하시면 클릭해주세요"
+        android:textSize="11dp"
+        android:textColor="@color/colorGray"
+        android:gravity="center"/>
+</LinearLayout>

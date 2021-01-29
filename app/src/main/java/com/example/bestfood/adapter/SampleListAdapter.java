@@ -70,6 +70,10 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
         notifyDataSetChanged();
     }
 
+    public void clearItemList() {
+        this.itemList.clear();
+    }
+
     /**
      * 아이템 크기를 반환한다.
      * @return 아이템 크기

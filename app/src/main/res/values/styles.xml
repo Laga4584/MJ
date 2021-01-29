@@ -30,4 +30,31 @@
         <item name="android:textSize">11sp</item>
     </style>
 
+    <!-- set the rounded drawable as background to your bottom sheet -->
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottom_sheet_dialog_fragment</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="CustomDialog" parent="@android:style/Theme.Holo.Light" >
+        <item name="android:windowIsFloating">true</item>
+    </style>
+    <style name="Theme.Transparent" parent="android:Theme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorStartGray</item>
+        <item name="colorControlActivated">@color/colorLightYellow</item>
+    </style>
+
 </resources>

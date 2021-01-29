@@ -3,10 +3,12 @@ package com.example.bestfood;
 import android.app.Application;
 import android.os.StrictMode;
 
-import com.example.bestfood.item.CaseInfoItem;
+import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.UserItem;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import com.kakao.auth.ApprovalType;
 import com.kakao.auth.AuthType;
@@ -21,7 +23,7 @@ import com.kakao.auth.KakaoSDK;
  */
 public class App extends Application {
     private UserItem userItem;
-    private CaseInfoItem caseInfoItem;
+    private CaseItem caseItem;
 
     private static volatile App instance = null;
 
@@ -131,11 +133,18 @@ public class App extends Application {
         return userItem.seq;
     }
 
-    public void setCaseInfoItem(CaseInfoItem caseInfoItem) {
-        this.caseInfoItem = caseInfoItem;
+    public void setCaseItem(CaseItem caseItem) {
+        this.caseItem = caseItem;
     }
 
-    public CaseInfoItem getCaseInfoItem() {
-        return caseInfoItem;
+    public CaseItem getCaseItem() {
+        return caseItem;
+    }
+
+    public DisplayMetrics getMetrics(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        return metrics;
     }
 }

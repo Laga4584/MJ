@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.bestfood.item.CaseInfoItem;
+import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
@@ -26,7 +26,7 @@ public class CaseFragment7 extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
     EditText reviewEdit;
     Button nextButton;
-    CaseInfoItem infoItem;
+    CaseItem infoItem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,8 +34,8 @@ public class CaseFragment7 extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_case_7, container, false);
 
-        infoItem = new CaseInfoItem();
-        infoItem = CaseActivity.infoItem;
+        infoItem = new CaseItem();
+        infoItem = CaseActivity.caseItem;
 
         reviewEdit = rootView.findViewById(R.id.input4);
         reviewEdit.addTextChangedListener(new TextWatcher() {
@@ -85,7 +85,7 @@ public class CaseFragment7 extends Fragment {
                         //등록 실패
                     } else {
                         infoItem.seq = seq;
-                        CaseActivity.infoItem.review = infoItem.review;
+                        CaseActivity.caseItem.review = infoItem.review;
                         //goNextPage();
                     }
                 } else { // 등록 실패

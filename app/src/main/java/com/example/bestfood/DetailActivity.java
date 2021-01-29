@@ -32,11 +32,10 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         images = new ArrayList<ImageItem>();
-        if (CaseActivity.infoItem.seq > 0){
-            selectImageInfo(CaseActivity.infoItem.seq);
+        if (CaseActivity.caseItem.seq > 0){
+            selectImageInfo(CaseActivity.caseItem.seq);
         }else{
-            MyLog.d(TAG, "currentItem " + CaseFragment1.currentItem.toString());
-            selectImageInfo(CaseFragment1.currentItem.seq);
+            //selectImageInfo(CaseFragment1.caseItem.seq);
         }
 
     }

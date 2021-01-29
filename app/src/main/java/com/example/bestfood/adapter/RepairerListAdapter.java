@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.bestfood.App;
 import com.example.bestfood.R;
+import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.RepairerItem;
 import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.GoLib;
@@ -73,7 +74,9 @@ public class RepairerListAdapter extends RecyclerView.Adapter<RepairerListAdapte
         notifyDataSetChanged();
     }
 
-
+    public void clearItemList() {
+        this.itemList.clear();
+    }
     /**
      * 아이템 크기를 반환한다.
      * @return 아이템 크기

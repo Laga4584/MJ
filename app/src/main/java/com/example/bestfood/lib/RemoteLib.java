@@ -172,12 +172,13 @@ public class RemoteLib {
     public void updateCaseStatus(int index1, int index2){
         final String status1 = status_list_1[index1];
         final String status2;
-        if (index2 == 1) status2 = "배송 대기";
-        else status2 = CaseActivity.infoItem.status2;
+        if (index1 == 3 && index2 == 1 || index1 == 4 && index2 == 4) status2 = "발송 대기";
+        else if (index1 == 4 && index2 == 5) status2 = "배송 완료";
+        else status2 = CaseActivity.caseItem.status2;
 
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<String> call = remoteService.updateCaseStatus(CaseActivity.infoItem.seq, status1, status2);
+        Call<String> call = remoteService.updateCaseStatus(CaseActivity.caseItem.seq, status1, status2);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -194,9 +195,9 @@ public class RemoteLib {
                     if (seq == 0) {
                         //등록 실패
                     } else {
-                        CaseActivity.infoItem.seq = seq;
-                        CaseActivity.infoItem.status = status1;
-                        CaseActivity.infoItem.status2 = status2;
+                        CaseActivity.caseItem.seq = seq;
+                        CaseActivity.caseItem.status = status1;
+                        CaseActivity.caseItem.status2 = status2;
                         //goNextPage();
                     }
                 } else { // 등록 실패
@@ -233,7 +234,7 @@ public class RemoteLib {
                     if (seq == 0) {
                         //등록 실패
                     } else {
-                        //CaseActivity.infoItem.seq = seq;
+                        //CaseActivity.caseItem.seq = seq;
                         //goNextPage();
                     }
                 } else { // 등록 실패

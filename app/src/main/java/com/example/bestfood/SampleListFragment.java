@@ -5,9 +5,16 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.bestfood.item.SampleItem;
@@ -32,11 +39,13 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
     Context context;
 
     int userSeq;
+    String query = "";
 
-    RecyclerView bestFoodList;
+    RecyclerView sampleList;
     TextView noDataText;
+    EditText search;
 
-    SampleListAdapter infoListAdapter;
+    SampleListAdapter sampleListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
@@ -70,28 +79,7 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
 
         return layout;
     }
-
-    /**
-     * 프래그먼트가 일시 중지 상태가 되었다가 다시 보여질 때 호출된다.
-     * BestFoodInfoActivity가 실행된 후,
-     * 즐겨찾기 상태가 변경되었을 경우 이를 반영하는 용도로 사용한다.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        /*
-        App app = ((App) getActivity().getApplication());
-        SampleItem currentInfoItem = app.getSampleItem();
-
-        if (infoListAdapter != null && currentInfoItem != null) {
-            infoListAdapter.setItem(currentInfoItem);
-            app.setSampleItem(null);
-
-        }
-
-         */
-    }
-
+    
     /**
      * onCreateView() 메소드 뒤에 호출되며 화면 뷰들을 설정한다.
      * @param view onCreateView() 메소드에 의해 반환된 뷰
@@ -101,11 +89,30 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.nav_list);
+        search = view.findViewById(R.id.search);
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (EditorInfo.IME_ACTION_SEARCH == i) {
+                    InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(textView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    query = search.getText().toString();
+                    sampleListAdapter.clearItemList();
+                    listInfo(query, 0);
+                } else {
+                    return false;
+                }
+                return true;
+            }
+        });
 
         orderType = Constant.ORDER_TYPE_METER;
 
-        bestFoodList = (RecyclerView) view.findViewById(R.id.list);
-        noDataText = (TextView) view.findViewById(R.id.no_data);
+        sampleList = view.findViewById(R.id.list);
+        noDataText = view.findViewById(R.id.no_data);
+
+        DisplayMetrics metrics = ((App) this.getActivity().getApplication()).getMetrics();
+        sampleList.setPadding(metrics.widthPixels/18, metrics.heightPixels*25/760, metrics.widthPixels/18, metrics.heightPixels*25/760);
 
         //spinner = (Spinner) view.findViewById(R.id.spinner);
         //orderMeter = (TextView) view.findViewById(R.id.order_meter);
@@ -118,8 +125,7 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
 
 
         setRecyclerView();
-
-        listInfo(userSeq, 0);
+        listInfo(query, 0);
     }
 
 
@@ -131,7 +137,7 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
         layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
         layoutManager
                 .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        bestFoodList.setLayoutManager(layoutManager);
+        sampleList.setLayoutManager(layoutManager);
     }
 
     /**
@@ -140,28 +146,27 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
     private void setRecyclerView() {
         setLayoutManager(listTypeValue);
 
-        infoListAdapter = new SampleListAdapter(context,
+        sampleListAdapter = new SampleListAdapter(context,
                 R.layout.row_sample_list, new ArrayList<SampleItem>());
-        bestFoodList.setAdapter(infoListAdapter);
+        sampleList.setAdapter(sampleListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listInfo(userSeq, page);
+                listInfo(query, page);
             }
         };
-        bestFoodList.addOnScrollListener(scrollListener);
+        sampleList.addOnScrollListener(scrollListener);
     }
 
     /**
      * 서버에서 명작 정보를 조회한다.
-     * @param userSeq 사용자 시퀀스
      * @param currentPage 현재 페이지
      */
-    private void listInfo(int userSeq, final int currentPage) {
+    private void listInfo(String query, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<SampleItem>> call = remoteService.listSampleInfo(currentPage);
+        Call<ArrayList<SampleItem>> call = remoteService.listSampleInfo(query, currentPage);
         call.enqueue(new Callback<ArrayList<SampleItem>>() {
             @Override
             public void onResponse(Call<ArrayList<SampleItem>> call,
@@ -169,9 +174,9 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
                 ArrayList<SampleItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
-                    infoListAdapter.addItemList(list);
+                    sampleListAdapter.addItemList(list);
 
-                    if (infoListAdapter.getItemCount() == 0) {
+                    if (sampleListAdapter.getItemCount() == 0) {
                         noDataText.setVisibility(View.VISIBLE);
                     } else {
                         noDataText.setVisibility(View.GONE);
@@ -217,18 +222,4 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
             listInfo(userSeq, GeoItem.getKnownLocation(), orderType, 0);
 */
     }
-
-    /**
-     * 명작 정보 정렬 방식의 텍스트 색상을 설정한다.
-     * @param color1 거리순 색상
-     * @param color2 인기순 색상
-     * @param color3 최근순 색상
-     */
-    private void setOrderTextColor(int color1, int color2, int color3) {
-        //orderMeter.setTextColor(ContextCompat.getColor(context, color1));
-        //orderFavorite.setTextColor(ContextCompat.getColor(context, color2));
-        //orderRecent.setTextColor(ContextCompat.getColor(context, color3));
-    }
-
-
 }

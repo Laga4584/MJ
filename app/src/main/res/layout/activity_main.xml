@@ -3,55 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="25dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_gravity="top"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <EditText
-            android:id="@+id/search"
-            android:layout_width="290dp"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_cardview"
-            android:drawableStart="@drawable/ic_search"
-            android:maxLines="1"
-            android:inputType="text"
-            android:imeOptions="actionSearch"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/filter_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/filter_button"
-            android:layout_width="21dp"
-            android:layout_height="18dp"
-            android:layout_marginVertical="6dp"
-            android:background="@drawable/bg_transparent"
-            app:layout_constraintStart_toEndOf="@id/search"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_filter" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
+        android:layout_height="match_parent"
         />
     </LinearLayout>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="56dp"
@@ -62,7 +23,6 @@
         app:borderWidth="0dp"
         app:layout_anchor="@id/bottomAppBar"
         app:srcCompat="@drawable/ic_plus" />
-
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
@@ -71,54 +31,64 @@
         android:backgroundTint="@color/colorLightGray"
         app:fabAlignmentMode="center"
         app:fabCradleMargin="10dp">
-
     </com.google.android.material.bottomappbar.BottomAppBar>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:weightSum="11"
+        android:gravity="center_horizontal">
         <ImageButton
             android:id="@+id/repairer_button"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
             android:src="@drawable/ic_repairer"
             android:background="@drawable/bg_transparent"/>
-
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:visibility="invisible"/>
         <ImageButton
             android:id="@+id/sample_button"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:src="@drawable/ic_sample"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_sample"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:background="@drawable/bg_transparent" />
-
         <View
             android:id="@+id/placeholder"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:visibility="invisible"/>
         <ImageButton
             android:id="@+id/notice_button"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:src="@drawable/ic_notice"
+            android:checked="false"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_notice"
             android:background="@drawable/bg_transparent" />
-
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:visibility="invisible"/>
         <ImageButton
             android:id="@+id/profile_button"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:src="@drawable/ic_profile"
+            android:checked="false"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_mypage"
             android:background="@drawable/bg_transparent" />
     </LinearLayout>
 

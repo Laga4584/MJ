@@ -5,21 +5,23 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.bestfood.item.CaseInfoItem;
 import com.example.bestfood.adapter.RepairerListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
 import com.example.bestfood.item.RepairerItem;
 import com.example.bestfood.lib.MyLog;
-import com.example.bestfood.lib.StringLib;
+import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 
@@ -35,34 +37,28 @@ import retrofit2.Response;
  * 명장 정보 리스트를 보여주는 프래그먼트
  */
 public class RepairerListFragment extends Fragment implements View.OnClickListener {
-    public static final String QUERY = "QUERY";
     private final String TAG = this.getClass().getSimpleName();
 
     Context context;
-    String query;
+    String query = "";
     int userSeq;
 
-    RecyclerView bestFoodList;
+    RecyclerView repairerList;
     TextView noDataText;
-    Spinner spinner;
-    ImageView listType;
-    RepairerListAdapter infoListAdapter;
+    EditText search;
+    RepairerListAdapter repairerListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
     int listTypeValue = 3;
     String orderType;
-    String[] items = {"완료 케이스 보기", "완료 케이스 숨기기"};
 
     /**
      * BestFoodListFragment 인스턴스를 생성한다.
      * @return BestFoodListFragment 인스턴스
      */
-    public static RepairerListFragment newInstance(String query) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(QUERY, Parcels.wrap(query));
+    public static RepairerListFragment newInstance() {
         RepairerListFragment f = new RepairerListFragment();
-        f.setArguments(bundle);
         return f;
     }
 
@@ -75,9 +71,6 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (getArguments() != null) {
-            query = Parcels.unwrap(getArguments().getParcelable(QUERY));
-        }else query = "";
         context = this.getActivity();
 
         userSeq = ((App)this.getActivity().getApplication()).getUserSeq();
@@ -98,18 +91,38 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         //((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.nav_list);
 
+        search = view.findViewById(R.id.search);
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (EditorInfo.IME_ACTION_SEARCH == i) {
+                    InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(textView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    query = search.getText().toString();
+                    repairerListAdapter.clearItemList();
+                    listInfo(query, 0);
+
+                } else {
+                    return false;
+                }
+                return true;
+            }
+        });
+
         orderType = Constant.ORDER_TYPE_METER;
 
-        bestFoodList = (RecyclerView) view.findViewById(R.id.list);
+        repairerList = (RecyclerView) view.findViewById(R.id.list);
         //noDataText = (TextView) view.findViewById(R.id.no_data);
 
-        //spinner = (Spinner) view.findViewById(R.id.spinner);
-
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        ViewGroup.LayoutParams params = repairerList.getLayoutParams();
+        repairerList.setPadding(metrics.widthPixels/18, metrics.heightPixels*25/760, metrics.widthPixels/18, metrics.heightPixels*25/760);
+        repairerList.setLayoutParams(params);
         setRecyclerView();
-
         listInfo(query, 0);
     }
-
 
     /**
      * 명장 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
@@ -119,7 +132,7 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
         layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
         layoutManager
                 .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        bestFoodList.setLayoutManager(layoutManager);
+        repairerList.setLayoutManager(layoutManager);
     }
 
     /**
@@ -128,9 +141,9 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
     private void setRecyclerView() {
         setLayoutManager(listTypeValue);
 
-        infoListAdapter = new RepairerListAdapter(context,
+        repairerListAdapter = new RepairerListAdapter(context,
                 R.layout.row_repairer_list, new ArrayList<RepairerItem>());
-        bestFoodList.setAdapter(infoListAdapter);
+        repairerList.setAdapter(repairerListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -138,7 +151,7 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
                 listInfo(query, page);
             }
         };
-        bestFoodList.addOnScrollListener(scrollListener);
+        repairerList.addOnScrollListener(scrollListener);
     }
 
     /**
@@ -156,9 +169,9 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
                 ArrayList<RepairerItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
-                    infoListAdapter.addItemList(list);
+                    repairerListAdapter.addItemList(list);
 
-                    if (infoListAdapter.getItemCount() == 0) {
+                    if (repairerListAdapter.getItemCount() == 0) {
                         //noDataText.setVisibility(View.VISIBLE);
                     } else {
                         //noDataText.setVisibility(View.GONE);

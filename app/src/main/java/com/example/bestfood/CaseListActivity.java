@@ -4,25 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.bestfood.adapter.InfoListAdapter;
+import com.example.bestfood.adapter.CaseListAdapter;
+import com.example.bestfood.adapter.RecyclerDecoration;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
-import com.example.bestfood.item.CaseInfoItem;
+import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.lib.MyLog;
-import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 
@@ -38,11 +37,11 @@ public class CaseListActivity extends AppCompatActivity {
     int userSeq;
 
     ImageButton backButton, addButton;
-    RecyclerView bestFoodList;
+    ToggleButton toggleButton;
+    RecyclerView caseList;
     TextView noDataText;
-    Spinner spinner;
     ImageView listType;
-    InfoListAdapter infoListAdapter;
+    CaseListAdapter caseListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
@@ -55,17 +54,22 @@ public class CaseListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_caselist);
 
+        //ActionBar actionbar = getSupportActionBar();
+        //actionbar.hide();
+
         context = this;
         userSeq = ((App)this.getApplication()).getUserSeq();
 
         addButton = findViewById(R.id.add_button);
         backButton = findViewById(R.id.back_button);
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startCase();
             }
         });
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,18 +79,35 @@ public class CaseListActivity extends AppCompatActivity {
 
         orderType = Constant.ORDER_TYPE_METER;
 
-        bestFoodList = (RecyclerView)findViewById(R.id.list);
-        noDataText = (TextView)findViewById(R.id.no_data);
+        caseList = (RecyclerView)findViewById(R.id.list);
 
-        spinner = (Spinner)findViewById(R.id.spinner);
-        //orderMeter = (TextView) view.findViewById(R.id.order_meter);
-        //orderFavorite = (TextView) view.findViewById(R.id.order_favorite);
-        //orderRecent = (TextView) view.findViewById(R.id.order_recent);
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        RecyclerDecoration spaceDecoration = new RecyclerDecoration(metrics.heightPixels/38);
+        caseList.addItemDecoration(spaceDecoration);
+        caseList.setPadding(metrics.widthPixels/18, metrics.heightPixels/38, metrics.widthPixels/18, metrics.heightPixels/38);
+        //noDataText = (TextView)findViewById(R.id.no_data);
 
-        //orderMeter.setOnClickListener(this);
-        //orderFavorite.setOnClickListener(this);
-        //orderRecent.setOnClickListener(this);
+        toggleButton = findViewById(R.id.toggle_button);
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+                if(isChecked){
+                    orderType = Constant.ORDER_TYPE_METER;
+                    setRecyclerView();
+                    listInfo(userSeq, 0);
+                }else{
+                    orderType = Constant.ORDER_TYPE_RECENT;
+                    setRecyclerView();
+                    listInfo(userSeq, 0);
+                }
+            }
+        });
+        //spinner = (Spinner)findViewById(R.id.spinner);
+
+        /*
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(
@@ -113,38 +134,13 @@ public class CaseListActivity extends AppCompatActivity {
 
             }
         });
+
+         */
         setRecyclerView();
 
         listInfo(userSeq, 0);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int curId = item.getItemId();
-        switch (curId) {
-            case R.id.menu_profile:
-                MyToast.s(this, "프로필 메뉴가 선택되었습니다.");
-                Intent intent = new Intent(CaseListActivity.this, ProfileActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_notice:
-                MyToast.s(this, "공지 메뉴가 선택되었습니다.");
-                Intent intent2 = new Intent(CaseListActivity.this, NoticeActivity.class);
-                startActivity(intent2);
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     /**
      * CaseActivity를 실행하고 현재 액티비티를 종료한다.
      */
@@ -164,7 +160,7 @@ public class CaseListActivity extends AppCompatActivity {
         layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
         layoutManager
                 .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        bestFoodList.setLayoutManager(layoutManager);
+        caseList.setLayoutManager(layoutManager);
     }
 
     /**
@@ -173,9 +169,9 @@ public class CaseListActivity extends AppCompatActivity {
     private void setRecyclerView() {
         setLayoutManager(listTypeValue);
 
-        infoListAdapter = new InfoListAdapter(context,
-                R.layout.row_case_list, new ArrayList<CaseInfoItem>());
-        bestFoodList.setAdapter(infoListAdapter);
+        caseListAdapter = new CaseListAdapter(context,
+                R.layout.row_case_list, new ArrayList<CaseItem>());
+        caseList.setAdapter(caseListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -183,7 +179,7 @@ public class CaseListActivity extends AppCompatActivity {
                 listInfo(userSeq, page);
             }
         };
-        bestFoodList.addOnScrollListener(scrollListener);
+        caseList.addOnScrollListener(scrollListener);
     }
 
     /**
@@ -194,26 +190,26 @@ public class CaseListActivity extends AppCompatActivity {
     private void listInfo(int userSeq, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<CaseInfoItem>> call = remoteService.listCaseInfo(userSeq, currentPage);
-        call.enqueue(new Callback<ArrayList<CaseInfoItem>>() {
+        Call<ArrayList<CaseItem>> call = remoteService.listCaseInfo(userSeq, currentPage);
+        call.enqueue(new Callback<ArrayList<CaseItem>>() {
             @Override
-            public void onResponse(Call<ArrayList<CaseInfoItem>> call,
-                                   Response<ArrayList<CaseInfoItem>> response) {
-                ArrayList<CaseInfoItem> list = response.body();
+            public void onResponse(Call<ArrayList<CaseItem>> call,
+                                   Response<ArrayList<CaseItem>> response) {
+                ArrayList<CaseItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
-                    infoListAdapter.addItemList(list);
+                    caseListAdapter.addItemList(list);
 
-                    if (infoListAdapter.getItemCount() == 0) {
-                        noDataText.setVisibility(View.VISIBLE);
+                    if (caseListAdapter.getItemCount() == 0) {
+                        //noDataText.setVisibility(View.VISIBLE);
                     } else {
-                        noDataText.setVisibility(View.GONE);
+                        //noDataText.setVisibility(View.GONE);
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<CaseInfoItem>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<CaseItem>> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }

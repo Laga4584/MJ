@@ -1,7 +1,8 @@
 package com.example.bestfood.remote;
 
-import com.example.bestfood.item.CaseInfoItem;
+import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.ChatItem;
+import com.example.bestfood.item.CheckItem;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.item.NoticeItem;
 import com.example.bestfood.item.RepairerItem;
@@ -51,7 +52,7 @@ public interface RemoteService {
     Call<SampleItem> selectSampleInfo(@Path("seq") int seq);
 
     @GET("/sample/list")
-    Call<ArrayList<SampleItem>> listSampleInfo(@Query("current_page") int currentPage);
+    Call<ArrayList<SampleItem>> listSampleInfo(@Query("query") String query, @Query("current_page") int currentPage);
 
     @GET("/sample/repairer")
     Call<ArrayList<SampleItem>> repairerSampleInfo(@Query("repairer_seq") int repairerSeq, @Query("current_page") int currentPage);
@@ -67,13 +68,13 @@ public interface RemoteService {
 
     //케이스
     @GET("/case/info/{seq}")
-    Call<CaseInfoItem> selectCaseInfo(@Path("seq") int seq);
+    Call<CaseItem> selectCaseInfo(@Path("seq") int seq);
 
     @POST("/case/info")
-    Call<String> insertCaseInfo(@Body CaseInfoItem infoItem);
+    Call<String> insertCaseInfo(@Body CaseItem infoItem);
 
     @GET("/case/list")
-    Call<ArrayList<CaseInfoItem>> listCaseInfo(@Query("user_seq") int userSeq,
+    Call<ArrayList<CaseItem>> listCaseInfo(@Query("user_seq") int userSeq,
                                                @Query("current_page") int currentPage);
 
     @POST("/case/status")
@@ -94,6 +95,9 @@ public interface RemoteService {
     @POST("/case/info/dot")
     Call<String> uploadCaseDot(@Query("seq") int seq,
                                      @Query("dot") String dot);
+
+    @GET("/case/check")
+    Call<ArrayList<CheckItem>> listCheckInfo(@Query("case_seq") int caseSeq, @Query("current_page") int currentPage);
 
     //사용자 정보
     @GET("/user/email")

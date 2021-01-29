@@ -1,71 +1,459 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/pageMarginAndOffset"
-        android:layout_marginRight="@dimen/pageMarginAndOffset"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:text="배송"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_large"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:text="배송 중입니다."
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold" />
+            <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                card_view:cardCornerRadius="@dimen/cardview_round_basic">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:gravity="center"
-            android:text="주소: 서울시 서대문구..."
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="11"
+                        android:scaleType="centerCrop" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:text="재수선 요청" />
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:text="수선 종료" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
-    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="3"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:weightSum="290">
 
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profile_icon"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="30"
+                            android:src="@drawable/ic_person"
+                            app:civ_border_color="#FFFFFF"
+                            app:civ_border_width="2dp" />
 
-</FrameLayout>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="6" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="181"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/name"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:autoSizeMinTextSize="5sp"
+                                android:autoSizeTextType="uniform"
+                                android:gravity="start"
+                                android:text="김엠제이 명장"
+                                android:textColor="@color/text_color_black"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/description"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:autoSizeMinTextSize="5sp"
+                                android:autoSizeTextType="uniform"
+                                android:text="[구찌] 캘리그래피백 핸들 스티치 수선 및"
+                                android:textColor="@color/text_color_gray" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="15" />
+
+                        <ImageView
+                            android:id="@+id/keep"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="28"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_message" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:elevation="3dp"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="15dp">
+
+                <com.iarcuschin.simpleratingbar.SimpleRatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srb_borderColor="@color/colorLightYellow"
+                    app:srb_fillColor="@color/colorLightYellow"
+                    app:srb_numberOfStars="5"
+                    app:srb_rating="3"
+                    app:srb_starBorderWidth="8"
+                    app:srb_starCornerRadius="20"
+                    app:srb_starSize="33dp"
+                    app:srb_starsSeparation="10dp"
+                    app:srb_stepSize="0.5" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_1"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:elevation="3dp"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="서비스 응대는 어땠나요?"
+                        android:textColor="@color/colorGray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="false"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_plus" />
+
+                        <TextView
+                            android:id="@+id/option1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/colorGray"
+                            android:textSize="15dp" />
+
+                        <EditText
+                            android:id="@+id/edit1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="@drawable/editor_focus"
+                            android:textCursorDrawable="@drawable/cursor_black"
+                            android:textSize="15dp" />
+                    </FrameLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_2"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:elevation="3dp"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="수선 품질은 만족스러우셨나요?"
+                        android:textColor="@color/colorGray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="false"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_plus" />
+
+                        <TextView
+                            android:id="@+id/option2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/colorGray"
+                            android:textSize="15dp" />
+
+                        <EditText
+                            android:id="@+id/edit2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="@drawable/editor_focus"
+                            android:textCursorDrawable="@drawable/cursor_black"
+                            android:textSize="15dp" />
+                    </FrameLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_3"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:elevation="3dp"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text3"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="가격은 괜찮으셨어요?"
+                        android:textColor="@color/colorGray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="false"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_plus" />
+
+                        <TextView
+                            android:id="@+id/option3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/colorGray"
+                            android:textSize="15dp" />
+
+                        <EditText
+                            android:id="@+id/edit3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="@drawable/editor_focus"
+                            android:textCursorDrawable="@drawable/cursor_black"
+                            android:textSize="15dp" />
+                    </FrameLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_4"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:elevation="3dp"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text4"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="전반적인 만족도는 어떠셨어요?"
+                        android:textColor="@color/colorGray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="false"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_plus" />
+
+                        <TextView
+                            android:id="@+id/option4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/colorGray"
+                            android:textSize="15dp" />
+                    </FrameLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_5"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:elevation="3dp"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text5"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="명장분에게 한 마디!"
+                        android:textColor="@color/colorGray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="false"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_plus" />
+
+                        <TextView
+                            android:id="@+id/option5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/colorGray"
+                            android:textSize="15dp" />
+                    </FrameLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/colorGray"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingBottom="30dp"
+        android:text="다음 사람을 위한 기록 끝냈어요 :)"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1" />
+</androidx.constraintlayout.widget.ConstraintLayout>

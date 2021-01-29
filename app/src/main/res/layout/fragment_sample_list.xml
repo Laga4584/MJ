@@ -1,16 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:weightSum="76"
+    android:gravity="bottom">
+    <LinearLayout
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:weightSum="360"
+        android:gravity="center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="290"
+            android:background="@drawable/bg_cardview"
+            android:drawableStart="@drawable/ic_search"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/filter_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"/>
+        <ImageButton
+            android:id="@+id/filter_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="21"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@drawable/bg_transparent"
+            app:layout_constraintStart_toEndOf="@id/search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_filter" />
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
-        android:layout_below="@+id/top_layout"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:dividerHeight="@dimen/spacing_small"/>
-
+        android:layout_height="0dp"
+        android:layout_weight="67"
+        android:dividerHeight="@dimen/spacing_small"
+        android:clipToPadding="false"/>
     <TextView
         android:id="@+id/no_data"
         android:layout_width="match_parent"
@@ -24,5 +67,4 @@
         android:textColor="@color/text_color_white"
         android:textSize="@dimen/text_size_small2"
         android:textStyle="bold"/>
-
-</RelativeLayout>
+</LinearLayout>

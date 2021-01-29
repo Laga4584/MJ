@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bestfood.BuildConfig;
-import com.example.bestfood.item.CaseInfoItem;
+import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.R;
 import com.example.bestfood.lib.MyLog;

@@ -59,7 +59,7 @@
 
         <activity android:name=".JoinActivity"/>
         <activity android:name=".IndexActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".CaseActivity"/>
         <activity android:name=".ImageActivity"/>
         <activity android:name=".SampleActivity"/>
@@ -72,6 +72,10 @@
         <activity android:name=".CaseListActivity"/>
         <activity android:name=".NoticeActivity"/>
         <activity android:name=".RepairerActivity"/>
+        <activity android:name=".ProfileEditActivity" />
+        <activity android:name=".DialogActivity"
+            android:theme="@style/Theme.Transparent"/>
+        <activity android:name=".CameraActivity"/>
     </application>
 
 </manifest>
