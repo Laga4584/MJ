@@ -130,7 +130,13 @@ public class CameraActivity extends AppCompatActivity {
 
         rectangles = findViewById(R.id.rectangles);
         description = findViewById(R.id.description);
-        captureItemList.add(new CaptureItem());
+
+        //편집하기 일 경우
+        if (captureItemList.size() > 0){
+
+        }else {
+            captureItemList.add(new CaptureItem());
+        }
 
     }
     /**
