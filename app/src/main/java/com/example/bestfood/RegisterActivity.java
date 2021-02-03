@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,7 +30,8 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText join_email, join_password, join_name, join_pwck, sextypeEdit, birthEdit, join_phone;
-    private Button join_button, check_button;
+    private Button join_button;
+    private TextView checkButton;
     private AlertDialog dialog;
     private boolean validate = false;
     private final String TAG = this.getClass().getSimpleName();
@@ -64,12 +66,11 @@ public class RegisterActivity extends AppCompatActivity {
                 setBirthdayDialog();
             }
         });
-        join_phone = findViewById(R.id.join_phone);
 
 
         //아이디 중복 체크
-        check_button = findViewById(R.id.check_button);
-        check_button.setOnClickListener(new View.OnClickListener() {
+        checkButton = findViewById(R.id.button_check);
+        checkButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -91,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         //회원가입 버튼 클릭 시 수행
-        join_button = findViewById( R.id.join_button );
+        //join_button = findViewById( R.id.join_button );
         join_button.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity {
                     dialog.show();
                     join_email.setEnabled(false); //아이디값 고정
                     validate = true; //검증 완료
-                    check_button.setBackgroundColor(getResources().getColor(R.color.colorGray));
+                    checkButton.setSelected(true);
                 }
             }
 

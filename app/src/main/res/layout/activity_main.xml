@@ -34,7 +34,7 @@
     </com.google.android.material.bottomappbar.BottomAppBar>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
         android:layout_marginBottom="20dp"
@@ -44,8 +44,9 @@
             android:id="@+id/repairer_button"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_repairer"
+            android:scaleType="center"
             android:background="@drawable/bg_transparent"/>
         <View
             android:layout_weight="1"
@@ -59,7 +60,7 @@
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_sample"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
+            android:scaleType="center"
             android:background="@drawable/bg_transparent" />
         <View
             android:id="@+id/placeholder"
@@ -71,9 +72,9 @@
             android:id="@+id/notice_button"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:checked="false"
-            android:scaleType="fitCenter"
+            android:scaleType="center"
             app:srcCompat="@drawable/ic_notice"
             android:background="@drawable/bg_transparent" />
         <View
@@ -85,9 +86,9 @@
             android:id="@+id/profile_button"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:checked="false"
-            android:scaleType="fitCenter"
+            android:scaleType="center"
             app:srcCompat="@drawable/ic_mypage"
             android:background="@drawable/bg_transparent" />
     </LinearLayout>

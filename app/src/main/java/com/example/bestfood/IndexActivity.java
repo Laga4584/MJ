@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.bestfood.item.UserItem;
+import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
 
 /**
@@ -35,6 +37,7 @@ public class IndexActivity extends AppCompatActivity {
 
         context = this;
 
+        MyLog.d("here connected " + RemoteLib.getInstance().isConnected(context));
         if (!RemoteLib.getInstance().isConnected(context)) {
             showNoService();
         }
@@ -82,7 +85,13 @@ public class IndexActivity extends AppCompatActivity {
      * MainActivity를 실행하고 현재 액티비티를 종료한다.
      */
     public void startMain() {
-        Intent intent = new Intent(IndexActivity.this, LoginActivity.class);
+
+        UserItem useritem = new UserItem();
+        useritem.seq = 0;
+
+        ((App) getApplicationContext()).setUserItem(useritem);
+
+        Intent intent = new Intent(IndexActivity.this, MainActivity.class);
         startActivity(intent);
 
         finish();

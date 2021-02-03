@@ -11,7 +11,7 @@
         android:background="@drawable/bg_transparent"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_back_white"
+        android:src="@drawable/ic_back"
         android:layout_marginTop="25dp"
         android:layout_marginStart="20dp" />
     <androidx.cardview.widget.CardView

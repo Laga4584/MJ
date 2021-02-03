@@ -20,7 +20,10 @@ public class RepairerItem {
     public float score;
     @SerializedName("reply_period") public String replyPeriod;
     public String review;
-    public String tag;
+    public float tag1;
+    public float tag2;
+    public float tag3;
+    public float tag4;
     @SerializedName("profile_img_filename") public String profileImgFilename;
     @SerializedName("reg_date") public String regDate;
 
@@ -41,7 +44,10 @@ public class RepairerItem {
                 ", score='" + score + '\'' +
                 ", replyPeriod='" + replyPeriod + '\'' +
                 ", review='" + review + '\'' +
-                ", tag='" + tag + '\'' +
+                ", tag1='" + tag1 + '\'' +
+                ", tag2='" + tag2 + '\'' +
+                ", tag3='" + tag3 + '\'' +
+                ", tag4='" + tag4 + '\'' +
                 ", profileImgFilename='" + profileImgFilename + '\'' +
                 ", regDate='" + regDate + '\'' +
                 '}';

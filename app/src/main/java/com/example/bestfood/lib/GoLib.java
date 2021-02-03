@@ -9,7 +9,7 @@ import com.example.bestfood.CaseActivity;
 import com.example.bestfood.ChatActivity;
 import com.example.bestfood.DetailActivity;
 import com.example.bestfood.ImageActivity;
-import com.example.bestfood.ProfileActivity;
+import com.example.bestfood.ProfileActivity_bak;
 import com.example.bestfood.RepairerActivity;
 import com.example.bestfood.SampleActivity;
 
@@ -71,7 +71,7 @@ public class GoLib {
      * @param context 컨텍스트
      */
     public void goProfileActivity(Context context) {
-        Intent intent = new Intent(context, ProfileActivity.class);
+        Intent intent = new Intent(context, ProfileActivity_bak.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }

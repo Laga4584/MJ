@@ -33,7 +33,7 @@ import retrofit2.Response;
 /**
  * 명작 정보 리스트를 보여주는 프래그먼트
  */
-public class SampleListFragment extends Fragment implements View.OnClickListener {
+public class SampleListFragment extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
 
     Context context;
@@ -106,24 +106,14 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
             }
         });
 
-        orderType = Constant.ORDER_TYPE_METER;
-
         sampleList = view.findViewById(R.id.list);
         noDataText = view.findViewById(R.id.no_data);
 
+        /*
         DisplayMetrics metrics = ((App) this.getActivity().getApplication()).getMetrics();
         sampleList.setPadding(metrics.widthPixels/18, metrics.heightPixels*25/760, metrics.widthPixels/18, metrics.heightPixels*25/760);
 
-        //spinner = (Spinner) view.findViewById(R.id.spinner);
-        //orderMeter = (TextView) view.findViewById(R.id.order_meter);
-        //orderFavorite = (TextView) view.findViewById(R.id.order_favorite);
-        //orderRecent = (TextView) view.findViewById(R.id.order_recent);
-
-        //orderMeter.setOnClickListener(this);
-        //orderFavorite.setOnClickListener(this);
-        //orderRecent.setOnClickListener(this);
-
-
+         */
         setRecyclerView();
         listInfo(query, 0);
     }
@@ -190,36 +180,5 @@ public class SampleListFragment extends Fragment implements View.OnClickListener
                 MyLog.d(TAG, t.toString());
             }
         });
-    }
-
-    /**
-     * 각종 버튼에 대한 클릭 처리를 정의한다.
-     * @param v 클릭한 뷰에 대한 정보
-     */
-    @Override
-    public void onClick(View v) {
-        /*
-            if (v.getId() == R.id.order_meter) {
-                orderType = Constant.ORDER_TYPE_METER;
-
-                setOrderTextColor(R.color.text_color_green,
-                        R.color.text_color_black, R.color.text_color_black);
-
-            } else if (v.getId() == R.id.order_favorite) {
-                orderType = Constant.ORDER_TYPE_FAVORITE;
-
-                setOrderTextColor(R.color.text_color_black,
-                        R.color.text_color_green, R.color.text_color_black);
-
-            } else if (v.getId() == R.id.order_recent) {
-                orderType = Constant.ORDER_TYPE_RECENT;
-
-                setOrderTextColor(R.color.text_color_black,
-                        R.color.text_color_black, R.color.text_color_green);
-            }
-
-            setRecyclerView();
-            listInfo(userSeq, GeoItem.getKnownLocation(), orderType, 0);
-*/
     }
 }

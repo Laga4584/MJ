@@ -45,7 +45,7 @@ public interface RemoteService {
     Call<RepairerItem> selectRepairerInfo(@Path("seq") int seq);
 
     @GET("/repairer/list")
-    Call<ArrayList<RepairerItem>> listRepairerInfo(@Query("query") String query, @Query("current_page") int currentPage);
+    Call<ArrayList<RepairerItem>> listRepairerInfo(@Query("mode") int mode, @Query("query") String query, @Query("current_page") int currentPage);
 
     //샘플
     @GET("/sample/info/{seq}")
@@ -120,4 +120,12 @@ public interface RemoteService {
 
     @POST("/user/login")
     Call<UserItem> loginUserInfo(@Query("email") String email, @Query("password") String password, @Query("token") String token);
+
+    //즐겨찾기
+    @GET("/keep/repairer")
+    Call<ArrayList<RepairerItem>> listRepairerKeep(@Query("user_seq") int userSeq, @Query("current_page") int currentPage);
+
+    @GET("/keep/sample")
+    Call<ArrayList<SampleItem>> listSampleKeep(@Query("user_seq") int userSeq, @Query("current_page") int currentPage);
+
 }

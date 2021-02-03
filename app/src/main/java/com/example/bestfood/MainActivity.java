@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     RepairerListFragment fragment1;
     SampleListFragment fragment2;
     NoticeFragment fragment3;
-    ProfileFragment fragment4;
+    MyPageFragment fragment4;
 
     int colorAccent, colorPrimary;
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         fragment1 = new RepairerListFragment();
         fragment2 = new SampleListFragment();
         fragment3 = new NoticeFragment();
-        fragment4 = new ProfileFragment();
+        fragment4 = new MyPageFragment();
 
         colorAccent = getResources().getColor(R.color.colorAccent, null);
         colorPrimary = getResources().getColor(R.color.colorPrimaryDark, null);

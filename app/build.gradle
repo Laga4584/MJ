@@ -60,5 +60,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.2.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.iarcuschin:simpleratingbar:0.1.+'
+    implementation "com.google.android:flexbox:2.0.1"
 
 }

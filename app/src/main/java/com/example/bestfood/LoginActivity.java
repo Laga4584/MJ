@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.EtcLib;
@@ -46,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private SessionCallback sessionCallback;
     private EditText login_email, login_password;
-    private Button login_button, join_button;
+    private CardView loginButton, registerButton, kakakoButton;
     public static String token;
 
     @Override
@@ -78,8 +79,8 @@ public class LoginActivity extends AppCompatActivity {
         login_email = findViewById( R.id.login_email );
         login_password = findViewById( R.id.login_password );
 
-        join_button = findViewById( R.id.join_button );
-        join_button.setOnClickListener( new View.OnClickListener() {
+        registerButton = findViewById( R.id.button_register );
+        registerButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent( LoginActivity.this, RegisterActivity.class );
@@ -87,8 +88,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        login_button = findViewById( R.id.login_button );
-        login_button.setOnClickListener( new View.OnClickListener() {
+        loginButton = findViewById( R.id.button_login );
+        loginButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String UserEmail = login_email.getText().toString();
@@ -105,9 +106,17 @@ public class LoginActivity extends AppCompatActivity {
         Log.i("newItem", newItem.toString());
         //여기까지
         context = this;
-        sessionCallback = new SessionCallback();
-        Session.getCurrentSession().addCallback(sessionCallback);
-        Session.getCurrentSession().checkAndImplicitOpen();
+
+        kakakoButton = findViewById(R.id.button_kakao);
+        kakakoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sessionCallback = new SessionCallback();
+                Session.getCurrentSession().addCallback(sessionCallback);
+                Session.getCurrentSession().checkAndImplicitOpen();
+            }
+        });
+
     }
 
     private void login(String email, String password){
@@ -123,8 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                     setUserInfoItem(item);
                     MyLog.d(TAG, "success " + response.body().toString());
                     MyToast.s(context, "환영합니다");
-                    Intent intent = new Intent( LoginActivity.this, MainActivity.class );
-                    startActivity( intent );
+                    finish();
                 } else {
                     MyLog.d(TAG, "not success");
                     MyToast.s(context, "로그인에 실패하셨습니다");
@@ -347,9 +355,6 @@ public class LoginActivity extends AppCompatActivity {
      * MainActivity를 실행하고 현재 액티비티를 종료한다.
      */
     public void startMain() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-
         finish();
     }
 

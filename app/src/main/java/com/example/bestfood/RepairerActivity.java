@@ -56,10 +56,10 @@ public class RepairerActivity extends AppCompatActivity {
     Button requestButton;
     ImageButton backButton;
 
-    String[] tag1_list = {"그때 그때 바로 연락주세요!", ""};
-    String[] tag2_list = {"전체적으로 만족스러워요", ""};
-    String[] tag3_list = {"", "조금 비싸요"};
-    String[] tag4_list = {"또 맡기고 싶어요 추천해요!", ""};
+    String[] tag1_list = {"그때 그때 바로 연락주세요!", "불편하지 않을 정도였어요.", "연락이 안되서 답답했어요"};
+    String[] tag2_list = {"훌륭해요 제 마음에 쏙 들어요!", "전체적으로 만족스러워요", "실망스러워요"};
+    String[] tag3_list = {"저렴해요", "적당해요", "조금 비싸요"};
+    String[] tag4_list = {"또 맡기고 싶어요 추천해요!", "만족해요", "다음엔 좀 고민해보려구요"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,11 +133,17 @@ public class RepairerActivity extends AppCompatActivity {
         replyPeriod.setText(infoItem.replyPeriod);
         service.setText(infoItem.product + ", " + infoItem.service);
         description.setText(infoItem.description);
+        /*
         String[] tags = infoItem.tag.split(", ");
         tag1.setText(tag1_list[Integer.parseInt(tags[0])]);
         tag2.setText(tag2_list[Integer.parseInt(tags[1])]);
         tag3.setText(tag3_list[Integer.parseInt(tags[2])]);
         tag4.setText(tag4_list[Integer.parseInt(tags[3])]);
+         */
+        tag1.setText(tag1_list[Math.round(infoItem.tag1)]);
+        tag2.setText(tag2_list[Math.round(infoItem.tag2)]);
+        tag3.setText(tag3_list[Math.round(infoItem.tag3)]);
+        tag4.setText(tag4_list[Math.round(infoItem.tag4)]);
         review.setText(infoItem.review);
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override

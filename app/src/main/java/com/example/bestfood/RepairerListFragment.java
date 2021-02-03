@@ -1,6 +1,8 @@
 package com.example.bestfood;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.bestfood.adapter.RepairerListAdapter;
@@ -40,12 +43,15 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
     private final String TAG = this.getClass().getSimpleName();
 
     Context context;
+    public static final int REQUEST_CODE = 100;
     String query = "";
     int userSeq;
+    int mode = 0;
 
     RecyclerView repairerList;
     TextView noDataText;
     EditText search;
+    ImageButton filter;
     RepairerListAdapter repairerListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
@@ -100,7 +106,8 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
                     imm.hideSoftInputFromWindow(textView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     query = search.getText().toString();
                     repairerListAdapter.clearItemList();
-                    listInfo(query, 0);
+                    mode = 0;
+                    listInfo(mode, query, 0);
 
                 } else {
                     return false;
@@ -109,19 +116,47 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
             }
         });
 
-        orderType = Constant.ORDER_TYPE_METER;
+        filter = view.findViewById(R.id.filter_button);
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FilterActivity.class);
+                intent.putExtra("requestCode", REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
 
         repairerList = (RecyclerView) view.findViewById(R.id.list);
         //noDataText = (TextView) view.findViewById(R.id.no_data);
 
+        /*
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);
         ViewGroup.LayoutParams params = repairerList.getLayoutParams();
         repairerList.setPadding(metrics.widthPixels/18, metrics.heightPixels*25/760, metrics.widthPixels/18, metrics.heightPixels*25/760);
         repairerList.setLayoutParams(params);
+
+         */
         setRecyclerView();
-        listInfo(query, 0);
+        listInfo(mode, query, 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode != Activity.RESULT_OK) {
+                return;
+            }
+            int[] selectedList = data.getIntArrayExtra("selectedList");
+            String queryString = Integer.toString(selectedList[0]) + ", " + Integer.toString(selectedList[1]) + ", " + Integer.toString(selectedList[2]) + ", " + Integer.toString(selectedList[3]);
+            repairerListAdapter.clearItemList();
+            mode = 1;
+            listInfo(mode, queryString, 0);
+        }
     }
 
     /**
@@ -148,7 +183,7 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listInfo(query, page);
+                listInfo(mode, query, page);
             }
         };
         repairerList.addOnScrollListener(scrollListener);
@@ -158,10 +193,10 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
      * 서버에서 명장 정보를 조회한다.
      * @param currentPage 현재 페이지
      */
-    private void listInfo(String query, final int currentPage) {
+    private void listInfo(int mode, String query, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<RepairerItem>> call = remoteService.listRepairerInfo(query, currentPage);
+        Call<ArrayList<RepairerItem>> call = remoteService.listRepairerInfo(mode, query, currentPage);
         call.enqueue(new Callback<ArrayList<RepairerItem>>() {
             @Override
             public void onResponse(Call<ArrayList<RepairerItem>> call,
