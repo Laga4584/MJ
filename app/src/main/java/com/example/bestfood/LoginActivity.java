@@ -102,8 +102,8 @@ public class LoginActivity extends AppCompatActivity {
         //기존 코드
         newItem = new UserItem();
         // 여기서부터 나중에 고쳐야함 임시로 추가
-        newItem.phone = EtcLib.getInstance().getPhoneNumber(this);
-        Log.i("newItem", newItem.toString());
+        //newItem.phone = EtcLib.getInstance().getPhoneNumber(this);
+        //Log.i("newItem", newItem.toString());
         //여기까지
         context = this;
 
