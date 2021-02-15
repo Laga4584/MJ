@@ -79,20 +79,21 @@ public class CaseFragment3 extends Fragment {
         /*String strmethod = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_method;
         String strpurchase = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_purchasecorp;
         String stramount = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_amount;
+        String strctype = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_ctype;
         String strinterest = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_interest;
         String strmonth = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_month;
         String strname = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_name;
 
         if (strmethod == "CARD") {
-            method.setText("신용카드 " + strpurchase);
+            method.setText(strctype + " " + strpurchase);
             if (strinterest == "Y") {
-                amount.setText(stramount + "/ " + strmonth + " 무이자");
-            }
-            else if (strinterest == "N") {
                 amount.setText(stramount + "/ " + strmonth + " 할부");
             }
+            else if (strinterest == "N") {
+                amount.setText(stramount + "/ " + strmonth + "무이자");
+            }
         } else if (strmethod == "MONEY") {
-            method.setText("계좌이체");
+            method.setText("현금결제");
         }
 
         name.setText(strname);*/
