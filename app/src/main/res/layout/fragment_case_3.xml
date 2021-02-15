@@ -33,6 +33,7 @@ android:orientation="vertical">
             android:layout_weight="1" />
 
         <TextView
+            android:id="@+id/kakaopay_method"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -42,16 +43,19 @@ android:orientation="vertical">
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
+            android:id="@+id/kakaopay_itemname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:gravity="end"
             android:text="김엠제이 명장 [발렌시아가] 핸드백 스트링..."
             android:textSize="12dp"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:maxLength="10"/>
 
 
         <TextView
+            android:id="@+id/kakaopay_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
