@@ -44,6 +44,8 @@ public class KakaoPayActivity extends AppCompatActivity {
     public static Context context_kakaopay;
 
     String pg_token;
+    String item_name;
+    String total_amount;
 
     WebView payView;
     WebSettings payViewSettings;
@@ -62,7 +64,7 @@ public class KakaoPayActivity extends AppCompatActivity {
         kakaoPayApproveVO = new KakaoPayApproveVO();
 
         try {
-            kakaoPay.kakaoPayReady(kakaoPayReadyVO);
+            kakaoPay.kakaoPayReady(kakaoPayReadyVO, item_name, total_amount);
             boolean flag = true;
             while (flag) {
                 if (kakaoPayReadyVO.getTid() != null) flag = false;

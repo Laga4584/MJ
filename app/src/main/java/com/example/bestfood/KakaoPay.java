@@ -29,16 +29,16 @@ import okhttp3.Response;
 
 public class KakaoPay {
     /*HttpURLConnection*/
-    public void kakaoPayReady(final KakaoPayReadyVO kakaoPayReadyVO) throws IOException {
+    public void kakaoPayReady(final KakaoPayReadyVO kakaoPayReadyVO, String item_name, String total_amount) throws IOException {
         final OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
         RequestBody body = new FormBody.Builder()
                 .add("cid", "TC0ONETIME")
                 .add("partner_order_id", "partner_order_id")
                 .add("partner_user_id", "partner_user_id")
-                .add("item_name", "초코파이")
+                .add("item_name", item_name)
                 .add("quantity", "1")
-                .add("total_amount", "2200")
+                .add("total_amount", total_amount)
                 .add("tax_free_amount", "0")
                 .add("approval_url", "http://ec2-54-180-82-94.ap-northeast-2.compute.amazonaws.com:3000")
                 .add("fail_url", "http://ec2-54-180-82-94.ap-northeast-2.compute.amazonaws.com:3000")
