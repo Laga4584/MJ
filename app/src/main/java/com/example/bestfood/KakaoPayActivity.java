@@ -15,6 +15,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.example.bestfood.lib.RemoteLib;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +50,7 @@ public class KakaoPayActivity extends AppCompatActivity {
 
     KakaoPay kakaoPay;
     KakaoPayReadyVO kakaoPayReadyVO;
-    public KakaoPayApproveVO kakaoPayApproveVO;
+    KakaoPayApproveVO kakaoPayApproveVO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,18 +80,12 @@ public class KakaoPayActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url != null && url.startsWith("intent://")) {
                     Intent intent = null;
+                    Intent marketIntent = null;
                     try {
                         intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
                         //Uri uri = Uri.parse(intent.getDataString());
-                        Intent existPackage = getPackageManager().getLaunchIntentForPackage(intent.getPackage());
-                        if (existPackage != null) {
-                            startActivity(intent);
-                            //startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                        } else {
-                            Intent marketIntent = new Intent(Intent.ACTION_VIEW);
-                            marketIntent.setData(Uri.parse("market://details?id=" + intent.getPackage()));
-                            startActivity(marketIntent);
-                        }
+                        startActivity(intent);
+                        //startActivity(new Intent(Intent.ACTION_VIEW, uri));
                         return true;
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -131,9 +127,10 @@ public class KakaoPayActivity extends AppCompatActivity {
         });
         payViewSettings = payView.getSettings();
         payViewSettings.setJavaScriptEnabled(true);
-
         payView.loadUrl(kakaoPayReadyVO.getNext_redirect_app_url());
 
         context_kakaopay = this;
+
+        //finish();
     }
 }
