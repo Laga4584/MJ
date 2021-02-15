@@ -1,15 +1,21 @@
 package com.example.bestfood;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,163 +29,335 @@ import com.example.bestfood.remote.ServiceGenerator;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText join_email, join_password, join_name, join_pwck, sextypeEdit, birthEdit, join_phone;
-    private Button join_button;
-    private TextView checkButton;
+    public static final int REQUEST_CODE_1 = 100;
+    public static final int REQUEST_CODE_2 = 200;
+    private EditText emailEdit, passwordEdit, nameEdit, pwckEdit;
+    private ImageButton backButton, agreeAllButton, agreeButton1, agreeButton2, agreeButton3;
+    private TextView checkButton, registerButton, sextypeText, birthText;
     private AlertDialog dialog;
     private boolean validate = false;
+    private boolean validate2 = false;
+    private boolean validate3 = false;
     private final String TAG = this.getClass().getSimpleName();
     Context context;
-    UserItem registerItem;
+    UserItem userItem;
+
+    String[] items_sextype = {"남성", "여성"};
+    int[] items_1 = new int[80];
+    int[] items_2 = new int[12];
+    int[] items_3 = new int[31];
+    String[] items_year = new String[80];
+    String[] items_month = new String[12];
+    String[] items_day = new String[31];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         context = this;
+        userItem = new UserItem();
 
-        registerItem = new UserItem();
+        for(int i = 0; i < 80; i++) items_1[i] = 1930 + i;
+        for(int i = 0; i < 12; i++) items_2[i] = 1 + i;
+        for(int i = 0; i < 31; i++) items_3[i] = 1 + i;
+        for(int i=0; i<80; i++) items_year[i] = Integer.toString(items_1[i]);
+        for(int i=0; i<12; i++) items_month[i] = Integer.toString(items_2[i]);
+        for(int i=0; i<31; i++) items_day[i] = Integer.toString(items_3[i]);
 
-        //아이디값 찾아주기
-        join_email = findViewById( R.id.join_email );
-        join_password = findViewById( R.id.join_password );
-        join_name = findViewById( R.id.join_name );
-        join_pwck = findViewById(R.id.join_pwck);
+        backButton = findViewById(R.id.button_back);
+        emailEdit = findViewById( R.id.edit_email );
+        passwordEdit = findViewById( R.id.edit_password );
+        pwckEdit = findViewById(R.id.edit_pwck);
+        nameEdit = findViewById( R.id.edit_name );
+        sextypeText = findViewById(R.id.text_sextype);
+        birthText = findViewById(R.id.text_birth);
+        registerButton = findViewById(R.id.button_register);
+        agreeAllButton = findViewById(R.id.button_agree_all);
+        agreeButton1 = findViewById(R.id.button_agree_1);
+        agreeButton2 = findViewById(R.id.button_agree_2);
+        agreeButton3 = findViewById(R.id.button_agree_3);
 
-        sextypeEdit = findViewById(R.id.join_sextype);
-        sextypeEdit.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                setSexTypeDialog();
+            public void onClick(View view) {
+                finish();
             }
         });
-        birthEdit = findViewById(R.id.join_birthday);
-        birthEdit.setOnClickListener(new View.OnClickListener() {
+        emailEdit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                setBirthdayDialog();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                emailEdit.setTextColor(context.getColorStateList(R.color.editor_focus));
+                if(validate){
+                    validate = false;
+                    checkButton.setSelected(false);
+                }
+                if (!emailEdit.getText().toString().equals("")){
+                    checkButton.setActivated(true);
+                }else {
+                    checkButton.setSelected(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
+        emailEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if(EditorInfo.IME_ACTION_DONE == i) emailEdit.clearFocus();
+                return false;
+            }
+        });
+
+        passwordEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!passwordEdit.getText().toString().equals(pwckEdit.getText().toString())){
+                    pwckEdit.setTextColor(context.getColor(R.color.colorRed));
+                    validate3 = false;
+                } else{
+                    pwckEdit.setTextColor(context.getColorStateList(R.color.editor_focus));
+                    validate3 = true;
+                }
+                String pwPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
+                Matcher matcher = Pattern.compile(pwPattern).matcher(passwordEdit.getText().toString());
+                if(!matcher.matches()){
+                    passwordEdit.setTextColor(context.getColor(R.color.colorRed));
+                    validate2 = false;
+                }else{
+                    passwordEdit.setTextColor(context.getColorStateList(R.color.editor_focus));
+                    validate2 = true;
+                }
+
+                validateForm();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        passwordEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if(EditorInfo.IME_ACTION_DONE == i) emailEdit.clearFocus();
+                return false;
+            }
+        });
+
+
+        pwckEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!pwckEdit.getText().toString().equals(passwordEdit.getText().toString())){
+                    pwckEdit.setTextColor(context.getColor(R.color.colorRed));
+                    validate3 = false;
+                } else{
+                    pwckEdit.setTextColor(context.getColorStateList(R.color.editor_focus));
+                    validate3 = true;
+                }
+                validateForm();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        pwckEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if(EditorInfo.IME_ACTION_DONE == i) emailEdit.clearFocus();
+                return false;
+            }
+        });
+
+        nameEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                validateForm();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        nameEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if(EditorInfo.IME_ACTION_DONE == i) emailEdit.clearFocus();
+                return false;
+            }
+        });
+
+        sextypeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DialogActivity.class);
+                intent.putExtra("requestCode", REQUEST_CODE_1);
+                intent.putExtra("itemList", items_sextype);
+                startActivityForResult(intent, REQUEST_CODE_1);
+            }
+        });
+        birthText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DialogActivity.class);
+                intent.putExtra("requestCode", REQUEST_CODE_2);
+                intent.putExtra("itemList1", items_year);
+                intent.putExtra("itemList2", items_month);
+                intent.putExtra("itemList3", items_day);
+                startActivityForResult(intent, REQUEST_CODE_2);
+            }
+        });
 
         //아이디 중복 체크
         checkButton = findViewById(R.id.button_check);
         checkButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
-                String UserEmail = join_email.getText().toString();
+                String UserEmail = emailEdit.getText().toString();
                 if (validate) {
                     return; //검증 완료
                 }
-
-                if (UserEmail.equals("")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("아이디를 입력하세요.").setPositiveButton("확인", null).create();
-                    dialog.show();
-                    return;
-                }
-
                 validateEmail(UserEmail);
             }
         });
 
-
-        //회원가입 버튼 클릭 시 수행
-        //join_button = findViewById( R.id.join_button );
-        join_button.setOnClickListener( new View.OnClickListener() {
+        //약관 동의
+        agreeAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String UserEmail = join_email.getText().toString();
-                final String UserPwd = join_password.getText().toString();
-                final String UserName = join_name.getText().toString();
-                final String PassCk = join_pwck.getText().toString();
-
-
-                //아이디 중복체크 했는지 확인
-                if (!validate) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("중복된 아이디가 있는지 확인하세요.").setNegativeButton("확인", null).create();
-                    dialog.show();
-                    return;
+                if(agreeAllButton.isSelected()) {
+                    agreeAllButton.setSelected(false);
+                    agreeButton1.setSelected(false);
+                    agreeButton2.setSelected(false);
+                    agreeButton3.setSelected(false);
                 }
-
-                //한 칸이라도 입력 안했을 경우
-                if (UserEmail.equals("") || UserPwd.equals("") || UserName.equals("")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("모두 입력해주세요.").setNegativeButton("확인", null).create();
-                    dialog.show();
-                    return;
+                else {
+                    agreeAllButton.setSelected(true);
+                    agreeButton1.setSelected(true);
+                    agreeButton2.setSelected(true);
+                    agreeButton3.setSelected(true);
                 }
-
-                registerItem.name = UserName;
-                registerItem.email = UserEmail;
-                registerItem.password = UserPwd;
-                registerItem.sextype = sextypeEdit.getText().toString();
-                registerItem.birthday = birthEdit.getText().toString().replace(" ", "");
-                registerUserInfo(registerItem);
+                validateForm();
+            }
+        });
+        agreeButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(agreeButton1.isSelected()) {
+                    agreeButton1.setSelected(false);
+                    if (agreeAllButton.isSelected()) agreeAllButton.setSelected(false);
+                }
+                else agreeButton1.setSelected(true);
+                validateForm();
+            }
+        });
+        agreeButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(agreeButton2.isSelected()) {
+                    agreeButton2.setSelected(false);
+                    if (agreeAllButton.isSelected()) agreeAllButton.setSelected(false);
+                }
+                else agreeButton2.setSelected(true);
+                validateForm();
+            }
+        });
+        agreeButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(agreeButton3.isSelected()) {
+                    agreeButton3.setSelected(false);
+                    if (agreeAllButton.isSelected()) agreeAllButton.setSelected(false);
+                }
+                else agreeButton3.setSelected(true);
+                validateForm();
             }
         });
     }
 
-    /**
-     * 성별을 선택할 수 있는 다이얼로그를 보여준다.
-     */
-    private void setSexTypeDialog() {
-        final String[] sexTypes = new String[2];
-        sexTypes[0] = getResources().getString(R.string.sex_man);
-        sexTypes[1] = getResources().getString(R.string.sex_woman);
+    private void validateForm(){
 
-        new AlertDialog.Builder(this)
-                .setItems(sexTypes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which >= 0) {
-                            sextypeEdit.setText(sexTypes[which]);
-                        }
-                        dialog.dismiss();
-                    }
-                }).show();
+        if (validate && validate2 && validate3
+                && !nameEdit.getText().toString().equals("")
+                && !sextypeText.getText().toString().equals("") && !birthText.getText().toString().equals("")
+                && agreeButton1.isSelected() && agreeButton2.isSelected()){
+            registerButton.setBackgroundColor(context.getColor(R.color.colorAccent));
+            registerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    userItem.email = emailEdit.getText().toString();
+                    userItem.password = passwordEdit.getText().toString();
+                    userItem.name = nameEdit.getText().toString();
+                    userItem.sextype = sextypeText.getText().toString();
+                    userItem.birthday = birthText.getText().toString().replace(" ", "");
+                    registerUserInfo(userItem);
+                }
+            });
+        }
     }
 
-    /**
-     * 생일을 선택할 수 있는 다이얼로그를 보여준다.
-     */
-    private void setBirthdayDialog() {
-        GregorianCalendar calendar = new GregorianCalendar();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                String myMonth;
-                if (monthOfYear + 1 < 10) {
-                    myMonth = "0" + (monthOfYear + 1);
-                } else {
-                    myMonth = "" + (monthOfYear + 1);
-                }
-
-                String myDay;
-                if (dayOfMonth < 10) {
-                    myDay = "0" + dayOfMonth;
-                } else {
-                    myDay = "" + dayOfMonth;
-                }
-
-                String date = year + " " + myMonth + " " + myDay;
-                birthEdit.setText(date);
+        if (requestCode == REQUEST_CODE_1) {
+            if (resultCode != Activity.RESULT_OK) {
+                return;
             }
-        }, year, month, day).show();
-    }
+            int resultInt = data.getExtras().getInt("resultInt");
+            sextypeText.setText(items_sextype[resultInt]);
+            validateForm();
+        }else if (requestCode == REQUEST_CODE_2) {
+            if (resultCode != Activity.RESULT_OK) {
+                return;
+            }
+            int resultInt1 = data.getExtras().getInt("resultInt1");
+            int resultInt2 = data.getExtras().getInt("resultInt2");
+            int resultInt3 = data.getExtras().getInt("resultInt3");
 
+            String birthString = items_year[resultInt1] + items_month[resultInt2] + items_day[resultInt3];
+            birthText.setText(birthString);
+            validateForm();
+        }
+    }
+    
     private void validateEmail(String email){
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
@@ -191,17 +369,13 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (response.isSuccessful() && !StringLib.getInstance().isBlank(item.name)) {
                     MyLog.d(TAG, "success " + response.body().toString());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("이미 존재하는 아이디입니다.").setNegativeButton("확인", null).create();
-                    dialog.show();
+                    emailEdit.setTextColor(context.getColor(R.color.colorRed));
                 } else {
                     MyLog.d(TAG, "not success");
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("사용할 수 있는 아이디입니다.").setPositiveButton("확인", null).create();
-                    dialog.show();
-                    join_email.setEnabled(false); //아이디값 고정
                     validate = true; //검증 완료
+                    checkButton.setActivated(false);
                     checkButton.setSelected(true);
+                    validateForm();
                 }
             }
 
@@ -233,8 +407,6 @@ public class RegisterActivity extends AppCompatActivity {
                         return;
                     }
                     MyToast.s(context, "회원가입이 완료되었습니다");
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
                     finish();
                 }
             }

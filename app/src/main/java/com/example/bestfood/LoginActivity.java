@@ -211,10 +211,15 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (!gender.equals("null")) {
                             Log.i("KAKAO_API", "gender: " + gender);
-                            newItem.sextype = gender;
+                            //newItem.sextype = gender;
+                            if(gender.equals("MALE")) newItem.sextype = "남성";
+                            else newItem.sextype = "여성";
 
                         } else if (kakaoAccount.genderNeedsAgreement() == OptionalBoolean.TRUE) {
-                            newItem.sextype = gender;
+                            //newItem.sextype = gender;
+                            if(gender.equals("MALE")) newItem.sextype = "남성";
+                            else newItem.sextype = "여성";
+
 
                         } else {
                             newItem.sextype = "none";

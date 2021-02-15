@@ -32,9 +32,9 @@ public class MyPageFragment extends Fragment {
     Context context;
 
     CardView cardView1_1, cardView1_2, cardView1_3, cardView2_1;
-    ImageView profileIconImage;
+    ImageView profileIcon;
     LinearLayout content1, content2;
-    TextView edit, id, name, phone, postcode, address, addressDetail;
+    TextView profileIconDefault, edit, id, name, phone, postcode, address, addressDetail;
 
     UserItem currentItem;
 
@@ -68,20 +68,11 @@ public class MyPageFragment extends Fragment {
         if (currentItem.seq != 0){
             content1.setVisibility(View.VISIBLE);
             content2.setVisibility(View.GONE);
-            //profileIconImage = view.findViewById(R.id.profile_icon);
+            profileIcon = getView().findViewById(R.id.profile_icon);
+            profileIconDefault = getView().findViewById(R.id.profile_icon_default);
             id = getView().findViewById(R.id.id);
             name = getView().findViewById(R.id.name);
 
-            /*
-            profileIconImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, ProfileIconActivity.class);
-                    startActivity(intent);
-                }
-            });
-
-             */
             cardView1_1 = getView().findViewById(R.id.card_view_1_1);
             cardView1_2 = getView().findViewById(R.id.card_view_1_2);
             cardView1_3 = getView().findViewById(R.id.card_view_1_3);
@@ -133,16 +124,33 @@ public class MyPageFragment extends Fragment {
         setView();
 
         if (currentItem.seq != 0) {
-            /*
+
             if (StringLib.getInstance().isBlank(currentItem.userIconFilename)) {
-                Picasso.get().load(R.drawable.ic_person).into(profileIconImage);
+                char initialChar = Character.toUpperCase(currentItem.email.charAt(0));
+                profileIconDefault.setText(Character.toString(initialChar));
+                profileIconDefault.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, ProfileIconActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
             } else {
+                profileIconDefault.setVisibility(View.GONE);
                 Picasso.get()
                         .load(RemoteService.USER_ICON_URL + currentItem.userIconFilename)
-                        .into(profileIconImage);
+                        .into(profileIcon);
+                profileIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, ProfileIconActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
 
-             */
+
 
             id.setText(currentItem.email);
             name.setText(currentItem.name);

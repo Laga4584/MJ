@@ -1,6 +1,8 @@
 package com.example.bestfood;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.bestfood.item.SampleItem;
@@ -35,15 +38,18 @@ import retrofit2.Response;
  */
 public class SampleListFragment extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
+    public static final int REQUEST_CODE = 200;
 
     Context context;
 
     int userSeq;
+    int mode = 0;
     String query = "";
 
     RecyclerView sampleList;
     TextView noDataText;
     EditText search;
+    ImageButton filter;
 
     SampleListAdapter sampleListAdapter;
     StaggeredGridLayoutManager layoutManager;
@@ -98,11 +104,22 @@ public class SampleListFragment extends Fragment {
                     imm.hideSoftInputFromWindow(textView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     query = search.getText().toString();
                     sampleListAdapter.clearItemList();
-                    listInfo(query, 0);
+                    mode = 0;
+                    listInfo(0, query, 0);
                 } else {
                     return false;
                 }
                 return true;
+            }
+        });
+
+        filter = view.findViewById(R.id.filter_button);
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FilterActivity.class);
+                intent.putExtra("requestCode", REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
@@ -115,7 +132,23 @@ public class SampleListFragment extends Fragment {
 
          */
         setRecyclerView();
-        listInfo(query, 0);
+        listInfo(mode, query, 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode != Activity.RESULT_OK) {
+                return;
+            }
+            int[] selectedList = data.getIntArrayExtra("selectedList");
+            String queryString = Integer.toString(selectedList[0]) + ", " + Integer.toString(selectedList[1]) + ", " + Integer.toString(selectedList[2]) + ", " + Integer.toString(selectedList[3]);
+            sampleListAdapter.clearItemList();
+            mode = 1;
+            listInfo(mode, queryString, 0);
+        }
     }
 
 
@@ -143,7 +176,7 @@ public class SampleListFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listInfo(query, page);
+                listInfo(mode, query, page);
             }
         };
         sampleList.addOnScrollListener(scrollListener);
@@ -153,10 +186,10 @@ public class SampleListFragment extends Fragment {
      * 서버에서 명작 정보를 조회한다.
      * @param currentPage 현재 페이지
      */
-    private void listInfo(String query, final int currentPage) {
+    private void listInfo(int mode, String query, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<SampleItem>> call = remoteService.listSampleInfo(query, currentPage);
+        Call<ArrayList<SampleItem>> call = remoteService.listSampleInfo(mode, query, currentPage);
         call.enqueue(new Callback<ArrayList<SampleItem>>() {
             @Override
             public void onResponse(Call<ArrayList<SampleItem>> call,

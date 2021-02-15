@@ -234,8 +234,8 @@ public class CaseFragment1 extends Fragment {
             if (resultCode != Activity.RESULT_OK) {
                 return;
             }
-            int sendText = data.getExtras().getInt("sendText");
-            if(sendText == items_1.length-1){
+            int resultInt = data.getExtras().getInt("resultInt");
+            if(resultInt == items_1.length-1){
                 option1.setVisibility(View.GONE);
                 edit1.setVisibility(View.VISIBLE);
                 edit1.requestFocus();
@@ -253,8 +253,8 @@ public class CaseFragment1 extends Fragment {
                     }
                 });
             }else{
-                caseItem.product = items_1[sendText];
-                option1.setText(items_1[sendText]);
+                caseItem.product = items_1[resultInt];
+                option1.setText(items_1[resultInt]);
             }
             image1.setVisibility(View.GONE);
             if(status == requestCode) status += 1;
@@ -264,8 +264,8 @@ public class CaseFragment1 extends Fragment {
             if (resultCode != Activity.RESULT_OK) {
                 return;
             }
-            int sendText = data.getExtras().getInt("sendText");
-            if(sendText == items_2.length-1){
+            int resultInt = data.getExtras().getInt("resultInt");
+            if(resultInt == items_2.length-1){
                 option2.setVisibility(View.GONE);
                 edit2.setVisibility(View.VISIBLE);
                 edit2.requestFocus();
@@ -283,8 +283,8 @@ public class CaseFragment1 extends Fragment {
                     }
                 });
             }else{
-                caseItem.service = items_2[sendText];
-                option2.setText(items_2[sendText]);
+                caseItem.service = items_2[resultInt];
+                option2.setText(items_2[resultInt]);
 
             }
             image2.setVisibility(View.GONE);
@@ -295,8 +295,8 @@ public class CaseFragment1 extends Fragment {
             if (resultCode != Activity.RESULT_OK) {
                 return;
             }
-            int sendText = data.getExtras().getInt("sendText");
-            if(sendText == items_3.length-1){
+            int resultInt = data.getExtras().getInt("resultInt");
+            if(resultInt == items_3.length-1){
                 option3.setVisibility(View.GONE);
                 edit3.setVisibility(View.VISIBLE);
                 edit3.requestFocus();
@@ -314,8 +314,8 @@ public class CaseFragment1 extends Fragment {
                     }
                 });
             }else{
-                caseItem.brand = items_3[sendText];
-                option3.setText(items_3[sendText]);
+                caseItem.brand = items_3[resultInt];
+                option3.setText(items_3[resultInt]);
             }
             image3.setVisibility(View.GONE);
             if(status == requestCode) status += 1;
@@ -326,7 +326,7 @@ public class CaseFragment1 extends Fragment {
                 return;
             }
 
-            //ArrayList<ImageItem> sendText = data.getParcelableArrayListExtra("Images");
+            //ArrayList<ImageItem> resultInt = data.getParcelableArrayListExtra("Images");
             cardView4.setVisibility(View.GONE);
             cardView4_2.setVisibility(View.VISIBLE);
             if(status == requestCode) status += 1;

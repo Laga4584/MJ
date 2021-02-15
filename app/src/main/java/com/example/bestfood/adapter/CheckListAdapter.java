@@ -123,8 +123,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.View
 
         String nameText = item.name + " 명장";
         holder.name.setText(nameText);
-        int dotCount = caseItem.dot.split("/ ").length - 1;
-        String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + dotCount + " 건";
+        String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + caseItem.dotCount + " 건";
         holder.info.setText(infoText);
         String titleText = "완료 " + item.caseCount + " | 평점 " + item.score + " | " + item.product + " 분야";
         holder.title.setText(titleText);

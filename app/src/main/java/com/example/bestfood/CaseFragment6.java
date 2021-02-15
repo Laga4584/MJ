@@ -58,7 +58,7 @@ public class CaseFragment6 extends Fragment {
     String[] items_2 = {"훌륭해요 제 마음에 쏙 들어요!", "전체적으로 만족스러워요", "실망스러워요"};
     String[] items_3 = {"저렴해요", "적당해요", "조금 비싸요"};
     String[] items_4 = {"또 맡기고 싶어요 추천해요!", "만족해요", "다음엔 좀 고민해보려구요"};
-    String[] tagList = {"", "", "", ""};
+    int[] tagList = {0, 0, 0, 0};
 
     public static CaseFragment6 newInstance(CaseItem caseItem) {
         Bundle bundle = new Bundle();
@@ -186,8 +186,10 @@ public class CaseFragment6 extends Fragment {
             @Override
             public void onClick(View view) {
                 if(status > 4) {
-                    String tags = Arrays.toString(tagList).replace("[", "").replace("]", "");
-                    caseItem.tag = tags;
+                    caseItem.tag1 = tagList[0];
+                    caseItem.tag2 = tagList[1];
+                    caseItem.tag3 = tagList[2];
+                    caseItem.tag4 = tagList[3];
                     insertCaseInfo();
                 }
             }
@@ -241,9 +243,9 @@ public class CaseFragment6 extends Fragment {
             if (resultCode != Activity.RESULT_OK) {
                 return;
             }
-            int sendText = data.getExtras().getInt("sendText");
-            tagList[0] = items_1[sendText];
-            option1.setText(items_1[sendText]);
+            int resultInt = data.getExtras().getInt("resultInt");
+            tagList[0] = resultInt;
+            option1.setText(items_1[resultInt]);
             image1.setVisibility(View.GONE);
             if(status == requestCode) status += 1;
             setText(status);
@@ -252,9 +254,9 @@ public class CaseFragment6 extends Fragment {
             if (resultCode != Activity.RESULT_OK) {
                 return;
             }
-            int sendText = data.getExtras().getInt("sendText");
-            tagList[1] = items_2[sendText];
-            option2.setText(items_2[sendText]);
+            int resultInt = data.getExtras().getInt("resultInt");
+            tagList[1] = resultInt;
+            option2.setText(items_2[resultInt]);
             image2.setVisibility(View.GONE);
             if(status == requestCode) status += 1;
             setText(status);
@@ -263,9 +265,9 @@ public class CaseFragment6 extends Fragment {
             if (resultCode != Activity.RESULT_OK) {
                 return;
             }
-            int sendText = data.getExtras().getInt("sendText");
-            tagList[2] = items_3[sendText];
-            option3.setText(items_3[sendText]);
+            int resultInt = data.getExtras().getInt("resultInt");
+            tagList[2] = resultInt;
+            option3.setText(items_3[resultInt]);
             image3.setVisibility(View.GONE);
             if(status == requestCode) status += 1;
             setText(status);
@@ -274,9 +276,9 @@ public class CaseFragment6 extends Fragment {
             if (resultCode != Activity.RESULT_OK) {
                 return;
             }
-            int sendText = data.getExtras().getInt("sendText");
-            tagList[3] = items_4[sendText];
-            option4.setText(items_4[sendText]);
+            int resultInt = data.getExtras().getInt("resultInt");
+            tagList[3] = resultInt;
+            option4.setText(items_4[resultInt]);
             image4.setVisibility(View.GONE);
             if(status == requestCode) status += 1;
             setText(status);

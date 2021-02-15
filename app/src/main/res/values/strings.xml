@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Repair Service</string>
+    <string name="app_name">명장</string>
     <string name="kakao_app_key">83a195b7208931438f01eb065a434477</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

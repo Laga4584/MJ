@@ -107,8 +107,8 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
         MyLog.d(TAG, "getView " + item);
 
         holder.name.setText(item.product);
-        setImage(holder.image, item.afterImageFilename, 0);
-        setImage(holder.profile, item.profileImageFilename, 1);
+        setImage(holder.image, item.imageFilename, 0);
+        setImage(holder.profile, item.repairerImageFilename, 1);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +128,7 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
         if (StringLib.getInstance().isBlank(fileName)) {
             Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
         } else {
-            if (path == 0) Picasso.get().load(RemoteService.SAMPLE_URL + fileName).into(imageView);
+            if (path == 0) Picasso.get().load(RemoteService.IMAGE_URL + fileName).into(imageView);
             else Picasso.get().load(RemoteService.USER_ICON_URL + fileName).into(imageView);
         }
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_below="@+id/toolbar_layout"
@@ -8,260 +9,319 @@
     android:scrollbars="none">
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/pageMarginAndOffset"
-    android:layout_marginRight="@dimen/pageMarginAndOffset"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="샘플"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/text_size_large"
-        android:textStyle="bold" />
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewpager"
-        android:clipToPadding="false"
-        android:clipChildren="false"
+    <ImageButton
+        android:id="@+id/button_back"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/bg_transparent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_back"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp" />
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="250dp" />
-    <TextView
-        android:id="@+id/text8"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="수선자"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/repairer_text"
-        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="15dp"
+        android:elevation="3dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/icon_repairer_profile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_person" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp">
+                <TextView
+                    android:id="@+id/text_repairer_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="김엠제이 명장"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="7dp"/>
+                <TextView
+                    android:id="@+id/text_repairer_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="완료 41 | 평점 4.9 | 가방 분야"
+                    android:textSize="11dp"
+                    android:textColor="@color/colorGray" />
+                <TextView
+                    android:id="@+id/text_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="[발렌시아가] 핸드백 스트링 수선 외 4건"
+                    android:textSize="11dp"
+                    android:textColor="@color/colorPrimaryDark" />
+                <TextView
+                    android:id="@+id/text_estimate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="예상 견적 25,000원 | 7일"
+                    android:textSize="12dp"
+                    android:textColor="@color/colorPrimaryDark" />
+                <TextView
+                    android:id="@+id/text_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="최종 결과 27,500원 | 5일"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_rate"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingHorizontal="20dp">
+            <TextView
+                android:id="@+id/text_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="견적 오차율 -10% (가격 +10% | 기간 -30%)"
+                android:textSize="12dp"
+                android:textColor="@color/colorBlue"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="염색"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/text9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="브랜드"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/brand_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="브랜드"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/text1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="서비스 종류"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/service_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="염색"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="10dp">
 
-    <TextView
-        android:id="@+id/text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="물품 종류"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="20dp">
 
-    <TextView
-        android:id="@+id/product_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="핸드백"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/text3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="요청 사항"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/image_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/round_white"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/bg_bestfood_drawer" />
+                <TextView
+                    android:id="@+id/text_sequence"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="15dp"
+                    android:gravity="center"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/text_circle_blue" />
+                <ImageButton
+                    android:id="@+id/button_prev"
+                    android:layout_width="24dp"
+                    android:layout_height="49dp"
+                    android:layout_gravity="center|start"
 
-    <TextView
-        android:id="@+id/description_text"
-        android:layout_width="wrap_content"
+                    android:src="@drawable/ic_prev" />
+
+                <ImageButton
+                    android:id="@+id/button_next"
+                    android:layout_width="24dp"
+                    android:layout_height="49dp"
+                    android:layout_gravity="center|end"
+
+                    android:src="@drawable/ic_next" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="52dp"
+                android:layout_marginBottom="20dp"
+                android:text="수선 요청 리스트"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_request"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="5dp"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="15dp">
+
+        <com.iarcuschin.simpleratingbar.SimpleRatingBar
+            android:id="@+id/rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:srb_borderColor="@color/colorLightYellow"
+            app:srb_fillColor="@color/colorLightYellow"
+            app:srb_numberOfStars="5"
+            app:srb_rating="3"
+            app:srb_starBorderWidth="8"
+            app:srb_starCornerRadius="20"
+            app:srb_starSize="33dp"
+            app:srb_starsSeparation="10dp"
+            app:srb_stepSize="0.5"
+            app:srb_isIndicator="true"/>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="끈이 떨어졌어요"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/text4"
-        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="15dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="리뷰 블럭"
+                android:textSize="15dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/text_tag1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:layout_marginEnd="7dp"
+                    android:text="그때 그때 바로 연락주세요!"
+                    android:background="@drawable/edge"
+                    android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:id="@+id/text_tag2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:text="전체적으로 만족스러워요"
+                    android:background="@drawable/edge"
+                    android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:id="@+id/text_tag3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:layout_marginEnd="7dp"
+                    android:text="조금 비싸요"
+                    android:background="@drawable/edge"
+                    android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:id="@+id/text_tag4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:text="또 맡기고 싶어요 추천해요!"
+                    android:background="@drawable/edge"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="수선 방법"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/method_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="염색"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/text5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="가격"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/price_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="5만원"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/text6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="소요 시간"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/time_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="3일"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/text10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="수선 내용 설명"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/result_description_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="이렇게 했습니다."
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/text7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="후기"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/review_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="감사합니다."
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/text11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="평점"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/score_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="0"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="15dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="최근 댓글"
+                android:textSize="15dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/icon_review_profile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_person" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp">
+                    <TextView
+                        android:id="@+id/text_review_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="압구정로대리"
+                        android:textSize="11dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="7dp"/>
+                    <TextView
+                        android:id="@+id/text_review"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="어쩜어쩜… 새 가방 산기분 옿ㅎㅎㅎㅎ"
+                        android:textSize="11dp"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>
 </ScrollView>

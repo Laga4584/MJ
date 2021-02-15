@@ -56,11 +56,11 @@ public class CaseFragment5 extends Fragment {
     Context context;
     CaseItem caseItem;
     RepairerItem repairerItem;
-    TextView name, info, title, price, description1, description2, next, sequence;
+    TextView name, info, title, price, timeText, rateText, reportText, description1, description2, next, sequence;
     TextView text1, text2, text3, text4, text5, option2;
     TextView finish, restart;
     EditText edit1, edit2, edit3, edit4, edit5;
-    CardView content1;
+    CardView content1, result, report;
     LinearLayout content2;
     ImageView image, profileIcon;
     ImageButton prevButton, nextButton;
@@ -134,8 +134,12 @@ public class CaseFragment5 extends Fragment {
             prevButton.setVisibility(View.GONE);
             nextButton = view.findViewById(R.id.button_next);
             nextButton.setVisibility(View.VISIBLE);
-
             requestList = view.findViewById(R.id.request_list);
+            result = view.findViewById(R.id.result);
+            rateText = view.findViewById(R.id.text_rate);
+            timeText = view.findViewById(R.id.text_time);
+            report = view.findViewById(R.id.report);
+            reportText = view.findViewById(R.id.text_report);
             next = view.findViewById(R.id.next);
 
             selectRepairerInfo(caseItem.repairerSeq);
@@ -234,8 +238,7 @@ public class CaseFragment5 extends Fragment {
         MyLog.d("here repairerItem " + repairerItem.toString());
         String nameText = repairerItem.name + " 명장";
         name.setText(nameText);
-        int dotCount = caseItem.dot.split("/ ").length - 1;
-        String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + dotCount + " 건";
+        String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + caseItem.dotCount + " 건";
         info.setText(infoText);
         String titleText = "완료 " + repairerItem.caseCount + " | 평점 " + repairerItem.score + " | " + repairerItem.product + " 분야";
         title.setText(titleText);
@@ -260,6 +263,14 @@ public class CaseFragment5 extends Fragment {
             description1.setText("명장님이 고객님의 요청 사항에 맞춰 수선을 진행중이에요");
             description2.setVisibility(View.GONE);
         } else if (count == 3) {
+            result.setVisibility(View.VISIBLE);
+            String suffixString;
+            if (caseItem.errorRateTime < 0) suffixString = "단축";
+            else suffixString = "초과";
+            String rateString = "수선 기간 " + String.valueOf(caseItem.errorRateTime) + "% " + suffixString;
+            rateText.setText(rateString);
+            report.setVisibility(View.VISIBLE);
+            reportText.setText(caseItem.report);
             price.setVisibility(View.GONE);
             description1.setText("명장님이 수선을 종료하고 결과물 사진을 올려주셨어요");
             description2.setVisibility(View.GONE);

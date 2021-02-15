@@ -121,7 +121,7 @@
         android:id="@+id/button_kakao"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:backgroundTint="@color/colorLightYellow"
+        android:backgroundTint="@color/colorKakaoYellow"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="5dp"

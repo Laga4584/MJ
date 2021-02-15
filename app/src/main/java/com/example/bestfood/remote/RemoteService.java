@@ -52,7 +52,7 @@ public interface RemoteService {
     Call<SampleItem> selectSampleInfo(@Path("seq") int seq);
 
     @GET("/sample/list")
-    Call<ArrayList<SampleItem>> listSampleInfo(@Query("query") String query, @Query("current_page") int currentPage);
+    Call<ArrayList<SampleItem>> listSampleInfo(@Query("mode") int mode, @Query("query") String query, @Query("current_page") int currentPage);
 
     @GET("/sample/repairer")
     Call<ArrayList<SampleItem>> repairerSampleInfo(@Query("repairer_seq") int repairerSeq, @Query("current_page") int currentPage);
@@ -103,8 +103,14 @@ public interface RemoteService {
     @GET("/user/email")
     Call<UserItem> selectUserInfo(@Query("email") String email);
 
+    @GET("/user/info/{seq}")
+    Call<UserItem> selectUserSeq(@Path("seq") int seq);
+
     @POST("/user/info")
     Call<String> insertUserInfo(@Body UserItem userItem, @Query("token") String token);
+
+    @POST("/user/update")
+    Call<String> updateUserInfo(@Body UserItem userItem);
 
     @FormUrlEncoded
     @POST("/user/phone")

@@ -13,8 +13,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.example.bestfood.App;
 import com.example.bestfood.CaseActivity;
 import com.example.bestfood.R;
+import com.example.bestfood.item.UserItem;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 

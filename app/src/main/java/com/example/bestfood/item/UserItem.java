@@ -13,6 +13,8 @@ public class UserItem {
     public String birthday;
     public String email;
     public String password;
+    public String address;
+    @SerializedName("address_detail") public String addressDetail;
     @SerializedName("user_icon_filename") public String userIconFilename;
     @SerializedName("reg_date") public String regDate;
 
@@ -24,6 +26,8 @@ public class UserItem {
                 ", name='" + name + '\'' +
                 ", sextype='" + sextype + '\'' +
                 ", birthday='" + birthday + '\'' +
+                ", address='" + address + '\'' +
+                ", addressDetail='" + addressDetail + '\'' +
                 ", userIconFilename='" + userIconFilename + '\'' +
                 ", regDate='" + regDate + '\'' +
                 ", email='" + email + '\'' +

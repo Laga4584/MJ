@@ -39,12 +39,65 @@
                 android:alpha="0.2"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/viewpager"
+        android:id="@+id/list"
         android:paddingVertical="120dp"
         android:layout_width="match_parent"
         android:layout_height="280dp"
         android:layout_gravity="bottom"
         android:clipToPadding="false"/>
+    <LinearLayout
+        android:id="@+id/birth"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="280dp"
+        android:layout_gravity="bottom|center_horizontal">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list1"
+            android:paddingVertical="120dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:gravity="center"
+            android:text="년"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list2"
+            android:paddingVertical="120dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"/>
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:gravity="center"
+            android:text="월"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list3"
+            android:paddingVertical="120dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"/>
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:gravity="center_vertical"
+            android:text="일"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
     <ImageView
         android:layout_width="200dp"
         android:layout_height="50dp"

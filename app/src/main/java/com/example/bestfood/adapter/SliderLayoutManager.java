@@ -66,8 +66,6 @@ public class SliderLayoutManager extends LinearLayoutManager {
             final View child = recyclerView.getChildAt(i);
             TextView textView = recyclerView.getChildAt(i).findViewById(R.id.textItem);
             float childCenterX = (getDecoratedBottom(child) + getDecoratedTop(child))/2.0f;
-            MyLog.d("here location" + (recyclerViewCenter - metrics.density*20));
-            MyLog.d("here location" + (recyclerViewCenter + metrics.density*20));
             if(childCenterX>recyclerViewCenter - metrics.density*20 && childCenterX<recyclerViewCenter + metrics.density*20){
                 textView.setTextColor(context.getColor(R.color.colorPrimaryDark));
                 //textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
@@ -80,7 +78,7 @@ public class SliderLayoutManager extends LinearLayoutManager {
                     @Override
                     public void onClick(View view) {
                         Intent intentR = new Intent();
-                        intentR.putExtra("sendText" , recyclerView.getChildAdapterPosition(child)); //사용자에게 입력받은값 넣기
+                        intentR.putExtra("resultInt" , recyclerView.getChildAdapterPosition(child)); //사용자에게 입력받은값 넣기
                         ((Activity)context).setResult(Activity.RESULT_OK, intentR);
                         ((Activity)context).finish();
                     }

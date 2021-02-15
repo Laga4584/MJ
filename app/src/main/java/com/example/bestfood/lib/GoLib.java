@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.bestfood.CaseActivity;
 import com.example.bestfood.ChatActivity;
-import com.example.bestfood.DetailActivity;
 import com.example.bestfood.ImageActivity;
 import com.example.bestfood.ProfileActivity_bak;
 import com.example.bestfood.RepairerActivity;
@@ -109,9 +108,4 @@ public class GoLib {
         context.startActivity(intent);
     }
 
-    public void goDetailActivity(Context context) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        //intent.putExtra(ImageActivity.INFO_SEQ, infoSeq);
-        context.startActivity(intent);
-    }
 }

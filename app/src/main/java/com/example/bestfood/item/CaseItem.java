@@ -13,9 +13,7 @@ public class CaseItem {
     public String service;
     public String product;
     public String brand;
-    public String dot;
-    public String description;
-    public String method;
+    @SerializedName("dot_count") public int dotCount;
     public String price;
     public String time;
     public String addressee;
@@ -23,19 +21,24 @@ public class CaseItem {
     public String addressDetail;
     @SerializedName("addressee_phone") public String addresseePhone;
     public String memo;
-    public String descriptionAdd;
     @SerializedName("price_final") public String priceFinal;
     @SerializedName("time_final") public String timeFinal;
-    @SerializedName("repair_description") public String repairDescription;
-    public String repairState;
-    public String tag;
-    public String review;
+    public String report;
+    @SerializedName("repair_state") public String repairState;
+    @SerializedName("time_result") public String timeResult;
     public float score;
+    @SerializedName("error_rate") public float errorRate;
+    @SerializedName("error_rate_price") public float errorRateTime;
+    @SerializedName("error_rate_time") public float errorRatePrice;
+    public int tag1;
+    public int tag2;
+    public int tag3;
+    public int tag4;
+    public String review;
     public String status;
     public String status2;
     @SerializedName("reg_date") public String regDate;
     @SerializedName("image_filename") public String imageFilename;
-    @SerializedName("repair_image_filename") public String repairImageFilename;
     @SerializedName("repairer_name") public String repairerName;
     @SerializedName("repairer_image_filename") public String repairerImageFilename;
 
@@ -48,29 +51,32 @@ public class CaseItem {
                 ", service='" + service + '\'' +
                 ", product='" + product + '\'' +
                 ", brand='" + brand + '\'' +
-                ", dot='" + dot + '\'' +
-                ", description='" + description + '\'' +
-                ", method='" + method + '\'' +
+                ", dotCount='" + dotCount + '\'' +
                 ", price='" + price + '\'' +
                 ", time='" + time + '\'' +
                 ", addressee='" + addressee + '\'' +
                 ", address='" + address + '\'' +
                 ", address_detail='" + addressDetail + '\'' +
-                ", description_add='" + descriptionAdd + '\'' +
                 ", addresseePhone='" + addresseePhone + '\'' +
                 ", memo='" + memo + '\'' +
                 ", priceFinal='" + priceFinal + '\'' +
                 ", timeFinal='" + timeFinal + '\'' +
-                ", repair_description='" + repairDescription + '\'' +
+                ", report='" + report + '\'' +
                 ", repair_state='" + repairState + '\'' +
-                ", tag='" + tag + '\'' +
-                ", review='" + review + '\'' +
+                ", time_result='" + timeResult + '\'' +
                 ", score='" + score + '\'' +
+                ", errorRate='" + errorRate + '\'' +
+                ", errorRatePrice='" + errorRatePrice + '\'' +
+                ", errorRateTime='" + errorRateTime + '\'' +
+                ", tag1='" + tag1 + '\'' +
+                ", tag2='" + tag2 + '\'' +
+                ", tag3='" + tag3 + '\'' +
+                ", tag4='" + tag4 + '\'' +
+                ", review='" + review + '\'' +
                 ", status='" + status + '\'' +
                 ", status2='" + status2 + '\'' +
                 ", regDate='" + regDate + '\'' +
                 ", image_filename='" + imageFilename + '\'' +
-                ", repair_image_filename='" + repairImageFilename + '\'' +
                 ", repairer_name='" + repairerName + '\'' +
                 ", repairerImageFilename='" + repairerImageFilename + '\'' +
                 '}';

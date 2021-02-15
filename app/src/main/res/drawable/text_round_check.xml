@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_selected="true">
+    <item android:state_activated="true">
         <shape android:shape="rectangle">
             <corners
                 android:bottomLeftRadius="3dp"
@@ -8,6 +8,16 @@
                 android:topLeftRadius="3dp"
                 android:topRightRadius="3dp"/>
             <solid android:color="@color/colorBlue"/>
+        </shape>
+    </item>
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <corners
+                android:bottomLeftRadius="3dp"
+                android:bottomRightRadius="3dp"
+                android:topLeftRadius="3dp"
+                android:topRightRadius="3dp"/>
+            <solid android:color="@color/colorLightGreen"/>
         </shape>
     </item>
     <item>

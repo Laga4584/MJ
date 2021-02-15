@@ -191,6 +191,77 @@
                 </LinearLayout>
             </FrameLayout>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/result"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:elevation="3dp"
+                app:cardCornerRadius="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="20dp">
+                    <TextView
+                        android:id="@+id/text_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수선 기간 29% 단축"
+                        android:textSize="12dp"
+                        android:textColor="@color/colorBlue"
+                        android:textStyle="bold"/>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/text_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="예상 7일 | 완료 5일"
+                        android:textSize="12dp"
+                        android:textColor="@color/colorPrimaryDark"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/report"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:elevation="3dp"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="15dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="명장 리포트"
+                        android:textSize="12dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/text_report"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="한결 같이 모시겠습니다. 명장 중에 명장 김엠제이 입니 다. 세개의 요청사항 모두 완료했으며, 지퍼는 완전히 훼 손된 상태로 입고 되어 프랑스제 블랑드르로 교체 완료 했습니다. 사용하심에 있어 파라핀으로 먼저 문질문질  "
+                        android:textSize="12dp"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <TextView
                 android:id="@+id/description1"
                 android:layout_width="match_parent"

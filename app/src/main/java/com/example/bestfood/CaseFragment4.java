@@ -233,8 +233,7 @@ public class CaseFragment4 extends Fragment {
     private void setView(){
         String nameText = repairerItem.name + " 명장";
         name.setText(nameText);
-        int dotCount = caseItem.dot.split("/ ").length - 1;
-        String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + dotCount + " 건";
+        String infoText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + caseItem.dotCount + " 건";
         info.setText(infoText);
         String titleText = "완료 " + repairerItem.caseCount + " | 평점 " + repairerItem.score + " | " + repairerItem.product + " 분야";
         title.setText(titleText);

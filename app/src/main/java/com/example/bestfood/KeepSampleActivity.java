@@ -107,9 +107,9 @@ public class KeepSampleActivity extends AppCompatActivity {
                     sampleListAdapter.addItemList(list);
 
                     if (sampleListAdapter.getItemCount() == 0) {
-                        noDataText.setVisibility(View.VISIBLE);
+                        //noDataText.setVisibility(View.VISIBLE);
                     } else {
-                        noDataText.setVisibility(View.GONE);
+                        //noDataText.setVisibility(View.GONE);
                     }
                 }
             }
