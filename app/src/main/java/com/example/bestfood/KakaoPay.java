@@ -75,6 +75,11 @@ public class KakaoPay {
         });
     }
 
+    public String getToken(URL url) throws IOException {
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        return urlConnection.getURL().getHost();
+    }
+
     public InputStream openConnectionCheckRedirects(URLConnection c) throws IOException {
         boolean redir;
         int redirects = 0;
@@ -116,7 +121,7 @@ public class KakaoPay {
         is.close();
     }
 
-    public void kakaoPayApprove(String tid, String pg_token) throws IOException {
+    public void kakaoPayApprove(final KakaoPayApproveVO kakaoPayApproveVO, String tid, String pg_token) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded;charset=utf-8");
@@ -140,8 +145,25 @@ public class KakaoPay {
             }
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                final String responseData = response.body().string();
-                Log.d("Success Approve", "ResponseData: " + responseData);
+                if (response.isSuccessful()) {
+                    String responseData = response.body().string();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        Log.d("Success check", responseData);
+                        kakaoPayApproveVO.setTid(jsonObject.getString("tid"));
+                        kakaoPayApproveVO.setPayment_method_type(jsonObject.getString("payment_method_type"));
+                        kakaoPayApproveVO.setItem_name(jsonObject.getString("item_name"));
+                        kakaoPayApproveVO.setApproved_at(jsonObject.getString("approved_at"));
+                        kakaoPayApproveVO.setTotal(jsonObject.getJSONObject("amount").getString("total"));
+                        if (jsonObject.getString("payment_method_type") == "CARD") {
+                            kakaoPayApproveVO.setPurchase_corp(jsonObject.getJSONObject("card_info").getString("purchase_corp"));
+                            kakaoPayApproveVO.setInstall_month(jsonObject.getJSONObject("card_info").getString("install_month"));
+                            kakaoPayApproveVO.setInterest_free_install(jsonObject.getJSONObject("card_info").getString("interest_free_install"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
     }
