@@ -54,7 +54,7 @@ public class KakaoPayApproveVO {
     public String getPayment_method_type() {
         return payment_method_type;
     }
-    public AmountVO getAmount() {
+    public JSONObject getAmount() {
         return amount;
     }
     public String getTotal() {
