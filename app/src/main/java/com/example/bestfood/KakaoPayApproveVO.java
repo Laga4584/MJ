@@ -1,12 +1,13 @@
 package com.example.bestfood;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class KakaoPayApproveVO {
     private String aid, tid, cid, sid;
     private String partner_order_id, partner_user_id;
     private String payment_method_type;
-    private AmountVO amount;
+    private JSONObject amount;
     private String total;
     private JSONArray card_info;
     private String purchase_corp;
@@ -21,7 +22,7 @@ public class KakaoPayApproveVO {
     public void setPayment_method_type(String payment_method_type) {
         this.payment_method_type = payment_method_type;
     }
-    public void setAmount(AmountVO amount) {
+    public void setAmount(JSONObject amount) {
         this.amount = amount;
     }
     public void setTotal(String total) {
