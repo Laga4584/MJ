@@ -154,12 +154,14 @@ public class KakaoPay {
                         kakaoPayApproveVO.setPayment_method_type(jsonObject.getString("payment_method_type"));
                         kakaoPayApproveVO.setItem_name(jsonObject.getString("item_name"));
                         kakaoPayApproveVO.setApproved_at(jsonObject.getString("approved_at"));
-                        kakaoPayApproveVO.setTotal(jsonObject.getJSONObject("amount").getString("total"));
-                        if (jsonObject.getString("payment_method_type") == "CARD") {
-                            kakaoPayApproveVO.setPurchase_corp(jsonObject.getJSONObject("card_info").getString("purchase_corp"));
-                            kakaoPayApproveVO.setInstall_month(jsonObject.getJSONObject("card_info").getString("install_month"));
-                            kakaoPayApproveVO.setInterest_free_install(jsonObject.getJSONObject("card_info").getString("interest_free_install"));
-                        }
+                        JSONObject amountObject = jsonObject.getJSONObject("amount");
+                        kakaoPayApproveVO.setTotal(amountObject.getInt("total"));
+                        kakaoPayApproveVO.setVat(amountObject.getInt("vat"));
+                        JSONObject cardObject = jsonObject.getJSONObject("card_info");
+                        kakaoPayApproveVO.setPurchase_corp(cardObject.getString("purchase_corp"));
+                        kakaoPayApproveVO.setCard_type(cardObject.getString("card_type"));
+                        kakaoPayApproveVO.setInstall_month(cardObject.getString("install_month"));
+                        kakaoPayApproveVO.setInterest_free_install(cardObject.getString("interest_free_install"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

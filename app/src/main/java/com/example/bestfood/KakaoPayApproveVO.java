@@ -7,10 +7,10 @@ public class KakaoPayApproveVO {
     private String aid, tid, cid, sid;
     private String partner_order_id, partner_user_id;
     private String payment_method_type;
-    private JSONObject amount;
-    private String total;
-    private JSONArray card_info;
+    private int total;
+    private int vat;
     private String purchase_corp;
+    private String card_type;
     private String install_month;
     private String interest_free_install;
     private String item_name, item_code, quantity;
@@ -22,17 +22,17 @@ public class KakaoPayApproveVO {
     public void setPayment_method_type(String payment_method_type) {
         this.payment_method_type = payment_method_type;
     }
-    public void setAmount(JSONObject amount) {
-        this.amount = amount;
-    }
-    public void setTotal(String total) {
+    public void setTotal(int total) {
         this.total = total;
     }
-    public void setCard_info(JSONArray card_info) {
-        this.card_info = card_info;
+    public void setVat(int vat) {
+        this.vat = vat;
     }
     public void setPurchase_corp(String purchase_corp) {
         this.purchase_corp = purchase_corp;
+    }
+    public void setCard_type(String card_type) {
+        this.card_type = card_type;
     }
     public void setInstall_month(String install_month) {
         this.install_month = install_month;
@@ -54,17 +54,17 @@ public class KakaoPayApproveVO {
     public String getPayment_method_type() {
         return payment_method_type;
     }
-    public JSONObject getAmount() {
-        return amount;
-    }
-    public String getTotal() {
+    public int getTotal() {
         return total;
     }
-    public JSONArray getCard_info() {
-        return card_info;
+    public int getVat() {
+        return vat;
     }
     public String getPurchase_corp() {
         return purchase_corp;
+    }
+    public String getCard_type() {
+        return card_type;
     }
     public String getInstall_month() {
         return install_month;
@@ -85,10 +85,10 @@ public class KakaoPayApproveVO {
         return "KakaoPayApproveVO {" +
                 "tid='" + tid + '\'' +
                 ", payment_method_type='" + payment_method_type + '\'' +
-                ", amount='" + amount + '\'' +
-                ", total='" + total + '\'' +
-                ", card_info='" + card_info + '\'' +
+                ", total=" + total +
+                ", vat=" + vat +
                 ", purchase_corp='" + purchase_corp + '\'' +
+                ", card_type='" + card_type + '\'' +
                 ", install_month='" + install_month + '\'' +
                 ", interest_free_install='" + interest_free_install + '\'' +
                 ", item_name='" + item_name + '\'' +
