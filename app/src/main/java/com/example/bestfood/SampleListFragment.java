@@ -8,12 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -48,15 +46,14 @@ public class SampleListFragment extends Fragment {
 
     RecyclerView sampleList;
     TextView noDataText;
-    EditText search;
-    ImageButton filter;
+    EditText searchEdit;
+    ImageButton filterButton;
 
     SampleListAdapter sampleListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
     int listTypeValue = 2;
-    String orderType;
 
 
     /**
@@ -94,15 +91,15 @@ public class SampleListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.nav_list);
-        search = view.findViewById(R.id.search);
-        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+        searchEdit = view.findViewById(R.id.edit_search);
+        searchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (EditorInfo.IME_ACTION_SEARCH == i) {
                     InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(textView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    query = search.getText().toString();
+                    query = searchEdit.getText().toString();
                     sampleListAdapter.clearItemList();
                     mode = 0;
                     listInfo(0, query, 0);
@@ -113,8 +110,8 @@ public class SampleListFragment extends Fragment {
             }
         });
 
-        filter = view.findViewById(R.id.filter_button);
-        filter.setOnClickListener(new View.OnClickListener() {
+        filterButton = view.findViewById(R.id.button_filter);
+        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, FilterActivity.class);
@@ -123,14 +120,9 @@ public class SampleListFragment extends Fragment {
             }
         });
 
-        sampleList = view.findViewById(R.id.list);
-        noDataText = view.findViewById(R.id.no_data);
+        sampleList = view.findViewById(R.id.list_sample);
+        noDataText = view.findViewById(R.id.text_no_data);
 
-        /*
-        DisplayMetrics metrics = ((App) this.getActivity().getApplication()).getMetrics();
-        sampleList.setPadding(metrics.widthPixels/18, metrics.heightPixels*25/760, metrics.widthPixels/18, metrics.heightPixels*25/760);
-
-         */
         setRecyclerView();
         listInfo(mode, query, 0);
     }

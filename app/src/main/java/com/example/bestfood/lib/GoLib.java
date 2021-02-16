@@ -7,8 +7,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.bestfood.CaseActivity;
 import com.example.bestfood.ChatActivity;
-import com.example.bestfood.ImageActivity;
-import com.example.bestfood.ProfileActivity_bak;
 import com.example.bestfood.RepairerActivity;
 import com.example.bestfood.SampleActivity;
 
@@ -65,15 +63,6 @@ public class GoLib {
         fragmentManager.popBackStack();
     }
 
-    /**
-     * 프로파일 액티비티를 실행한다.
-     * @param context 컨텍스트
-     */
-    public void goProfileActivity(Context context) {
-        Intent intent = new Intent(context, ProfileActivity_bak.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
 
     public void goRepairerActivity(Context context, int infoSeq) {
         Intent intent = new Intent(context, RepairerActivity.class);
@@ -93,11 +82,6 @@ public class GoLib {
         context.startActivity(intent);
     }
 
-    public void goImageActivity(Context context, int infoSeq) {
-        Intent intent = new Intent(context, ImageActivity.class);
-        intent.putExtra(ImageActivity.INFO_SEQ, infoSeq);
-        context.startActivity(intent);
-    }
 
     public void goSampleActivity(Context context, int infoSeq) {
         MyLog.d(TAG, "here intent");

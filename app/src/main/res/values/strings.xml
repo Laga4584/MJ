@@ -58,35 +58,6 @@
     <string name="albumn">앨범</string>
     <string name="camera">카메라</string>
 
-    <!-- 맛집 등록 -->
-    <string name="bestfood_register">상품 등록</string>
-    <string name="input_bestfood_name">상품 이름을 입력해주세요</string>
-    <string name="input_bestfood_address">주소를 입력해주세요</string>
-    <string name="input_bestfood_tel">전화번호를 입력해주세요</string>
-    <string name="input_bestfood_description">설명을 입력해주세요</string>
-    <string name="input_bestfood_image_memo">이미지 설명을 입력해주세요</string>
-    <string name="input_text_length">글자수 :</string>
-    <string name="input_text_max_length">/500</string>
-    <string name="not_valid_tel_number">잘못된 번호입니다.</string>
-
-    <!-- 맛집 이미지 등록 화면 -->
-    <string name="title_bestfood_image_register">이미지 등록</string>
-    <string name="no_image_ready">이미지를 준비중입니다. 잠시 후에 다시 시도해주세요</string>
-    <string name="no_image_selected">이미지를 먼저 선택해주세요</string>
-
-    <!-- 맛집 리스트 화면 -->
-    <string name="order_meter">옵션1</string>
-    <string name="order_favorite">옵션2</string>
-    <string name="order_recent">옵션3</string>
-
-    <!-- 지도 리스트 화면 -->
-    <string name="list_open">목록보기</string>
-    <string name="list_close">목록닫기</string>
-    <string name="no_list">현재 위치에는 조회할 데이터가 없습니다.</string>
-    <string name="message_zoom_level_max_over">지도를 좀 더 확대해야 배너가 보입니다.</string>
-    <string name="unit_m">m</string>
-    <string name="unit_km">Km</string>
-
     <!-- 정보 화면 -->
     <string name="description">상세설명</string>
     <string name="map">지도</string>

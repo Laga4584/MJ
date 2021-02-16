@@ -1,6 +1,5 @@
 package com.example.bestfood;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -18,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton repairerButton;
     ImageButton sampleButton;
     ImageButton noticeButton;
-    ImageButton profileButton;
+    ImageButton mypageButton;
 
     RepairerListFragment fragment1;
     SampleListFragment fragment2;
@@ -40,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        repairerButton = findViewById(R.id.repairer_button);
-        sampleButton = findViewById(R.id.sample_button);
-        noticeButton = findViewById(R.id.notice_button);
-        profileButton = findViewById(R.id.profile_button);
+        repairerButton = findViewById(R.id.button_repairer);
+        sampleButton = findViewById(R.id.button_sample);
+        noticeButton = findViewById(R.id.button_notice);
+        mypageButton = findViewById(R.id.button_mypage);
 
         fragment1 = new RepairerListFragment();
         fragment2 = new SampleListFragment();
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 repairerButton.getDrawable().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
                 sampleButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
                 noticeButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
-                profileButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
+                mypageButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
             }
         });
         sampleButton.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 repairerButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
                 sampleButton.getDrawable().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
                 noticeButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
-                profileButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
+                mypageButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
             }
         });
         noticeButton.setOnClickListener(new View.OnClickListener() {
@@ -80,17 +79,17 @@ public class MainActivity extends AppCompatActivity {
                 repairerButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
                 sampleButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
                 noticeButton.getDrawable().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
-                profileButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
+                mypageButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
             }
         });
-        profileButton.setOnClickListener(new View.OnClickListener() {
+        mypageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment4).commit();
                 repairerButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
                 sampleButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
                 noticeButton.getDrawable().setColorFilter(colorPrimary, PorterDuff.Mode.SRC_ATOP);
-                profileButton.getDrawable().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
+                mypageButton.getDrawable().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
             }
         });
 
@@ -103,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
     public void startCase() {
         Intent intent = new Intent(MainActivity.this, CaseListActivity.class);
         startActivity(intent);
-
-        //finish();
     }
 
 }

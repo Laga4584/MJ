@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:text="알림"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/text_size_medium2"
+                android:textSize="15dp"
                 android:textStyle="bold" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list"

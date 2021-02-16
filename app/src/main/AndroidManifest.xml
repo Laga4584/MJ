@@ -63,16 +63,13 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".CaseActivity"/>
-        <activity android:name=".ImageActivity"/>
         <activity android:name=".SampleActivity"/>
         <activity android:name=".AddressActivity"/>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ProfileIconActivity" />
         <activity android:name=".ChatActivity"/>
-        <activity android:name=".DetailActivity"/>
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".CaseListActivity"/>
-        <activity android:name=".NoticeActivity"/>
         <activity android:name=".RepairerActivity"/>
         <activity android:name=".ProfileEditActivity" />
         <activity android:name=".DialogActivity"

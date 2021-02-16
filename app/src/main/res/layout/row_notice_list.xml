@@ -29,7 +29,7 @@
                 android:gravity="start"
                 android:text="name"
                 android:textColor="@color/text_color_black"
-                android:textSize="@dimen/text_size_small2"
+                android:textSize="12dp"
                 android:textStyle="bold" />
 
 
@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:text="description"
                 android:textColor="@color/text_color_gray"
-                android:textSize="@dimen/text_size_small2" />
+                android:textSize="12dp" />
 
         </LinearLayout>
 

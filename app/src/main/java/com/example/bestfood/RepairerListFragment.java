@@ -8,12 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -24,11 +22,8 @@ import com.example.bestfood.adapter.RepairerListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
 import com.example.bestfood.item.RepairerItem;
 import com.example.bestfood.lib.MyLog;
-import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -39,7 +34,7 @@ import retrofit2.Response;
 /**
  * 명장 정보 리스트를 보여주는 프래그먼트
  */
-public class RepairerListFragment extends Fragment implements View.OnClickListener {
+public class RepairerListFragment extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
 
     Context context;
@@ -50,14 +45,13 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
 
     RecyclerView repairerList;
     TextView noDataText;
-    EditText search;
-    ImageButton filter;
+    EditText searchEdit;
+    ImageButton filterButton;
     RepairerListAdapter repairerListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
     int listTypeValue = 3;
-    String orderType;
 
     /**
      * BestFoodListFragment 인스턴스를 생성한다.
@@ -95,16 +89,15 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.nav_list);
 
-        search = view.findViewById(R.id.search);
-        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        searchEdit = view.findViewById(R.id.edit_search);
+        searchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (EditorInfo.IME_ACTION_SEARCH == i) {
                     InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(textView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    query = search.getText().toString();
+                    query = searchEdit.getText().toString();
                     repairerListAdapter.clearItemList();
                     mode = 0;
                     listInfo(mode, query, 0);
@@ -116,8 +109,8 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
             }
         });
 
-        filter = view.findViewById(R.id.filter_button);
-        filter.setOnClickListener(new View.OnClickListener() {
+        filterButton = view.findViewById(R.id.button_filter);
+        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, FilterActivity.class);
@@ -127,18 +120,9 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
         });
 
 
-        repairerList = (RecyclerView) view.findViewById(R.id.list);
-        //noDataText = (TextView) view.findViewById(R.id.no_data);
+        repairerList = (RecyclerView) view.findViewById(R.id.list_repairer);
+        noDataText = (TextView) view.findViewById(R.id.text_no_data);
 
-        /*
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        ViewGroup.LayoutParams params = repairerList.getLayoutParams();
-        repairerList.setPadding(metrics.widthPixels/18, metrics.heightPixels*25/760, metrics.widthPixels/18, metrics.heightPixels*25/760);
-        repairerList.setLayoutParams(params);
-
-         */
         setRecyclerView();
         listInfo(mode, query, 0);
     }
@@ -207,9 +191,9 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
                     repairerListAdapter.addItemList(list);
 
                     if (repairerListAdapter.getItemCount() == 0) {
-                        //noDataText.setVisibility(View.VISIBLE);
+                        noDataText.setVisibility(View.VISIBLE);
                     } else {
-                        //noDataText.setVisibility(View.GONE);
+                        noDataText.setVisibility(View.GONE);
                     }
                 }
             }
@@ -220,36 +204,5 @@ public class RepairerListFragment extends Fragment implements View.OnClickListen
                 MyLog.d(TAG, t.toString());
             }
         });
-    }
-
-    /**
-     * 각종 버튼에 대한 클릭 처리를 정의한다.
-     * @param v 클릭한 뷰에 대한 정보
-     */
-    @Override
-    public void onClick(View v) {
-        /*
-            if (v.getId() == R.id.order_meter) {
-                orderType = Constant.ORDER_TYPE_METER;
-
-                setOrderTextColor(R.color.text_color_green,
-                        R.color.text_color_black, R.color.text_color_black);
-
-            } else if (v.getId() == R.id.order_favorite) {
-                orderType = Constant.ORDER_TYPE_FAVORITE;
-
-                setOrderTextColor(R.color.text_color_black,
-                        R.color.text_color_green, R.color.text_color_black);
-
-            } else if (v.getId() == R.id.order_recent) {
-                orderType = Constant.ORDER_TYPE_RECENT;
-
-                setOrderTextColor(R.color.text_color_black,
-                        R.color.text_color_black, R.color.text_color_green);
-            }
-
-            setRecyclerView();
-            listInfo(userSeq, GeoItem.getKnownLocation(), orderType, 0);
-*/
     }
 }

@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="김엠제이"
-            android:textSize="@dimen/text_size_large"
+            android:textSize="18dp"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:layout_marginVertical="10dp"/>
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="완료 "
-                android:textSize="@dimen/text_size_small"
+                android:textSize="10dp"
                 android:textColor="@color/colorDarkGray"/>
             <TextView
                 android:id="@+id/case_count_content"
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="43"
-                android:textSize="@dimen/text_size_small"
+                android:textSize="10dp"
                 android:textColor="@color/colorDarkGray" />
             <TextView
                 android:id="@+id/score"
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text=" | 평점 "
-                android:textSize="@dimen/text_size_small"
+                android:textSize="10dp"
                 android:textColor="@color/colorDarkGray" />
             <TextView
                 android:id="@+id/score_content"
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="4.2"
-                android:textSize="@dimen/text_size_small"
+                android:textSize="10dp"
                 android:textColor="@color/colorDarkGray" />
             <TextView
                 android:id="@+id/reply_period"
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text=" | 견적 응답 "
-                android:textSize="@dimen/text_size_small"
+                android:textSize="10dp"
                 android:textColor="@color/colorDarkGray" />
             <TextView
                 android:id="@+id/reply_period_content"
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="1일"
-                android:textSize="@dimen/text_size_small"
+                android:textSize="10dp"
                 android:textColor="@color/colorDarkGray" />
         </LinearLayout>
         <android.widget.Button
@@ -157,7 +157,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:text="명장 정보"
-                            android:textSize="@dimen/text_size_medium2"
+                            android:textSize="15dp"
                             android:textColor="@color/colorPrimaryDark"
                             android:textStyle="bold"/>
                         <TextView
@@ -165,7 +165,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="7dp"
                             android:text="전문 분야"
-                            android:textSize="@dimen/text_size_small2"
+                            android:textSize="12dp"
                             android:textColor="@color/colorPrimaryDark"
                             android:textStyle="bold"/>
                         <TextView
@@ -174,14 +174,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="7dp"
                             android:text="핸드백, 지갑"
-                            android:textSize="@dimen/text_size_small2"
+                            android:textSize="12dp"
                             android:textColor="@color/colorPrimaryDark" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="7dp"
                             android:text="명장 소개"
-                            android:textSize="@dimen/text_size_small2"
+                            android:textSize="12dp"
                             android:textColor="@color/colorPrimaryDark"
                             android:textStyle="bold"/>
                         <TextView
@@ -189,7 +189,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="계롱산에서 가방 10년, 금강산에서 하이힐 20년을 수련하고 20년 전부터 성수동을 접수한 가방의 달인 37세 김엠제이입니다 :)"
-                            android:textSize="@dimen/text_size_small2"
+                            android:textSize="12dp"
                             android:textColor="@color/colorPrimaryDark" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -209,7 +209,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:text="리뷰 블럭"
-                            android:textSize="@dimen/text_size_medium2"
+                            android:textSize="15dp"
                             android:textColor="@color/colorPrimaryDark"
                             android:textStyle="bold"/>
                         <LinearLayout
@@ -268,7 +268,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:text="최근 댓글"
-                            android:textSize="@dimen/text_size_medium2"
+                            android:textSize="15dp"
                             android:textColor="@color/colorPrimaryDark"
                             android:textStyle="bold"/>
                         <TextView
@@ -276,7 +276,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="좋아요"
-                            android:textSize="@dimen/text_size_small2"
+                            android:textSize="12dp"
                             android:textColor="@color/colorPrimaryDark" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

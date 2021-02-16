@@ -159,6 +159,7 @@ public class RepairerListAdapter extends RecyclerView.Adapter<RepairerListAdapte
             score = itemView.findViewById(R.id.score_content);
             product = itemView.findViewById(R.id.product_content);
 
+            /*
             DisplayMetrics metrics = new DisplayMetrics();
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             windowManager.getDefaultDisplay().getMetrics(metrics);
@@ -166,6 +167,8 @@ public class RepairerListAdapter extends RecyclerView.Adapter<RepairerListAdapte
             params.width = metrics.widthPixels/4;
             params.height = metrics.widthPixels/4;
             image.setLayoutParams(params);
+
+             */
         }
     }
 }
