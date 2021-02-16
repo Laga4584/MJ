@@ -109,12 +109,14 @@ public class RepairerListAdapter extends RecyclerView.Adapter<RepairerListAdapte
         final RepairerItem item = itemList.get(position);
         MyLog.d(TAG, "getView " + item);
 
-        holder.name.setText(item.name);
-        holder.caseCount.setText(item.caseCount);
-        holder.score.setText(Float.toString(item.score));
-        holder.product.setText(item.product);
+        String nameString = item.name + " 명장";
+        holder.nameText.setText(nameString);
+        String infoString = "완료 " + item.caseCount + " | 평점" + item.score;
+        holder.infoText.setText(infoString);
+        String productString = item.product + " 분야";
+        holder.productText.setText(productString);
 
-        setImage(holder.image, item.profileImgFilename);
+        setImage(holder.profileIcon, item.profileImgFilename);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,20 +146,18 @@ public class RepairerListAdapter extends RecyclerView.Adapter<RepairerListAdapte
      * 아이템을 보여주기 위한 뷰홀더 클래스
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;
-        TextView name;
-        TextView caseCount;
-        TextView score;
-        TextView product;
+        ImageView profileIcon;
+        TextView nameText;
+        TextView infoText;
+        TextView productText;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            image = itemView.findViewById(R.id.profile_image);
-            name = itemView.findViewById(R.id.name_content);
-            caseCount = itemView.findViewById(R.id.case_count_content);
-            score = itemView.findViewById(R.id.score_content);
-            product = itemView.findViewById(R.id.product_content);
+            profileIcon = itemView.findViewById(R.id.icon_profile);
+            nameText = itemView.findViewById(R.id.text_name);
+            infoText = itemView.findViewById(R.id.text_info);
+            productText = itemView.findViewById(R.id.text_product);
 
             /*
             DisplayMetrics metrics = new DisplayMetrics();
