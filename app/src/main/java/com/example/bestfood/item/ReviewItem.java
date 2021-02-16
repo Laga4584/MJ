@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * 명장 정보를 저장하는 객체
  */
-public class RepairerItem {
+public class ReviewItem {
     public int seq;
     public String email;
     public String password;
@@ -29,7 +29,7 @@ public class RepairerItem {
 
     @Override
     public String toString() {
-        return "RepairerItem{" +
+        return "ReviewItem{" +
                 "seq=" + seq +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

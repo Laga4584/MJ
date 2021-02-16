@@ -6,6 +6,7 @@ import com.example.bestfood.item.CheckItem;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.item.NoticeItem;
 import com.example.bestfood.item.RepairerItem;
+import com.example.bestfood.item.ReviewItem;
 import com.example.bestfood.item.UserItem;
 import com.example.bestfood.item.SampleItem;
 
@@ -46,6 +47,9 @@ public interface RemoteService {
 
     @GET("/repairer/list")
     Call<ArrayList<RepairerItem>> listRepairerInfo(@Query("mode") int mode, @Query("query") String query, @Query("current_page") int currentPage);
+
+    @GET("/repairer/review")
+    Call<ArrayList<ReviewItem>> listRepairerReview(@Query("repairer_seq") int repairerSeq);
 
     //샘플
     @GET("/sample/info/{seq}")

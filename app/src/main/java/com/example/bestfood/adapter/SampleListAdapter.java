@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bestfood.App;
 import com.example.bestfood.R;
 import com.example.bestfood.item.SampleItem;
-import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.StringLib;
@@ -29,7 +27,6 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
     private Context context;
     private int resource;
     private ArrayList<SampleItem> itemList;
-    private UserItem userItem;
 
     /**
      * 어댑터 생성자
@@ -41,8 +38,6 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
         this.context = context;
         this.resource = resource;
         this.itemList = itemList;
-
-        userItem = ((App) context.getApplicationContext()).getUserItem();
     }
 
     /**
@@ -106,9 +101,10 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
         final SampleItem item = itemList.get(position);
         MyLog.d(TAG, "getView " + item);
 
-        holder.name.setText(item.product);
-        setImage(holder.image, item.imageFilename, 0);
-        setImage(holder.profile, item.repairerImageFilename, 1);
+        String titleString = item.brand + " " + item.product + " " + item.service + " 외 " + item.dotCount + "건";
+        holder.titleText.setText(titleString);
+        setImage(holder.itemImage, item.imageFilename, 0);
+        setImage(holder.profileIcon, item.repairerImageFilename, 1);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,16 +133,16 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.Vi
      * 아이템을 보여주기 위한 뷰홀더 클래스
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;
-        TextView name;
-        ImageView profile;
+        ImageView itemImage;
+        TextView titleText;
+        ImageView profileIcon;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            image = itemView.findViewById(R.id.image);
-            name = itemView.findViewById(R.id.name);
-            profile = itemView.findViewById(R.id.profile_icon);
+            itemImage = itemView.findViewById(R.id.image_item);
+            titleText = itemView.findViewById(R.id.text_title);
+            profileIcon = itemView.findViewById(R.id.icon_profile);
         }
     }
 }

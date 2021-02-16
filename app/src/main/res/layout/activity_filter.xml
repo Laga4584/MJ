@@ -8,29 +8,29 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="end"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/button_refresh"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/ic_refresh"/>
+        <ImageButton
+            android:id="@+id/button_select"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/ic_selectoption"/>
+    </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    android:gravity="end"
-    android:layout_marginBottom="10dp"
-    android:orientation="horizontal">
-    <ImageButton
-        android:id="@+id/button_refresh"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/ic_refresh"/>
-    <ImageButton
-        android:id="@+id/button_select"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/ic_selectoption"/>
-</LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="550dp"
+    android:layout_height="580dp"
     android:layout_gravity="bottom"
     android:paddingHorizontal="30dp"
     android:background="@drawable/bg_bottom_sheet_dialog_white"
@@ -71,7 +71,7 @@
             android:layout_marginEnd="10dp"
             android:paddingHorizontal="7dp"
             android:paddingVertical="6dp"
-            android:text="견적오차율"
+            android:text="평점"
             android:textSize="12dp"
             android:textColor="@color/colorTextGray"
             android:background="@drawable/tag_background_selector"
@@ -83,7 +83,7 @@
             android:layout_marginEnd="10dp"
             android:paddingHorizontal="7dp"
             android:paddingVertical="6dp"
-            android:text="평점"
+            android:text="인기도"
             android:textSize="12dp"
             android:textColor="@color/colorTextGray"
             android:background="@drawable/tag_background_selector"
@@ -95,11 +95,17 @@
             android:layout_marginEnd="10dp"
             android:paddingHorizontal="7dp"
             android:paddingVertical="6dp"
-            android:text="인기도"
+            android:text="완료건수"
             android:textSize="12dp"
             android:textColor="@color/colorTextGray"
             android:background="@drawable/tag_background_selector"
             android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
         <TextView
             android:id="@+id/tag1_4"
             android:layout_width="wrap_content"
@@ -107,7 +113,31 @@
             android:layout_marginEnd="10dp"
             android:paddingHorizontal="7dp"
             android:paddingVertical="6dp"
-            android:text="완료건수"
+            android:text="견적오차율"
+            android:textSize="12dp"
+            android:textColor="@color/colorTextGray"
+            android:background="@drawable/tag_background_selector"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tag1_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="6dp"
+            android:text="가격오차율"
+            android:textSize="12dp"
+            android:textColor="@color/colorTextGray"
+            android:background="@drawable/tag_background_selector"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tag1_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="6dp"
+            android:text="기간오차율"
             android:textSize="12dp"
             android:textColor="@color/colorTextGray"
             android:background="@drawable/tag_background_selector"

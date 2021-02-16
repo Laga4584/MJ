@@ -52,5 +52,5 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginHorizontal="20dp"
-        android:paddingBottom="55dp"/>
+        android:paddingBottom="65dp"/>
 </LinearLayout>

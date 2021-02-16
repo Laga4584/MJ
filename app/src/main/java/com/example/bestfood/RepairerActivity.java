@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.bestfood.adapter.SampleListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
 import com.example.bestfood.item.RepairerItem;
+import com.example.bestfood.item.ReviewItem;
 import com.example.bestfood.item.SampleItem;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
@@ -24,7 +25,6 @@ import com.example.bestfood.remote.ServiceGenerator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,23 +38,19 @@ public class RepairerActivity extends AppCompatActivity {
     RepairerItem infoItem;
 
     RecyclerView sampleList;
-    SampleListAdapter infoListAdapter;
+    SampleListAdapter sampleListAdapter;
     StaggeredGridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
     int listTypeValue = 1;
-    String orderType;
 
-    ImageView profileImage;
-    TextView name;
-    TextView caseCount;
-    TextView score;
-    TextView replyPeriod;
-    TextView service;
-    TextView description;
-    TextView tag1, tag2, tag3, tag4;
-    TextView review;
+    ImageButton backButton, keepButton;
+    ImageView profileIcon;
+    TextView nameText, infoText;
     Button requestButton;
-    ImageButton backButton;
+    TextView serviceText, descriptionText;
+    TextView tag1, tag2, tag3, tag4;
+    TextView reviewNameText, reviewText;
+    ImageView reviewProfileIcon;
 
     String[] tag1_list = {"그때 그때 바로 연락주세요!", "불편하지 않을 정도였어요.", "연락이 안되서 답답했어요"};
     String[] tag2_list = {"훌륭해요 제 마음에 쏙 들어요!", "전체적으로 만족스러워요", "실망스러워요"};
@@ -100,39 +96,54 @@ public class RepairerActivity extends AppCompatActivity {
     }
 
     private void setView(){
-        orderType = Constant.ORDER_TYPE_METER;
-        sampleList = findViewById(R.id.list);
+        sampleList = findViewById(R.id.list_sample);
         setRecyclerView();
         listInfo(repairerInfoSeq, 0);
-        
-        profileImage = findViewById(R.id.profile_icon);
-        name = findViewById(R.id.name);
-        caseCount = findViewById(R.id.case_count_content);
-        score = findViewById(R.id.score_content);
-        replyPeriod = findViewById(R.id.reply_period_content);
-        requestButton = findViewById(R.id.button);
-        service = findViewById(R.id.service);
-        description = findViewById(R.id.description);
+
+        backButton = findViewById(R.id.button_back);
+        keepButton = findViewById(R.id.button_keep);
+        profileIcon = findViewById(R.id.icon_profile);
+        nameText = findViewById(R.id.text_name);
+        infoText = findViewById(R.id.text_info);
+        requestButton = findViewById(R.id.button_request);
+        serviceText = findViewById(R.id.text_service);
+        descriptionText = findViewById(R.id.text_description);
         tag1 = findViewById(R.id.tag1);
         tag2 = findViewById(R.id.tag2);
         tag3 = findViewById(R.id.tag3);
         tag4 = findViewById(R.id.tag4);
-        review = findViewById(R.id.review);
-        backButton = findViewById(R.id.back_button);
+        reviewProfileIcon = findViewById(R.id.icon_review_profile);
+        reviewNameText = findViewById(R.id.text_review_name);
+        reviewText = findViewById(R.id.text_review);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+        keepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(keepButton.isSelected()) keepButton.setSelected(false);
+                else keepButton.setSelected(true);
+            }
+        });
 
-        setImage(profileImage, infoItem.profileImgFilename);
-        name.setText(infoItem.name);
-        caseCount.setText(infoItem.caseCount);
-        score.setText(Float.toString(infoItem.score));
-        replyPeriod.setText(infoItem.replyPeriod);
-        service.setText(infoItem.product + ", " + infoItem.service);
-        description.setText(infoItem.description);
+        setImage(profileIcon, infoItem.profileImgFilename);
+        nameText.setText(infoItem.name);
+        String infoString = "완료 " + infoItem.caseCount + " | 평점 " + infoItem.score + " | 견적 응답 " + infoItem.replyPeriod + "일";
+        infoText.setText(infoString);
+        requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GoLib.getInstance().goCaseActivity(context, 0);
+            }
+        });
+
+        String serviceString = infoItem.product + " / " + infoItem.service;
+        serviceText.setText(serviceString);
+        descriptionText.setText(infoItem.description);
         /*
         String[] tags = infoItem.tag.split(", ");
         tag1.setText(tag1_list[Integer.parseInt(tags[0])]);
@@ -144,18 +155,12 @@ public class RepairerActivity extends AppCompatActivity {
         tag2.setText(tag2_list[Math.round(infoItem.tag2)]);
         tag3.setText(tag3_list[Math.round(infoItem.tag3)]);
         tag4.setText(tag4_list[Math.round(infoItem.tag4)]);
-        review.setText(infoItem.review);
-        requestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GoLib.getInstance().goCaseActivity(context, 0);
-            }
-        });
+        //review.setText(infoItem.review);
     }
 
     private void setImage(ImageView imageView, String fileName) {
         if (StringLib.getInstance().isBlank(fileName)) {
-            Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
+            Picasso.get().load(R.drawable.ic_person).into(imageView);
         } else {
             Picasso.get().load(RemoteService.USER_ICON_URL + fileName).into(imageView);
         }
@@ -178,9 +183,9 @@ public class RepairerActivity extends AppCompatActivity {
     private void setRecyclerView() {
         setLayoutManager(listTypeValue);
 
-        infoListAdapter = new SampleListAdapter(context,
+        sampleListAdapter = new SampleListAdapter(context,
                 R.layout.row_sample_list, new ArrayList<SampleItem>());
-        sampleList.setAdapter(infoListAdapter);
+        sampleList.setAdapter(sampleListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -206,9 +211,9 @@ public class RepairerActivity extends AppCompatActivity {
                 ArrayList<SampleItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
-                    infoListAdapter.addItemList(list);
+                    sampleListAdapter.addItemList(list);
 
-                    if (infoListAdapter.getItemCount() == 0) {
+                    if (sampleListAdapter.getItemCount() == 0) {
                         //noDataText.setVisibility(View.VISIBLE);
                     } else {
                         //noDataText.setVisibility(View.GONE);
@@ -218,6 +223,38 @@ public class RepairerActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ArrayList<SampleItem>> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+                MyLog.d(TAG, t.toString());
+            }
+        });
+    }
+
+    /**
+     * 서버에서 리뷰 정보를 조회한다.
+     */
+    private void listReview(int repairerSeq) {
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        Call<ArrayList<ReviewItem>> call = remoteService.listRepairerReview(repairerSeq);
+        call.enqueue(new Callback<ArrayList<ReviewItem>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ReviewItem>> call,
+                                   Response<ArrayList<ReviewItem>> response) {
+                ArrayList<ReviewItem> list = response.body();
+
+                if (response.isSuccessful() && list != null) {
+                    //sampleListAdapter.addItemList(list);
+
+                    if (sampleListAdapter.getItemCount() == 0) {
+                        //noDataText.setVisibility(View.VISIBLE);
+                    } else {
+                        //noDataText.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ReviewItem>> call, Throwable t) {
                 MyLog.d(TAG, "no internet connectivity");
                 MyLog.d(TAG, t.toString());
             }

@@ -11,11 +11,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bestfood.App;
 import com.example.bestfood.R;
-import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.RepairerItem;
-import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.StringLib;
@@ -33,7 +30,6 @@ public class RepairerListAdapter extends RecyclerView.Adapter<RepairerListAdapte
     private Context context;
     private int resource;
     private ArrayList<RepairerItem> itemList;
-    private UserItem userItem;
 
     /**
      * 어댑터 생성자
@@ -45,8 +41,6 @@ public class RepairerListAdapter extends RecyclerView.Adapter<RepairerListAdapte
         this.context = context;
         this.resource = resource;
         this.itemList = itemList;
-
-        userItem = ((App) context.getApplicationContext()).getUserItem();
     }
 
     /**
@@ -159,16 +153,6 @@ public class RepairerListAdapter extends RecyclerView.Adapter<RepairerListAdapte
             infoText = itemView.findViewById(R.id.text_info);
             productText = itemView.findViewById(R.id.text_product);
 
-            /*
-            DisplayMetrics metrics = new DisplayMetrics();
-            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            windowManager.getDefaultDisplay().getMetrics(metrics);
-            ViewGroup.LayoutParams params = image.getLayoutParams();
-            params.width = metrics.widthPixels/4;
-            params.height = metrics.widthPixels/4;
-            image.setLayoutParams(params);
-
-             */
         }
     }
 }

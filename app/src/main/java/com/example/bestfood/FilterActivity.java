@@ -1,27 +1,18 @@
 package com.example.bestfood;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.bestfood.adapter.DialogListAdapter;
-import com.example.bestfood.adapter.SliderLayoutManager;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FilterActivity extends Activity {
 
-    Context context;
-    ImageButton select, refresh;
+    ImageButton selectButton, refreshButton;
     int requestCode;
-    TextView tag1_1, tag1_2, tag1_3, tag1_4, tag2_1, tag2_2, tag2_3, tag2_4, tag3_1, tag3_2, tag3_3, tag3_4, tag3_5, tag3_6, tag4_1, tag4_2, tag4_3, tag4_4;
+    TextView tag1_1, tag1_2, tag1_3, tag1_4, tag1_5, tag1_6, tag2_1, tag2_2, tag2_3, tag2_4, tag3_1, tag3_2, tag3_3, tag3_4, tag3_5, tag3_6, tag4_1, tag4_2, tag4_3, tag4_4;
     RadioView radioView1, radioView2, radioView3, radioView4;
 
     @Override
@@ -39,6 +30,8 @@ public class FilterActivity extends Activity {
         tag1_2 = findViewById(R.id.tag1_2);
         tag1_3 = findViewById(R.id.tag1_3);
         tag1_4 = findViewById(R.id.tag1_4);
+        tag1_5 = findViewById(R.id.tag1_5);
+        tag1_6 = findViewById(R.id.tag1_6);
         tag2_1 = findViewById(R.id.tag2_1);
         tag2_2 = findViewById(R.id.tag2_2);
         tag2_3 = findViewById(R.id.tag2_3);
@@ -55,10 +48,12 @@ public class FilterActivity extends Activity {
         tag4_4 = findViewById(R.id.tag4_4);
         viewList1.add(tag1_1);
         viewList1.add(tag1_2);
-        viewList1.add(tag1_3);
 
-        if (requestCode == 200) tag1_4.setVisibility(View.GONE);
-        else viewList1.add(tag1_4);
+        if (requestCode == 200) tag1_3.setVisibility(View.GONE);
+        else viewList1.add(tag1_3);
+        viewList1.add(tag1_4);
+        viewList1.add(tag1_5);
+        viewList1.add(tag1_6);
 
         viewList2.add(tag2_1);
         viewList2.add(tag2_2);
@@ -80,9 +75,9 @@ public class FilterActivity extends Activity {
         radioView3 = new RadioView(viewList3);
         radioView4 = new RadioView(viewList4);
 
-        select = findViewById(R.id.button_select);
-        refresh = findViewById(R.id.button_refresh);
-        select.setOnClickListener(new View.OnClickListener() {
+        selectButton = findViewById(R.id.button_select);
+        refreshButton = findViewById(R.id.button_refresh);
+        selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intentR = new Intent();
@@ -92,7 +87,7 @@ public class FilterActivity extends Activity {
                 finish();
             }
         });
-        refresh.setOnClickListener(new View.OnClickListener() {
+        refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 radioView1.setSelected(-1);
