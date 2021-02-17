@@ -138,4 +138,13 @@ public interface RemoteService {
     @GET("/keep/sample")
     Call<ArrayList<SampleItem>> listSampleKeep(@Query("user_seq") int userSeq, @Query("current_page") int currentPage);
 
+    @GET("/keep/{user_seq}/{item_seq}/{mode}")
+    Call<String> selectKeep(@Path("user_seq") int userSeq, @Path("item_seq") int infoSeq, @Path("mode") int mode);
+
+    @POST("/keep/{user_seq}/{item_seq}/{mode}")
+    Call<String> insertKeep(@Path("user_seq") int userSeq, @Path("item_seq") int infoSeq, @Path("mode") int mode);
+
+    @DELETE("/keep/{user_seq}/{item_seq}/{mode}")
+    Call<String> deleteKeep(@Path("user_seq") int userSeq, @Path("item_seq") int infoSeq, @Path("mode") int mode);
+
 }

@@ -1,6 +1,7 @@
 package com.example.bestfood;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -16,6 +17,7 @@ import com.example.bestfood.item.RepairerItem;
 import com.example.bestfood.item.SampleItem;
 import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.MyLog;
+import com.example.bestfood.lib.RemoteLib;
 import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
@@ -31,13 +33,14 @@ import retrofit2.Response;
 public class SampleActivity extends AppCompatActivity {
     public static final String INFO_SEQ = "INFO_SEQ";
     private final String TAG = this.getClass().getSimpleName();
+    public static final int REQUEST_CODE = 100;
     Context context;
-    int sampleSeq;
+    int sampleSeq, userSeq;
     SampleItem sampleItem;
     RepairerItem repairerItem;
     UserItem userItem;
 
-    ImageButton backButton;
+    ImageButton backButton, keepButton;
     TextView nameText, infoText, titleText, estimateText, resultText, rateText, sequenceText,
             reviewNameText, reviewText, tag1Text, tag2Text, tag3Text, tag4Text;
     ImageView repairerProfileIcon, itemImage, reviewProfileIcon;
@@ -48,6 +51,7 @@ public class SampleActivity extends AppCompatActivity {
     RequestListAdapter requestListAdapter;
     StaggeredGridLayoutManager layoutManager;
     int listTypeValue = 1;
+    boolean keep = false;
     ArrayList<ImageItem> requests = new ArrayList<ImageItem>();
     int imageCount = 0;
     String[] tag1_list = {"그때 그때 바로 연락주세요!", "불편하지 않을 정도였어요.", "연락이 안되서 답답했어요"};
@@ -148,8 +152,9 @@ public class SampleActivity extends AppCompatActivity {
     private void setView(){
 
         backButton = findViewById(R.id.button_back);
+        keepButton = findViewById(R.id.button_keep);
 
-        reviewProfileIcon = findViewById(R.id.icon_repairer_profile);
+        repairerProfileIcon = findViewById(R.id.icon_repairer_profile);
         nameText = findViewById(R.id.text_repairer_name);
         infoText = findViewById(R.id.text_repairer_info);
         titleText = findViewById(R.id.text_title);
@@ -179,6 +184,24 @@ public class SampleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+        keepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (userSeq == 0) {
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    intent.putExtra("requestCode", REQUEST_CODE);
+                    startActivityForResult(intent, REQUEST_CODE);
+                } else {
+                    if (keepButton.isSelected()) {
+                        RemoteLib.getInstance().deleteKeep(userSeq, sampleSeq, 1);
+                        keepButton.setSelected(false);
+                    } else {
+                        RemoteLib.getInstance().insertKeep(userSeq, sampleSeq, 1);
+                        keepButton.setSelected(true);
+                    }
+                }
             }
         });
 
@@ -252,6 +275,18 @@ public class SampleActivity extends AppCompatActivity {
 
         ratingBar = findViewById(R.id.rating_bar);
         ratingBar.setRating(sampleItem.score);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            userSeq = ((App)getApplication()).getUserSeq();
+            if(userSeq!=0) {
+                RemoteLib.getInstance().selectKeepInfo(userSeq, sampleSeq, 0, keepButton);
+            }
+        }
     }
 
     private void setImage(int mode, ImageView imageView, String fileName) {

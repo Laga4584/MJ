@@ -11,17 +11,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <ImageButton
-        android:id="@+id/button_back"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/bg_transparent"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_back"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="25dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="20dp" />
+        android:layout_marginBottom="10dp">
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/bg_transparent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_back"
+            android:layout_marginStart="20dp" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <ImageButton
+            android:id="@+id/button_keep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selector_heart_sample"
+            android:background="@drawable/bg_transparent"
+            android:layout_marginEnd="20dp" />
+    </LinearLayout>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

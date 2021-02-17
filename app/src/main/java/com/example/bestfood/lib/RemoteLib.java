@@ -9,6 +9,7 @@ import android.net.NetworkRequest;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -86,7 +87,6 @@ public class RemoteLib {
 
 
         while (true){
-            MyLog.d("here network check" + check);
             if(check)return available;
         }
     }
@@ -254,6 +254,72 @@ public class RemoteLib {
                     int statusCode = response.code();
                     ResponseBody errorBody = response.errorBody();
                     MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+            }
+        });
+    }
+
+    public void selectKeepInfo(int userSeq, int repairerSeq, int mode, final ImageButton keepButton) {
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+        Call<String> call = remoteService.selectKeep(userSeq, repairerSeq, mode);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    keepButton.setSelected(true);
+                } else {
+                    keepButton.setSelected(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+            }
+        });
+    }
+
+    public void insertKeep(int userSeq, int itemSeq, int mode){
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        Call<String> call = remoteService.insertKeep(userSeq, itemSeq, mode);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                        MyLog.d(TAG, "insertKeep success");
+                } else { // 등록 실패
+                    int statusCode = response.code();
+                    ResponseBody errorBody = response.errorBody();
+                    MyLog.d(TAG, "insertKeep fail " + statusCode + errorBody.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+            }
+        });
+    }
+
+    public void deleteKeep(int userSeq, int itemSeq, int mode){
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        Call<String> call = remoteService.deleteKeep(userSeq, itemSeq, mode);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                        MyLog.d(TAG, "deleteKeep fail");
+                } else { // 등록 실패
+                    int statusCode = response.code();
+                    ResponseBody errorBody = response.errorBody();
+                    MyLog.d(TAG, "deleteKeep fail " + statusCode + errorBody.toString());
                 }
             }
 

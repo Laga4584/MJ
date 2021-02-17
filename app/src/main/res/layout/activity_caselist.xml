@@ -30,7 +30,7 @@
                 android:adjustViewBounds="true"
                 android:background="@drawable/bg_transparent"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_back_white"/>
+                android:src="@drawable/ic_back"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

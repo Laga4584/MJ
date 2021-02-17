@@ -1,6 +1,8 @@
 package com.example.bestfood;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.example.bestfood.adapter.ReviewListAdapter;
 import com.example.bestfood.adapter.SampleListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
 import com.example.bestfood.item.RepairerItem;
@@ -19,6 +22,7 @@ import com.example.bestfood.item.ReviewItem;
 import com.example.bestfood.item.SampleItem;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
+import com.example.bestfood.lib.RemoteLib;
 import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
@@ -33,13 +37,15 @@ import retrofit2.Response;
 public class RepairerActivity extends AppCompatActivity {
     public static final String INFO_SEQ = "INFO_SEQ";
     private final String TAG = this.getClass().getSimpleName();
+    public static final int REQUEST_CODE = 100;
     Context context;
-    int repairerInfoSeq;
-    RepairerItem infoItem;
+    int repairerSeq, userSeq;
+    RepairerItem repairerItem;
 
-    RecyclerView sampleList;
+    RecyclerView sampleList, reviewList;
     SampleListAdapter sampleListAdapter;
-    StaggeredGridLayoutManager layoutManager;
+    ReviewListAdapter reviewListAdapter;
+    StaggeredGridLayoutManager layoutManager1, layoutManager2;
     EndlessRecyclerViewScrollListener scrollListener;
     int listTypeValue = 1;
 
@@ -51,6 +57,7 @@ public class RepairerActivity extends AppCompatActivity {
     TextView tag1, tag2, tag3, tag4;
     TextView reviewNameText, reviewText;
     ImageView reviewProfileIcon;
+    TextView noSampleText;
 
     String[] tag1_list = {"그때 그때 바로 연락주세요!", "불편하지 않을 정도였어요.", "연락이 안되서 답답했어요"};
     String[] tag2_list = {"훌륭해요 제 마음에 쏙 들어요!", "전체적으로 만족스러워요", "실망스러워요"};
@@ -62,15 +69,15 @@ public class RepairerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repairer);
         context = this;
-        infoItem = new RepairerItem();
-        repairerInfoSeq = getIntent().getIntExtra(INFO_SEQ, 0);
+        repairerItem = new RepairerItem();
+        repairerSeq = getIntent().getIntExtra(INFO_SEQ, 0);
         
-        selectRepairerInfo(repairerInfoSeq);
+        selectRepairerInfo(repairerSeq);
     }
 
-    private void selectRepairerInfo(int repairerInfoSeq) {
+    private void selectRepairerInfo(int repairerSeq) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-        Call<RepairerItem> call = remoteService.selectRepairerInfo(repairerInfoSeq);
+        Call<RepairerItem> call = remoteService.selectRepairerInfo(repairerSeq);
 
         call.enqueue(new Callback<RepairerItem>() {
             @Override
@@ -78,7 +85,7 @@ public class RepairerActivity extends AppCompatActivity {
                 RepairerItem item = response.body();
 
                 if (response.isSuccessful() && item != null && item.seq > 0) {
-                    infoItem = item;
+                    repairerItem = item;
                     setView();
                     //loadingText.setVisibility(View.GONE);
                 } else {
@@ -97,11 +104,15 @@ public class RepairerActivity extends AppCompatActivity {
 
     private void setView(){
         sampleList = findViewById(R.id.list_sample);
+        noSampleText = findViewById(R.id.text_no_sample);
+        reviewList = findViewById(R.id.list_review);
         setRecyclerView();
-        listInfo(repairerInfoSeq, 0);
+        listInfo(repairerSeq, 0);
+        listReview(repairerSeq);
 
         backButton = findViewById(R.id.button_back);
         keepButton = findViewById(R.id.button_keep);
+
         profileIcon = findViewById(R.id.icon_profile);
         nameText = findViewById(R.id.text_name);
         infoText = findViewById(R.id.text_info);
@@ -122,17 +133,29 @@ public class RepairerActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         keepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(keepButton.isSelected()) keepButton.setSelected(false);
-                else keepButton.setSelected(true);
+                if(userSeq == 0){
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    intent.putExtra("requestCode", REQUEST_CODE);
+                    startActivityForResult(intent, REQUEST_CODE);
+                }else {
+                    if (keepButton.isSelected()) {
+                        RemoteLib.getInstance().deleteKeep(userSeq, repairerSeq, 0);
+                        keepButton.setSelected(false);
+                    } else {
+                        RemoteLib.getInstance().insertKeep(userSeq, repairerSeq, 0);
+                        keepButton.setSelected(true);
+                    }
+                }
             }
         });
 
-        setImage(profileIcon, infoItem.profileImgFilename);
-        nameText.setText(infoItem.name);
-        String infoString = "완료 " + infoItem.caseCount + " | 평점 " + infoItem.score + " | 견적 응답 " + infoItem.replyPeriod + "일";
+        setImage(profileIcon, repairerItem.profileImgFilename);
+        nameText.setText(repairerItem.name);
+        String infoString = "완료 " + repairerItem.caseCount + " | 평점 " + repairerItem.score + " | 견적 응답 " + repairerItem.replyPeriod + "일";
         infoText.setText(infoString);
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,21 +164,26 @@ public class RepairerActivity extends AppCompatActivity {
             }
         });
 
-        String serviceString = infoItem.product + " / " + infoItem.service;
+        String serviceString = repairerItem.product + " / " + repairerItem.service;
         serviceText.setText(serviceString);
-        descriptionText.setText(infoItem.description);
-        /*
-        String[] tags = infoItem.tag.split(", ");
-        tag1.setText(tag1_list[Integer.parseInt(tags[0])]);
-        tag2.setText(tag2_list[Integer.parseInt(tags[1])]);
-        tag3.setText(tag3_list[Integer.parseInt(tags[2])]);
-        tag4.setText(tag4_list[Integer.parseInt(tags[3])]);
-         */
-        tag1.setText(tag1_list[Math.round(infoItem.tag1)]);
-        tag2.setText(tag2_list[Math.round(infoItem.tag2)]);
-        tag3.setText(tag3_list[Math.round(infoItem.tag3)]);
-        tag4.setText(tag4_list[Math.round(infoItem.tag4)]);
-        //review.setText(infoItem.review);
+        descriptionText.setText(repairerItem.description);
+        
+        tag1.setText(tag1_list[Math.round(repairerItem.tag1)]);
+        tag2.setText(tag2_list[Math.round(repairerItem.tag2)]);
+        tag3.setText(tag3_list[Math.round(repairerItem.tag3)]);
+        tag4.setText(tag4_list[Math.round(repairerItem.tag4)]);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            userSeq = ((App)getApplication()).getUserSeq();
+            if(userSeq!=0) {
+                RemoteLib.getInstance().selectKeepInfo(userSeq, repairerSeq, 0, keepButton);
+            }
+        }
     }
 
     private void setImage(ImageView imageView, String fileName) {
@@ -171,10 +199,15 @@ public class RepairerActivity extends AppCompatActivity {
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.HORIZONTAL);
-        layoutManager
+        layoutManager1 = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.HORIZONTAL);
+        layoutManager1
                 .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        sampleList.setLayoutManager(layoutManager);
+        sampleList.setLayoutManager(layoutManager1);
+
+        layoutManager2 = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager2
+                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        reviewList.setLayoutManager(layoutManager2);
     }
 
     /**
@@ -187,23 +220,27 @@ public class RepairerActivity extends AppCompatActivity {
                 R.layout.row_sample_list, new ArrayList<SampleItem>());
         sampleList.setAdapter(sampleListAdapter);
 
-        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager1) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listInfo(repairerInfoSeq, page);
+                listInfo(repairerSeq, page);
             }
         };
         sampleList.addOnScrollListener(scrollListener);
+
+        reviewListAdapter = new ReviewListAdapter(context,
+                R.layout.row_review_list, new ArrayList<ReviewItem>());
+        reviewList.setAdapter(reviewListAdapter);
     }
 
     /**
      * 서버에서 정보를 조회한다.
      * @param currentPage 현재 페이지
      */
-    private void listInfo(int repairerInfoSeq, final int currentPage) {
+    private void listInfo(int repairerSeq, final int currentPage) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<SampleItem>> call = remoteService.repairerSampleInfo(repairerInfoSeq, currentPage);
+        Call<ArrayList<SampleItem>> call = remoteService.repairerSampleInfo(repairerSeq, currentPage);
         call.enqueue(new Callback<ArrayList<SampleItem>>() {
             @Override
             public void onResponse(Call<ArrayList<SampleItem>> call,
@@ -214,9 +251,11 @@ public class RepairerActivity extends AppCompatActivity {
                     sampleListAdapter.addItemList(list);
 
                     if (sampleListAdapter.getItemCount() == 0) {
-                        //noDataText.setVisibility(View.VISIBLE);
+                        sampleList.setVisibility(View.GONE);
+                        noSampleText.setVisibility(View.VISIBLE);
                     } else {
-                        //noDataText.setVisibility(View.GONE);
+                        sampleList.setVisibility(View.VISIBLE);
+                        noSampleText.setVisibility(View.GONE);
                     }
                 }
             }
@@ -243,9 +282,9 @@ public class RepairerActivity extends AppCompatActivity {
                 ArrayList<ReviewItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
-                    //sampleListAdapter.addItemList(list);
+                    reviewListAdapter.addItemList(list);
 
-                    if (sampleListAdapter.getItemCount() == 0) {
+                    if (reviewListAdapter.getItemCount() == 0) {
                         //noDataText.setVisibility(View.VISIBLE);
                     } else {
                         //noDataText.setVisibility(View.GONE);
