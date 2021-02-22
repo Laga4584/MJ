@@ -3,26 +3,20 @@ package com.example.bestfood;
 import android.content.Context;
 import android.os.Bundle;
 
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.bestfood.adapter.NoticeListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
 import com.example.bestfood.item.NoticeItem;
 import com.example.bestfood.lib.MyLog;
-import com.example.bestfood.lib.MyToast;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 
@@ -38,11 +32,10 @@ public class NoticeFragment extends Fragment {
     Context context;
     int userSeq;
 
-    LinearLayout container, container2;
     RecyclerView noticeList;
-    TextView noDataText;
-    NoticeListAdapter infoListAdapter;
-    StaggeredGridLayoutManager layoutManager;
+    LinearLayout noNoticeTexts;
+    NoticeListAdapter noticeListAdapter;
+    LinearLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
     int listTypeValue = 1;
 
@@ -61,19 +54,9 @@ public class NoticeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        container = view.findViewById(R.id.container);
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        container.setPadding(metrics.widthPixels/18, metrics.heightPixels*5/76, metrics.widthPixels/18, metrics.heightPixels*5/76);
+        noticeList = view.findViewById(R.id.list_notice);
 
-        container2 = view.findViewById(R.id.container2);
-        container2.setPadding(metrics.widthPixels/18, metrics.heightPixels/38, metrics.widthPixels/18, metrics.heightPixels/38);
-
-        noticeList = view.findViewById(R.id.list);
-        noticeList.setPadding(0, metrics.heightPixels/38, 0, 0);
-
-        noDataText = view.findViewById(R.id.no_data);
+        noNoticeTexts = view.findViewById(R.id.texts_no_notice);
         setRecyclerView();
         listInfo(userSeq, 0);
     }
@@ -83,13 +66,8 @@ public class NoticeFragment extends Fragment {
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager = new LinearLayoutManager(context);
         noticeList.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration =
-                new DividerItemDecoration(noticeList.getContext(),layoutManager.getOrientation());
-        noticeList.addItemDecoration(dividerItemDecoration);
     }
 
     /**
@@ -98,9 +76,9 @@ public class NoticeFragment extends Fragment {
     private void setRecyclerView() {
         setLayoutManager(listTypeValue);
 
-        infoListAdapter = new NoticeListAdapter(context,
+        noticeListAdapter = new NoticeListAdapter(context,
                 R.layout.row_notice_list, new ArrayList<NoticeItem>());
-        noticeList.setAdapter(infoListAdapter);
+        noticeList.setAdapter(noticeListAdapter);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -127,12 +105,14 @@ public class NoticeFragment extends Fragment {
                 ArrayList<NoticeItem> list = response.body();
 
                 if (response.isSuccessful() && list != null) {
-                    infoListAdapter.addItemList(list);
+                    noticeListAdapter.addItemList(list);
 
-                    if (infoListAdapter.getItemCount() == 0) {
-                        //noDataText.setVisibility(View.VISIBLE);
+                    if (noticeListAdapter.getItemCount() == 0) {
+                        noNoticeTexts.setVisibility(View.VISIBLE);
+                        noticeList.setVisibility(View.GONE);
                     } else {
-                        //noDataText.setVisibility(View.GONE);
+                        noNoticeTexts.setVisibility(View.GONE);
+                        noticeList.setVisibility(View.VISIBLE);
                     }
                 }
             }

@@ -8,8 +8,7 @@
         android:id="@+id/bar_search"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp"
         android:layout_marginHorizontal="20dp"
         android:gravity="center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -35,22 +34,38 @@
             android:background="@drawable/bg_transparent"
             app:srcCompat="@drawable/ic_filter" />
     </LinearLayout>
-    <TextView
-        android:id="@+id/text_no_data"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
+    <LinearLayout
+        android:id="@+id/texts_no_data"
         android:visibility="gone"
-        android:text="@string/no_data"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="15dp"
-        android:textStyle="bold"/>
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="95dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:text="검색 결과가 없네요.."
+            android:textColor="@color/colorDarkGray"
+            android:textSize="12dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="검색 키워드나 필터 범위를 수정하셔서 명장의 세계를 마음껏 즐겨보세요!"
+            android:textColor="@color/colorDarkGray"
+            android:textSize="10dp" />
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_repairer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginHorizontal="20dp"
-        android:paddingBottom="65dp"/>
+        android:paddingHorizontal="11.5dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="65dp"
+        android:clipToPadding="false"/>
 </LinearLayout>

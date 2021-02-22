@@ -26,20 +26,24 @@ public class BitmapLib {
 
     /**
      * 비트맵을 별도 스레드에서 파일로 저장한다.
-     * @param handler 결과를 알려줄 핸들러
+     * 결과를 알려줄 핸들러
      * @param file 파일 객체
      * @param bitmap 비트맵 객체
      */
+
     public void saveBitmapToFileThread(final Handler handler, final File file,
                                        final Bitmap bitmap) {
         new Thread() {
             @Override
             public void run() {
+                MyLog.d("here bitmap saving");
                 saveBitmapToFile(file, bitmap);
                 handler.sendEmptyMessage(0);
+                MyLog.d("here bitmap saving6");
             }
         }.start();
     }
+
 
     /**
      * 비트맵을 파일에 저장한다.
@@ -49,16 +53,18 @@ public class BitmapLib {
      */
     private boolean saveBitmapToFile(File file, Bitmap bitmap) {
         if (bitmap == null) return false;
-
+        MyLog.d("here bitmap saving2");
         boolean save = false;
 
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(file);
-
+            MyLog.d("here bitmap saving3");
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+            MyLog.d("here bitmap saving4");
             save = true;
         } catch (Exception e) {
+            MyLog.d("here bitmap saving5" + e);
             save = false;
         } finally {
             try {

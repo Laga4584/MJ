@@ -21,8 +21,6 @@ import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 
 /**
  * 프로필을 설정할 수 있는 액티비티
@@ -33,8 +31,8 @@ public class MyPageFragment extends Fragment {
 
     CardView cardView1_1, cardView1_2, cardView1_3, cardView2_1;
     ImageView profileIcon;
-    LinearLayout content1, content2;
-    TextView profileIconDefault, edit, id, name, phone, postcode, address, addressDetail;
+    LinearLayout memberLayout, guestLayout;
+    TextView profileIconDefault, emailText, nameText, greetText;
 
     UserItem currentItem;
 
@@ -48,8 +46,6 @@ public class MyPageFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_mypage, container, false);
 
         context = this.getActivity();
-        //currentItem = ((App) this.getActivity().getApplication()).getUserItem();
-
         return layout;
     }
 
@@ -57,21 +53,20 @@ public class MyPageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        content1 = view.findViewById(R.id.content1);
-        content2 = view.findViewById(R.id.content2);
-
-        //setView();
+        memberLayout = view.findViewById(R.id.layout_member);
+        guestLayout = view.findViewById(R.id.layout_guest);
 
     }
 
     private void setView(){
         if (currentItem.seq != 0){
-            content1.setVisibility(View.VISIBLE);
-            content2.setVisibility(View.GONE);
-            profileIcon = getView().findViewById(R.id.profile_icon);
-            profileIconDefault = getView().findViewById(R.id.profile_icon_default);
-            id = getView().findViewById(R.id.id);
-            name = getView().findViewById(R.id.name);
+            memberLayout.setVisibility(View.VISIBLE);
+            guestLayout.setVisibility(View.GONE);
+            profileIcon = getView().findViewById(R.id.icon_profile);
+            profileIconDefault = getView().findViewById(R.id.icon_profile_default);
+            emailText = getView().findViewById(R.id.text_email);
+            nameText = getView().findViewById(R.id.text_name);
+            greetText = getView().findViewById(R.id.text_greet);
 
             cardView1_1 = getView().findViewById(R.id.card_view_1_1);
             cardView1_2 = getView().findViewById(R.id.card_view_1_2);
@@ -99,8 +94,8 @@ public class MyPageFragment extends Fragment {
             });
 
         }else{
-            content1.setVisibility(View.GONE);
-            content2.setVisibility(View.VISIBLE);
+            memberLayout.setVisibility(View.GONE);
+            guestLayout.setVisibility(View.VISIBLE);
             cardView2_1 = getView().findViewById(R.id.card_view_2_1);
 
             cardView2_1.setOnClickListener(new View.OnClickListener() {
@@ -150,10 +145,10 @@ public class MyPageFragment extends Fragment {
                 });
             }
 
-
-
-            id.setText(currentItem.email);
-            name.setText(currentItem.name);
+            emailText.setText(currentItem.email);
+            nameText.setText(currentItem.name);
+            String greetString = currentItem.name + "님 안녕하세요!";
+            greetText.setText(greetString);
         }
     }
 }

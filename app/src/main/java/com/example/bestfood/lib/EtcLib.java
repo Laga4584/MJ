@@ -6,9 +6,14 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.bestfood.App;
+
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -137,5 +142,16 @@ public class EtcLib {
         }
 
         return phoneText;
+    }
+
+    public ArrayList<Integer> convertPositionList(ArrayList<Float> floatList){
+        ArrayList<Integer> integerList = new ArrayList<Integer>();
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) App.getGlobalApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        for (int i=1; i<floatList.size(); i++) {
+            integerList.add(Math.round(floatList.get(i) * metrics.widthPixels));
+        }
+        return integerList;
     }
 }

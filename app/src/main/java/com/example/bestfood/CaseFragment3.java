@@ -60,7 +60,7 @@ public class CaseFragment3 extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RemoteLib.getInstance().updateCaseStatus(3, 0);
+                RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 3, 0);
                 ((CaseActivity) getActivity()).replaceFragment(2);
             }
         });

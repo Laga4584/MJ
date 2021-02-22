@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.bestfood.adapter.RepairerListAdapter;
@@ -44,11 +45,11 @@ public class RepairerListFragment extends Fragment {
     int mode = 0;
 
     RecyclerView repairerList;
-    TextView noDataText;
+    LinearLayout noDataTexts;
     EditText searchEdit;
     ImageButton filterButton;
     RepairerListAdapter repairerListAdapter;
-    StaggeredGridLayoutManager layoutManager;
+    GridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
     int listTypeValue = 3;
@@ -120,8 +121,8 @@ public class RepairerListFragment extends Fragment {
         });
 
 
-        repairerList = (RecyclerView) view.findViewById(R.id.list_repairer);
-        noDataText = (TextView) view.findViewById(R.id.text_no_data);
+        repairerList = view.findViewById(R.id.list_repairer);
+        noDataTexts = view.findViewById(R.id.texts_no_data);
 
         setRecyclerView();
         listInfo(mode, query, 0);
@@ -148,9 +149,7 @@ public class RepairerListFragment extends Fragment {
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager = new GridLayoutManager(context, row);
         repairerList.setLayoutManager(layoutManager);
     }
 
@@ -191,9 +190,11 @@ public class RepairerListFragment extends Fragment {
                     repairerListAdapter.addItemList(list);
 
                     if (repairerListAdapter.getItemCount() == 0) {
-                        noDataText.setVisibility(View.VISIBLE);
+                        noDataTexts.setVisibility(View.VISIBLE);
+                        repairerList.setVisibility(View.GONE);
                     } else {
-                        noDataText.setVisibility(View.GONE);
+                        noDataTexts.setVisibility(View.GONE);
+                        repairerList.setVisibility(View.VISIBLE);
                     }
                 }
             }

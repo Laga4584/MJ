@@ -11,6 +11,7 @@ import com.example.bestfood.item.UserItem;
 import com.example.bestfood.item.SampleItem;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -24,8 +25,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * 서버에 호출할 메소드를 선언하는 인터페이스
@@ -79,7 +82,7 @@ public interface RemoteService {
 
     @GET("/case/list")
     Call<ArrayList<CaseItem>> listCaseInfo(@Query("user_seq") int userSeq,
-                                               @Query("current_page") int currentPage);
+                                               @Query("current_page") int currentPage, @Query("mode") int mode);
 
     @POST("/case/status")
     Call<String> updateCaseStatus(@Query("seq") int seq, @Query("status") String status, @Query("status2") String status2);
@@ -88,6 +91,8 @@ public interface RemoteService {
     @POST("/case/info/image")
     Call<ResponseBody> uploadCaseImage(@Part("info_seq") RequestBody infoSeq,
                                        @Part("label") RequestBody label,
+                                       @Part("dot") RequestBody dot,
+                                       @Part("request") RequestBody request,
                                        @Part MultipartBody.Part file);
 
     @POST("/case/image/delete")

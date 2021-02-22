@@ -12,9 +12,9 @@ import java.util.ArrayList;
 @org.parceler.Parcel
 public class CaptureItem {
     public Bitmap bitmap;
-    public String description;
-    public ArrayList<Integer> positionX;
-    public ArrayList<Integer> positionY;
+    public String request = "";
+    public ArrayList<Float> positionX;
+    public ArrayList<Float> positionY;
 
     @Override
     public String toString() {

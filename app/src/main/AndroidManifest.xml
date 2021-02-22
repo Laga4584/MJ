@@ -71,7 +71,6 @@
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".CaseListActivity"/>
         <activity android:name=".RepairerActivity"/>
-        <activity android:name=".ProfileEditActivity" />
         <activity android:name=".DialogActivity"
             android:theme="@style/Theme.Transparent"/>
         <activity android:name=".CameraActivity"/>

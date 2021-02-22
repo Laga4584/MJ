@@ -2,6 +2,7 @@ package com.example.bestfood;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -58,6 +59,9 @@ public class KakaoPayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kakao_pay);
+
+        item_name = getIntent().getStringExtra("itemName");
+        total_amount = getIntent().getStringExtra("totalAmount");
 
         kakaoPay = new KakaoPay();
         kakaoPayReadyVO = new KakaoPayReadyVO();
@@ -133,6 +137,8 @@ public class KakaoPayActivity extends AppCompatActivity {
 
         context_kakaopay = this;
 
-        //finish();
+        Intent intentR = new Intent();
+        setResult(Activity.RESULT_OK, intentR);
+        finish();
     }
 }

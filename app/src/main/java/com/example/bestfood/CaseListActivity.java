@@ -4,21 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.bestfood.adapter.CaseListAdapter;
-import com.example.bestfood.adapter.RecyclerDecoration;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
 import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.lib.MyLog;
@@ -33,35 +29,51 @@ import retrofit2.Response;
 
 public class CaseListActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
+    public static final int REQUEST_CODE = 100;
     Context context;
     int userSeq;
 
     ImageButton backButton, addButton;
     ToggleButton toggleButton;
     RecyclerView caseList;
-    TextView noDataText;
-    ImageView listType;
+    CardView noDataTexts;
     CaseListAdapter caseListAdapter;
-    StaggeredGridLayoutManager layoutManager;
+    LinearLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
     int listTypeValue = 1;
-    String orderType;
-    String[] items = {"완료 케이스 보기", "완료 케이스 숨기기"};
+    int mode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_caselist);
 
-        //ActionBar actionbar = getSupportActionBar();
-        //actionbar.hide();
-
         context = this;
         userSeq = ((App)this.getApplication()).getUserSeq();
 
-        addButton = findViewById(R.id.add_button);
-        backButton = findViewById(R.id.back_button);
+        if(userSeq==0){
+            Intent intent = new Intent(context, LoginActivity.class);
+            intent.putExtra("requestCode", REQUEST_CODE);
+            startActivityForResult(intent, REQUEST_CODE);
+        }else{
+            setView();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            userSeq = ((App)getApplication()).getUserSeq();
+            setView();
+        }
+    }
+
+    private void setView(){
+        addButton = findViewById(R.id.button_add);
+        backButton = findViewById(R.id.button_back);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,68 +89,29 @@ public class CaseListActivity extends AppCompatActivity {
             }
         });
 
-        orderType = Constant.ORDER_TYPE_METER;
+        caseList = findViewById(R.id.list_case);
 
-        caseList = (RecyclerView)findViewById(R.id.list);
+        noDataTexts = findViewById(R.id.texts_no_data);
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        RecyclerDecoration spaceDecoration = new RecyclerDecoration(metrics.heightPixels/38);
-        caseList.addItemDecoration(spaceDecoration);
-        caseList.setPadding(metrics.widthPixels/18, metrics.heightPixels/38, metrics.widthPixels/18, metrics.heightPixels/38);
-        //noDataText = (TextView)findViewById(R.id.no_data);
 
-        toggleButton = findViewById(R.id.toggle_button);
+        toggleButton = findViewById(R.id.button_toggle);
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
                 if(isChecked){
-                    orderType = Constant.ORDER_TYPE_METER;
+                    mode = 1;
                     setRecyclerView();
-                    listInfo(userSeq, 0);
+                    listInfo(userSeq, 0, 1);
                 }else{
-                    orderType = Constant.ORDER_TYPE_RECENT;
+                    mode = 0;
                     setRecyclerView();
-                    listInfo(userSeq, 0);
+                    listInfo(userSeq, 0, 0);
                 }
             }
         });
-        //spinner = (Spinner)findViewById(R.id.spinner);
-
-        /*
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
-        );
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    orderType = Constant.ORDER_TYPE_METER;
-                    setRecyclerView();
-                    listInfo(userSeq, 0);
-                }else {
-                    orderType = Constant.ORDER_TYPE_RECENT;
-                    setRecyclerView();
-                    listInfo(userSeq, 0);
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-         */
         setRecyclerView();
-
-        listInfo(userSeq, 0);
+        listInfo(userSeq, 0, mode);
     }
 
     /**
@@ -147,19 +120,14 @@ public class CaseListActivity extends AppCompatActivity {
     public void startCase() {
         Intent intent = new Intent(CaseListActivity.this, CaseActivity.class);
         startActivity(intent);
-
-        //finish();
     }
-
 
     /**
      * 케이스 정보를 스태거드그리드레이아웃으로 보여주도록 설정한다.
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager = new LinearLayoutManager(context);
         caseList.setLayoutManager(layoutManager);
     }
 
@@ -176,7 +144,7 @@ public class CaseListActivity extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listInfo(userSeq, page);
+                listInfo(userSeq, page, mode);
             }
         };
         caseList.addOnScrollListener(scrollListener);
@@ -187,10 +155,10 @@ public class CaseListActivity extends AppCompatActivity {
      * @param userSeq 사용자 시퀀스
      * @param currentPage 현재 페이지
      */
-    private void listInfo(int userSeq, final int currentPage) {
+    private void listInfo(int userSeq, final int currentPage, int mode) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<ArrayList<CaseItem>> call = remoteService.listCaseInfo(userSeq, currentPage);
+        Call<ArrayList<CaseItem>> call = remoteService.listCaseInfo(userSeq, currentPage, mode);
         call.enqueue(new Callback<ArrayList<CaseItem>>() {
             @Override
             public void onResponse(Call<ArrayList<CaseItem>> call,
@@ -201,9 +169,11 @@ public class CaseListActivity extends AppCompatActivity {
                     caseListAdapter.addItemList(list);
 
                     if (caseListAdapter.getItemCount() == 0) {
-                        //noDataText.setVisibility(View.VISIBLE);
+                        noDataTexts.setVisibility(View.VISIBLE);
+                        caseList.setVisibility(View.GONE);
                     } else {
-                        //noDataText.setVisibility(View.GONE);
+                        noDataTexts.setVisibility(View.GONE);
+                        caseList.setVisibility(View.VISIBLE);
                     }
                 }
             }

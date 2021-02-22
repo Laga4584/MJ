@@ -11,6 +11,7 @@ public class NoticeItem {
     @SerializedName("user_seq") public int userSeq;
     @SerializedName("title") public String title;
     @SerializedName("body") public String body;
+    @SerializedName("icon_filename") public String iconFilename;
     @SerializedName("reg_date") public String regDate;
 
     @Override
@@ -20,6 +21,7 @@ public class NoticeItem {
                 ", userSeq=" + userSeq +
                 ", title=" + title +
                 ", body=" + body +
+                ", iconFilename=" + iconFilename +
                 ", regDate='" + regDate + '\'' +
                 '}';
     }

@@ -14,14 +14,14 @@
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/colorAccent"
         app:tint="@color/text_color_white"
-        android:scaleType="center"
+        app:maxImageSize="44dp"
         app:borderWidth="0dp"
         app:layout_anchor="@id/appbar"
-        app:srcCompat="@drawable/ic_caselist" />
+        app:srcCompat="@drawable/ic_mj_inside" />
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/appbar"
         android:layout_width="match_parent"

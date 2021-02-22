@@ -332,7 +332,7 @@ public class CaseFragment4 extends Fragment {
                         //등록 실패
                     } else {
                         CaseActivity.caseItem = caseItem;
-                        RemoteLib.getInstance().updateCaseStatus(3, 1);
+                        RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 3, 1);
                         //caseItem.status2 = "발송 대기";
                         ((CaseActivity) getActivity()).replaceFragment(2);
                         //goNextPage();

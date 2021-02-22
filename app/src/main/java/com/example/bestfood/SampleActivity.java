@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.bestfood.adapter.RequestListAdapter;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.item.RepairerItem;
@@ -49,7 +49,7 @@ public class SampleActivity extends AppCompatActivity {
     ImageButton prevButton, nextButton;
     RecyclerView requestList;
     RequestListAdapter requestListAdapter;
-    StaggeredGridLayoutManager layoutManager;
+    LinearLayoutManager layoutManager;
     int listTypeValue = 1;
     boolean keep = false;
     ArrayList<ImageItem> requests = new ArrayList<ImageItem>();
@@ -311,9 +311,7 @@ public class SampleActivity extends AppCompatActivity {
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager = new LinearLayoutManager(context);
         requestList.setLayoutManager(layoutManager);
     }
 

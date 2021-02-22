@@ -70,8 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginVertical="10dp"
         android:text="견적 요청"
         android:textColor="@color/colorPrimary"
         android:background="@drawable/btn_blue"/>
@@ -83,20 +82,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/text_no_sample"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="175dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="15dp"
-                android:text="샘플이 없습니다."
-                android:textSize="15dp"
-                android:textColor="@color/colorPrimaryDark"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_sample"
                 android:layout_width="match_parent"
                 android:layout_height="175dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="15dp"
                 android:orientation="horizontal"/>
                 <androidx.cardview.widget.CardView

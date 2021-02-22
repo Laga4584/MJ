@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.bestfood.item.SampleItem;
@@ -45,12 +46,12 @@ public class SampleListFragment extends Fragment {
     String query = "";
 
     RecyclerView sampleList;
-    TextView noDataText;
+    LinearLayout noDataTexts;
     EditText searchEdit;
     ImageButton filterButton;
 
     SampleListAdapter sampleListAdapter;
-    StaggeredGridLayoutManager layoutManager;
+    GridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
     int listTypeValue = 2;
@@ -121,7 +122,7 @@ public class SampleListFragment extends Fragment {
         });
 
         sampleList = view.findViewById(R.id.list_sample);
-        noDataText = view.findViewById(R.id.text_no_data);
+        noDataTexts = view.findViewById(R.id.texts_no_data);
 
         setRecyclerView();
         listInfo(mode, query, 0);
@@ -149,9 +150,7 @@ public class SampleListFragment extends Fragment {
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager = new GridLayoutManager(context, row);
         sampleList.setLayoutManager(layoutManager);
     }
 
@@ -192,9 +191,11 @@ public class SampleListFragment extends Fragment {
                     sampleListAdapter.addItemList(list);
 
                     if (sampleListAdapter.getItemCount() == 0) {
-                        noDataText.setVisibility(View.VISIBLE);
+                        noDataTexts.setVisibility(View.VISIBLE);
+                        sampleList.setVisibility(View.GONE);
                     } else {
-                        noDataText.setVisibility(View.GONE);
+                        noDataTexts.setVisibility(View.GONE);
+                        sampleList.setVisibility(View.VISIBLE);
                     }
                 }
             }

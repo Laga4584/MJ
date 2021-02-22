@@ -39,6 +39,9 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.View
     private SparseBooleanArray mSelectedItems;
     public CheckItem selectedItem;
 
+    // 리스너 객체 참조를 저장하는 변수
+    private OnItemClickListener mListener = null ;
+
 
     /**
      * 어댑터 생성자
@@ -52,6 +55,8 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.View
         this.itemList = itemList;
         this.caseItem = caseItem;
 
+        selectedItem = new CheckItem();
+        selectedItem.seq = 0;
         mSelectedItems = new SparseBooleanArray(itemList.size());
         userItem = ((App) context.getApplicationContext()).getUserItem();
     }
@@ -137,6 +142,10 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.View
                 mSelectedItems = new SparseBooleanArray(itemList.size());
                 mSelectedItems.put(position, true);
                 notifyDataSetChanged();
+
+                if (mListener != null) {
+                    mListener.onItemClick(view, position);
+                }
             }
         });
 
@@ -173,5 +182,14 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.View
             description = (TextView) itemView.findViewById(R.id.description);
             price = (TextView) itemView.findViewById(R.id.price);
         }
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(View v, int pos);
+    }
+
+    // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener ;
     }
 }

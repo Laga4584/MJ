@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -66,7 +67,7 @@ public class CaseFragment5 extends Fragment {
     ImageButton prevButton, nextButton;
     RecyclerView requestList;
     RequestListAdapter requestListAdapter;
-    StaggeredGridLayoutManager layoutManager;
+    LinearLayoutManager layoutManager;
     int listTypeValue = 1;
     ArrayList<ImageItem> requests = new ArrayList<ImageItem>();
     int imageCount = 0;
@@ -220,14 +221,14 @@ public class CaseFragment5 extends Fragment {
             restart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    RemoteLib.getInstance().updateCaseStatus(3, 0);
+                    RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 3, 0);
                 }
             });
 
             finish.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    RemoteLib.getInstance().updateCaseStatus(5, 0);
+                    RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 5, 0);
                 }
             });
         }
@@ -315,7 +316,7 @@ public class CaseFragment5 extends Fragment {
             @Override
             public void onClick(View view) {
                 CaseActivity.caseItem = caseItem;
-                RemoteLib.getInstance().updateCaseStatus(4, 4);
+                RemoteLib.getInstance().updateCaseStatus(caseItem.seq,4, 4);
                 ((CaseActivity) getActivity()).replaceFragment(3);
             }
         });
@@ -350,9 +351,7 @@ public class CaseFragment5 extends Fragment {
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager = new LinearLayoutManager(context);
         requestList.setLayoutManager(layoutManager);
     }
 
@@ -455,7 +454,7 @@ public class CaseFragment5 extends Fragment {
                         //caseItem.seq = seq;
                         //goNextPage();
                         CaseActivity.caseItem = caseItem;
-                        RemoteLib.getInstance().updateCaseStatus(4, 5);
+                        RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 4, 5);
                         ((CaseActivity) getActivity()).replaceFragment(3);
                     }
                 } else { // 등록 실패

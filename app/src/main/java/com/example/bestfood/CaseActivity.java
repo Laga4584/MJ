@@ -1,19 +1,12 @@
 package com.example.bestfood;
 
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.bestfood.item.CaseItem;
@@ -39,7 +32,6 @@ public class CaseActivity extends FragmentActivity {
     public static int iCount;
 
     ImageButton backButton;
-    CardView cardView;
     private TabLayout tabLayout;
     public static CaseItem caseItem;
 
@@ -79,13 +71,7 @@ public class CaseActivity extends FragmentActivity {
                 finish();
             }
         });
-        cardView = findViewById(R.id.card_view);
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) cardView.getLayoutParams();
-        layoutParams.setMargins(metrics.widthPixels/18, metrics.heightPixels/38, metrics.widthPixels/18, metrics.heightPixels/76);
-        cardView.requestLayout();
+
     }
 
     /**
@@ -126,19 +112,7 @@ public class CaseActivity extends FragmentActivity {
     //tablayout - viewpager 연결
     public void settingTabLayout()
     {
-        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
-
-
-        /*
-        final int unSelected = ContextCompat.getColor(context, R.color.colorGray);
-        final int selected = ContextCompat.getColor(context, R.color.colorPrimaryDark);
-
-        tabLayout.getTabAt(0).getIcon().setColorFilter(selected, PorterDuff.Mode.SRC_IN);
-        for(int i = 1; i < tabLayout.getTabCount(); i++) {
-            tabLayout.getTabAt(i).getIcon().setColorFilter(unSelected, PorterDuff.Mode.SRC_IN);
-        }
-
-         */
+        tabLayout = findViewById(R.id.tabLayout);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

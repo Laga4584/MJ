@@ -14,8 +14,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -30,6 +33,7 @@ import com.example.bestfood.custom.CustomView;
 import com.example.bestfood.item.CaptureItem;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.lib.BitmapLib;
+import com.example.bestfood.lib.EtcLib;
 import com.example.bestfood.lib.FileLib;
 import com.example.bestfood.lib.GoLib;
 import com.example.bestfood.lib.MyLog;
@@ -62,10 +66,12 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
     ImageButton backButton, prevButton;
     TextView doneButton, sequence;
     LinearLayout description2;
-    FrameLayout textbox;
+    FrameLayout textbox, imageLayout;
 
     ArrayList<Integer> position_list_X;
     ArrayList<Integer> position_list_Y;
+    ArrayList<Float> position_list_X_ratio;
+    ArrayList<Float> position_list_Y_ratio;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -83,6 +89,8 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
 
         position_list_X = new ArrayList<Integer>();
         position_list_Y = new ArrayList<Integer>();
+        position_list_X_ratio = new ArrayList<Float>();
+        position_list_Y_ratio = new ArrayList<Float>();
 
         infoImage = (ImageView)findViewById(R.id.image);
         pointImage = (CustomView)findViewById(R.id.dot);
@@ -113,6 +121,18 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
 
         infoImage.setImageBitmap(captureItem.bitmap);
 
+        final DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        //ViewGroup.LayoutParams params =  pointImage.getLayoutParams();
+
+        //LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imageLayout.getLayoutParams();
+        //MyLog.d("here position params " + params.width);
+        //MyLog.d("here position params " + params.height);
+        //params.height = metrics.widthPixels;
+        //imageLayout.setLayoutParams(params);
+        //pointImage.setLayoutParams(params);
+
         pointImage.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -123,8 +143,12 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
                 if(count == 0 || position_list_X.size() < 1) {
                     MyLog.d("here position X " + motionEvent.getX());
                     MyLog.d("here position Y " + motionEvent.getY());
+                    MyLog.d("here position X ratio " + motionEvent.getX()/metrics.widthPixels);
+                    MyLog.d("here position Y ratio " + motionEvent.getY()/metrics.widthPixels);
                     position_list_X.add((int) motionEvent.getX());
                     position_list_Y.add((int) motionEvent.getY());
+                    position_list_X_ratio.add(motionEvent.getX()/metrics.widthPixels);
+                    position_list_Y_ratio.add(motionEvent.getY()/metrics.widthPixels);
                     pointImage.position_list_X = position_list_X;
                     pointImage.position_list_Y = position_list_Y;
                     pointImage.invalidate();
@@ -135,10 +159,10 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
         });
 
         if (captureItem.positionX != null){
-            pointImage.position_list_X = captureItem.positionX;
-            pointImage.position_list_Y = captureItem.positionY;
-            position_list_X = captureItem.positionX;
-            position_list_Y = captureItem.positionY;
+            position_list_X = EtcLib.getInstance().convertPositionList(captureItem.positionX);
+            position_list_Y = EtcLib.getInstance().convertPositionList(captureItem.positionY);
+            pointImage.position_list_X = position_list_X;
+            pointImage.position_list_Y = position_list_Y;
             pointImage.invalidate();
         }
     }
@@ -154,13 +178,15 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
         } else if (v.getId() == R.id.button_prev) {
             position_list_X.remove(position_list_X.size()-1);
             position_list_Y.remove(position_list_Y.size()-1);
+            position_list_X_ratio.remove(position_list_X.size()-1);
+            position_list_Y_ratio.remove(position_list_Y.size()-1);
             pointImage.position_list_X = position_list_X;
             pointImage.position_list_Y = position_list_Y;
             pointImage.invalidate();
         } else if (v.getId() == R.id.button_done){
-            captureItem.positionX = position_list_X;
-            captureItem.positionY = position_list_Y;
-            captureItem.description = imageDescription.getText().toString();
+            captureItem.positionX = position_list_X_ratio;
+            captureItem.positionY = position_list_Y_ratio;
+            captureItem.request = imageDescription.getText().toString();
             if (count == 0){
                 for (int i=0; i<captureItem.positionX.size(); i++) {
                     CameraActivity.captureItemList.add(new CaptureItem());

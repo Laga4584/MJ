@@ -207,14 +207,4 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-
-
-    /**
-     * 화면이 보여질 때 호출되며 사용자 정보를 기반으로 프로필 아이콘을 설정한다.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
 }

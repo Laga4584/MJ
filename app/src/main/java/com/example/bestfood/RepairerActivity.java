@@ -1,6 +1,5 @@
 package com.example.bestfood;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import com.example.bestfood.adapter.ReviewListAdapter;
 import com.example.bestfood.adapter.SampleListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
@@ -45,7 +43,7 @@ public class RepairerActivity extends AppCompatActivity {
     RecyclerView sampleList, reviewList;
     SampleListAdapter sampleListAdapter;
     ReviewListAdapter reviewListAdapter;
-    StaggeredGridLayoutManager layoutManager1, layoutManager2;
+    LinearLayoutManager layoutManager1, layoutManager2;
     EndlessRecyclerViewScrollListener scrollListener;
     int listTypeValue = 1;
 
@@ -57,7 +55,6 @@ public class RepairerActivity extends AppCompatActivity {
     TextView tag1, tag2, tag3, tag4;
     TextView reviewNameText, reviewText;
     ImageView reviewProfileIcon;
-    TextView noSampleText;
 
     String[] tag1_list = {"그때 그때 바로 연락주세요!", "불편하지 않을 정도였어요.", "연락이 안되서 답답했어요"};
     String[] tag2_list = {"훌륭해요 제 마음에 쏙 들어요!", "전체적으로 만족스러워요", "실망스러워요"};
@@ -104,7 +101,6 @@ public class RepairerActivity extends AppCompatActivity {
 
     private void setView(){
         sampleList = findViewById(R.id.list_sample);
-        noSampleText = findViewById(R.id.text_no_sample);
         reviewList = findViewById(R.id.list_review);
         setRecyclerView();
         listInfo(repairerSeq, 0);
@@ -199,14 +195,10 @@ public class RepairerActivity extends AppCompatActivity {
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager1 = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.HORIZONTAL);
-        layoutManager1
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager1 = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         sampleList.setLayoutManager(layoutManager1);
 
-        layoutManager2 = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager2
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager2 = new LinearLayoutManager(context);
         reviewList.setLayoutManager(layoutManager2);
     }
 
@@ -252,10 +244,8 @@ public class RepairerActivity extends AppCompatActivity {
 
                     if (sampleListAdapter.getItemCount() == 0) {
                         sampleList.setVisibility(View.GONE);
-                        noSampleText.setVisibility(View.VISIBLE);
                     } else {
                         sampleList.setVisibility(View.VISIBLE);
-                        noSampleText.setVisibility(View.GONE);
                     }
                 }
             }

@@ -13,7 +13,6 @@ public class CheckItem {
     @SerializedName("case_count") public String caseCount;
     public float score;
     @SerializedName("profile_img_filename") public String profileImgFilename;
-
     public String description;
     public String price;
     public String time;

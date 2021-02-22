@@ -1,5 +1,6 @@
 package com.example.bestfood;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -37,13 +39,14 @@ import retrofit2.Response;
 public class CaseFragment2 extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
     public static final String CASE_ITEM = "CASE_ITEM";
+    public static final int REQUEST_CODE = 5000;
     Context context;
     CaseItem caseItem;
-    TextView description, next;
-    LinearLayout noData;
+    TextView descriptionText, nextButton;
+    LinearLayout noDataLayout;
     RecyclerView checkList;
     CheckListAdapter checkListAdapter;
-    StaggeredGridLayoutManager layoutManager;
+    LinearLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
     int listTypeValue = 1;
     int caseSeq;
@@ -83,27 +86,39 @@ public class CaseFragment2 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        description = view.findViewById(R.id.description);
-        next = view.findViewById(R.id.next);
-        next.setOnClickListener(new View.OnClickListener() {
+        descriptionText = view.findViewById(R.id.text_description);
+        nextButton = view.findViewById(R.id.button_next);
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedItem = checkListAdapter.selectedItem;
-                if (selectedItem != null){
+                if (selectedItem.seq != 0){
                     caseItem.repairerSeq = selectedItem.repairerSeq;
                     caseItem.price = selectedItem.price;
                     caseItem.time = selectedItem.time;
                     insertCaseInfo();
-                    getActivity().startActivity(new Intent(getActivity(), KakaoPayActivity.class));
+                    Intent intent = new Intent(context, KakaoPayActivity.class);
+                    intent.putExtra("requestCode", REQUEST_CODE);
+                    String titleText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + caseItem.dotCount + " 건";
+                    intent.putExtra("itemName", titleText);
+                    intent.putExtra("totalAmount", selectedItem.price);
+                    startActivityForResult(intent, REQUEST_CODE);
+                    //getActivity().startActivity(new Intent(getActivity(), KakaoPayActivity.class));
                 }
             }
         });
 
-        noData = view.findViewById(R.id.no_data);
+        noDataLayout = view.findViewById(R.id.layout_no_data);
         checkList = view.findViewById(R.id.check_list);
-        
-        setRecyclerView();
-        listInfo(caseSeq, 0);
+
+        if (caseItem.status2 == "대기"){
+            checkList.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.VISIBLE);
+        }else {
+            checkList.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
+            setRecyclerView();
+            listInfo(caseSeq, 0);
+        }
     }
 
     /**
@@ -111,9 +126,7 @@ public class CaseFragment2 extends Fragment {
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager = new LinearLayoutManager(context);
         checkList.setLayoutManager(layoutManager);
     }
 
@@ -134,6 +147,14 @@ public class CaseFragment2 extends Fragment {
             }
         };
         checkList.addOnScrollListener(scrollListener);
+
+        checkListAdapter.setOnItemClickListener(new CheckListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                nextButton.setBackgroundColor(context.getColor(R.color.colorAccent));
+                selectedItem = checkListAdapter.selectedItem;
+            }
+        });
     }
 
     /**
@@ -155,12 +176,10 @@ public class CaseFragment2 extends Fragment {
                     checkListAdapter.addItemList(list);
 
                     if (checkListAdapter.getItemCount() == 0) {
-                        noData.setVisibility(View.VISIBLE);
+                        noDataLayout.setVisibility(View.VISIBLE);
                         checkList.setVisibility(View.GONE);
                     } else {
-                        noData.setVisibility(View.GONE);
-                        checkList.setVisibility(View.VISIBLE);
-                        description.setText("완성된 견적서를 선택하시고 다음을 눌러주세요");
+                        descriptionText.setText("완성된 견적서를 선택하시고 다음을 눌러주세요");
                     }
                 }
             }
@@ -197,7 +216,7 @@ public class CaseFragment2 extends Fragment {
                         //goNextPage();
                         CaseActivity.caseItem = caseItem;
                         ((CaseActivity) getActivity()).replaceFragment(1);
-                        //RemoteLib.getInstance().updateCaseStatus(2, 0);
+                        RemoteLib.getInstance().updateCaseStatus(caseSeq, 2, 0);
                     }
                 } else { // 등록 실패
                     int statusCode = response.code();
@@ -210,5 +229,18 @@ public class CaseFragment2 extends Fragment {
                 MyLog.d(TAG, "no internet connectivity");
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode != Activity.RESULT_OK) {
+                return;
+            }
+            RemoteLib.getInstance().updateCaseStatus(caseSeq, 2, 0);
+            ((CaseActivity) getActivity()).replaceFragment(1);
+        }
     }
 }

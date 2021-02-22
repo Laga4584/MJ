@@ -6,24 +6,29 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.bestfood.item.UserItem;
 import com.example.bestfood.lib.FileLib;
 import com.example.bestfood.lib.MyLog;
-import com.example.bestfood.lib.RemoteLib;
 import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
+import com.example.bestfood.remote.ServiceGenerator;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 프로필 아이콘을 등록하는 액티비티
@@ -37,10 +42,11 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
     private static final int CROP_FROM_ALBUM = 3;
 
     Context context;
-
-    ImageView profileIconImage;
-
     UserItem userItem;
+
+    ImageButton backButton;
+    TextView finishButton;
+    ImageView profileIcon;
 
     File profileIconFile;
     String profileIconFilename;
@@ -58,35 +64,25 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
 
         userItem = ((App) getApplication()).getUserItem();
 
-        setToolbar();
         setView();
         setProfileIcon();
-    }
-
-    /**
-     * 액티비티 툴바를 설정한다.
-     */
-    private void setToolbar() {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        final ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.profile_setting);
-        }
     }
 
     /**
      * 액티비티 화면을 설정한다.
      */
     public void setView() {
-        profileIconImage = (ImageView) findViewById(R.id.profile_icon);
+        backButton = findViewById(R.id.button_back);
+        backButton.setOnClickListener(this);
+        finishButton = findViewById(R.id.button_finish);
+        finishButton.setOnClickListener(this);
 
-        Button albumButton = (Button) findViewById(R.id.album);
+        profileIcon = findViewById(R.id.icon_profile);
+
+        TextView albumButton = findViewById(R.id.button_album);
         albumButton.setOnClickListener(this);
 
-        Button cameraButton = (Button) findViewById(R.id.camera);
+        TextView cameraButton = findViewById(R.id.button_camera);
         cameraButton.setOnClickListener(this);
     }
 
@@ -98,11 +94,11 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
                 RemoteService.USER_ICON_URL + userItem.userIconFilename);
 
         if (StringLib.getInstance().isBlank(userItem.userIconFilename)) {
-            Picasso.get().load(R.drawable.ic_person).into(profileIconImage);
+            Picasso.get().load(R.drawable.ic_person).into(profileIcon);
         } else {
             Picasso.get()
                     .load(RemoteService.USER_ICON_URL + userItem.userIconFilename)
-                    .into(profileIconImage);
+                    .into(profileIcon);
         }
     }
 
@@ -121,48 +117,20 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
      */
     @Override
     public void onClick(View v) {
-        setProfileIconFile();
+        if (v.getId() == R.id.button_back) {
+            finish();
 
-        if (v.getId() == R.id.album) {
+        } else if (v.getId() == R.id.button_finish) {
+            uploadProfileIcon();
+
+        } else if (v.getId() == R.id.button_album) {
+            setProfileIconFile();
             getImageFromAlbum();
 
-        } else if (v.getId() == R.id.camera) {
+        } else if (v.getId() == R.id.button_camera) {
+            setProfileIconFile();
             getImageFromCamera();
         }
-    }
-
-    /**
-     * 오른쪽 상단 메뉴를 구성한다.
-     * 닫기 메뉴만이 설정되어 있는 menu_close.xml를 지정한다.
-     * @param menu 메뉴 객체
-     * @return 메뉴를 보여준다면 true, 보여주지 않는다면 false
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_close, menu);
-        return true;
-    }
-
-    /**
-     * 왼쪽 화살표 메뉴(android.R.id.home)를 클릭했을 때와
-     * 오른쪽 상단 닫기 메뉴를 클릭했을 때의 동작을 지정한다.
-     * 여기서는 모든 버튼이 액티비티를 종료한다.
-     * @param item 메뉴 아이템 객체
-     * @return 메뉴를 처리했다면 true, 그렇지 않다면 false
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-
-            case R.id.action_close:
-                finish();
-                break;
-        }
-
-        return true;
     }
 
     /**
@@ -240,8 +208,7 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
             cropImageFromCamera();
 
         } else if (requestCode == CROP_FROM_CAMERA) {
-            Picasso.get().load(profileIconFile).into(profileIconImage);
-            uploadProfileIcon();
+            Picasso.get().load(profileIconFile).into(profileIcon);
 
         } else if (requestCode == PICK_FROM_ALBUM && intent != null) {
             Uri dataUri = intent.getData();
@@ -249,8 +216,7 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
                 cropImageFromAlbum(dataUri);
             }
         } else if (requestCode == CROP_FROM_ALBUM && intent != null) {
-            Picasso.get().load(profileIconFile).into(profileIconImage);
-            uploadProfileIcon();
+            Picasso.get().load(profileIconFile).into(profileIcon);
         }
     }
 
@@ -258,8 +224,43 @@ public class ProfileIconActivity extends AppCompatActivity implements View.OnCli
      * 프로필 아이콘을 서버에 업로드한다.
      */
     private void uploadProfileIcon() {
-        RemoteLib.getInstance().uploadUserIcon(userItem.seq, profileIconFile);
+        uploadUserIcon(userItem.seq, profileIconFile);
 
         userItem.userIconFilename = profileIconFilename + ".png";
+    }
+
+    /**
+     * 사용자 프로필 아이콘을 서버에 업로드한다.
+     * @param userSeq 사용자 일련번호
+     * @param file 파일 객체
+     */
+    public void uploadUserIcon(int userSeq, File file) {
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+
+        RequestBody requestFile =
+                RequestBody.create(file, MediaType.parse("multipart/form-data"));
+
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+
+        RequestBody userSeqBody =
+                RequestBody.create(
+                        "" + userSeq, MediaType.parse("multipart/form-data"));
+
+        Call<ResponseBody> call =
+                remoteService.uploadUserIcon(userSeqBody, body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call,
+                                   Response<ResponseBody> response) {
+                MyLog.d(TAG, "uploadUserIcon success");
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                MyLog.e(TAG, "uploadUserIcon fail");
+            }
+        });
     }
 }

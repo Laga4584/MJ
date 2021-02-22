@@ -3,75 +3,74 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:theme="@style/AppTheme"
-    android:weightSum="760">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="65"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="25"
-            android:orientation="horizontal"
-            android:weightSum="320">
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="20"/>
-            <ImageButton
-                android:id="@+id/back_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="25"
-                android:adjustViewBounds="true"
-                android:background="@drawable/bg_transparent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_back"/>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="20" />
-        <LinearLayout
-            android:id="@+id/top_layout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="20"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="32">
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="28"/>
-            <ToggleButton
-                android:id="@+id/toggle_button"
-                android:layout_width="40dp"
-                android:layout_height="20dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/toggle_selector"
-                android:checked="false"
-                android:scaleType="fitCenter"
-                android:textOff=""
-                android:textOn="" />
-        </LinearLayout>
-    </LinearLayout>
+    android:orientation="vertical">
+    <ImageButton
+        android:id="@+id/button_back"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_back"
+        android:src="@drawable/ic_back"
+        android:elevation="1dp"/>
+    <ToggleButton
+        android:id="@+id/button_toggle"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="19dp"
+        android:background="@drawable/selector_toggle"
+        android:checked="false"
+        android:textOff=""
+        android:textOn="" />
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="645">
+        android:layout_weight="1">
+        <androidx.cardview.widget.CardView
+            android:visibility="gone"
+            android:id="@+id/texts_no_data"
+            android:layout_width="320dp"
+            android:layout_height="160dp"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="1dp"
+            android:layout_gravity="center_horizontal"
+            card_view:cardCornerRadius="@dimen/cardview_round_basic"
+            card_view:cardElevation="3dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginTop="55dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center"
+                    android:text="아직 명장님을 만나지 못하셨군요.."
+                    android:textSize="12dp"
+                    android:textColor="@color/colorDarkGray"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="최고의 명장님들과 세심한 수선서비스를 경험해보세요!"
+                    android:textSize="10dp"
+                    android:textColor="@color/colorDarkGray"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
+            android:id="@+id/list_case"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:dividerHeight="@dimen/spacing_small" />
+            android:clipToPadding="true" />
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_button"
+            android:id="@+id/button_add"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_gravity="center|bottom"

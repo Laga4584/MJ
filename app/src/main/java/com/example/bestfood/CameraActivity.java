@@ -28,6 +28,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
@@ -55,17 +57,22 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.bestfood.adapter.CaptureListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
 import com.example.bestfood.item.CaptureItem;
+import com.example.bestfood.lib.BitmapLib;
+import com.example.bestfood.lib.FileLib;
 import com.example.bestfood.lib.MyLog;
+import com.example.bestfood.lib.RemoteLib;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,10 +113,9 @@ public class CameraActivity extends AppCompatActivity {
 
     RecyclerView captureList;
     CaptureListAdapter infoListAdapter;
-    StaggeredGridLayoutManager layoutManager;
-    EndlessRecyclerViewScrollListener scrollListener;
+    LinearLayoutManager layoutManager;
     int listTypeValue = 1;
-    public static ArrayList<CaptureItem> captureItemList = new ArrayList<CaptureItem>();
+    public static ArrayList<CaptureItem> captureItemList;
 
     LinearLayout rectangles;
     TextView description, complete;
@@ -121,6 +127,8 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         context = this;
+        captureItemList = new ArrayList<CaptureItem>();
+        //captureItemList = CaseFragment1.captureItemList;
         try {
             initVIew();
         } catch (CameraAccessException e) {
@@ -325,7 +333,9 @@ public class CameraActivity extends AppCompatActivity {
                 complete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        insertCaptureInfo();
+                        CaseFragment1.captureItemList = captureItemList;
+                        Intent intentR = new Intent();
+                        setResult(Activity.RESULT_OK, intentR);
                         finish();
                     }
                 });
@@ -571,9 +581,7 @@ public class CameraActivity extends AppCompatActivity {
      * @param row 스태거드그리드레이아웃에 사용할 열의 개수
      */
     private void setLayoutManager(int row) {
-        layoutManager = new StaggeredGridLayoutManager(row, StaggeredGridLayoutManager.HORIZONTAL);
-        layoutManager
-                .setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager = new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false);
         captureList.setLayoutManager(layoutManager);
     }
 
@@ -586,10 +594,6 @@ public class CameraActivity extends AppCompatActivity {
         infoListAdapter = new CaptureListAdapter(context,
                 R.layout.row_capture_list, new ArrayList<CaptureItem>());
         captureList.setAdapter(infoListAdapter);
-    }
-
-    private void insertCaptureInfo(){
-
     }
 
 }

@@ -40,7 +40,7 @@ public class RemoteLib {
     public static final String TAG = RemoteLib.class.getSimpleName();
 
     private volatile static RemoteLib instance;
-    String[] status_list_1 = {"견적 요청", "견적 확인", "결제", "발송", "수선", "배송", "후기"};
+    String[] status_list_1 = {"요청", "확인", "결제", "발송", "수선", "후기"};
 
     public static RemoteLib getInstance() {
         if (instance == null) {
@@ -108,81 +108,8 @@ public class RemoteLib {
         }
     }
     */
-    /**
-     * 사용자 프로필 아이콘을 서버에 업로드한다.
-     * @param userSeq 사용자 일련번호
-     * @param file 파일 객체
-     */
-    public void uploadUserIcon(int userSeq, File file) {
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        RequestBody requestFile =
-                RequestBody.create(file, MediaType.parse("multipart/form-data"));
-
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-
-        RequestBody userSeqBody =
-                RequestBody.create(
-                        "" + userSeq, MediaType.parse("multipart/form-data"));
-
-        Call<ResponseBody> call =
-                remoteService.uploadUserIcon(userSeqBody, body);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call,
-                                   Response<ResponseBody> response) {
-                MyLog.d(TAG, "uploadUserIcon success");
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                MyLog.e(TAG, "uploadUserIcon fail");
-            }
-        });
-    }
-
-    /**
-     * 케이스 이미지를 서버에 업로드한다.
-     * @param infoSeq 케이스 정보 일련번호
-     * @param label 이미지 설명
-     * @param file 파일 객체
-     * @param handler 처리 결과를 응답할 핸들러
-     */
-    public void uploadCaseImage(int infoSeq, String label, File file, final Handler handler) {
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-
-        RequestBody requestFile =
-                RequestBody.create(file, MediaType.parse("multipart/form-data"));
-
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-
-        RequestBody infoSeqBody =
-                RequestBody.create(
-                         "" + infoSeq, MediaType.parse("multipart/form-data"));
-        RequestBody labelBody =
-                RequestBody.create(
-                        label, MediaType.parse("multipart/form-data"));
-
-        Call<ResponseBody> call =
-                remoteService.uploadCaseImage(infoSeqBody, labelBody, body);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call,
-                                   Response<ResponseBody> response) {
-                MyLog.d(TAG, "uploadCaseImage success");
-                handler.sendEmptyMessage(0);
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                MyLog.e(TAG, "uploadCaseImage fail");
-            }
-        });
-    }
-
-    public void updateCaseStatus(int index1, int index2){
+    public void updateCaseStatus(int caseSeq, int index1, int index2){
         final String status1 = status_list_1[index1];
         final String status2;
         if (index1 == 3 && index2 == 1 || index1 == 4 && index2 == 4) status2 = "발송 대기";
@@ -191,7 +118,7 @@ public class RemoteLib {
 
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
-        Call<String> call = remoteService.updateCaseStatus(CaseActivity.caseItem.seq, status1, status2);
+        Call<String> call = remoteService.updateCaseStatus(caseSeq, status1, status2);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

@@ -103,11 +103,9 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
         final NoticeItem item = itemList.get(position);
         MyLog.d(TAG, "getView " + item);
 
-        holder.name.setText(item.title);
-        holder.description.setText(StringLib.getInstance().getSubString(context,
-                item.body, Constant.MAX_LENGTH_DESCRIPTION));
+        holder.noticeText.setText(item.body);
 
-        setImage(holder.image, "default");
+        setImage(holder.noticeIcon, item.iconFilename, item.title);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,8 +114,6 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
             }
         });
 
-
-
     }
 
     /**
@@ -125,11 +121,13 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
      * @param imageView  이미지를 설정할 뷰
      * @param fileName 이미지 파일이름
      */
-    private void setImage(ImageView imageView, String fileName) {
-        if (fileName=="default") {
-            Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
+    private void setImage(ImageView imageView, String fileName, String title) {
+        if (StringLib.getInstance().isBlank(fileName)) {
+            MyLog.d("here null");
+            imageView.setImageResource(R.drawable.ic_mj);
+            //Picasso.get().load(R.drawable.ic_mj).into(imageView);
         } else {
-            Picasso.get().load(RemoteService.IMAGE_URL + fileName).into(imageView);
+            Picasso.get().load(RemoteService.USER_ICON_URL + fileName).into(imageView);
         }
     }
 
@@ -138,16 +136,14 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
      * 아이템을 보여주기 위한 뷰홀더 클래스
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;
-        TextView name;
-        TextView description;
+        ImageView noticeIcon;
+        TextView noticeText;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            image = (ImageView) itemView.findViewById(R.id.image);
-            name = (TextView) itemView.findViewById(R.id.name);
-            description = (TextView) itemView.findViewById(R.id.description);
+            noticeIcon = (ImageView) itemView.findViewById(R.id.icon_notice);
+            noticeText = (TextView) itemView.findViewById(R.id.text_notice);
         }
     }
 }
