@@ -11,9 +11,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,6 +37,7 @@ import android.widget.Toast;
 
 import com.example.bestfood.adapter.ChatMessageAdapter;
 import com.example.bestfood.item.ChatItem;
+import com.example.bestfood.lib.BitmapLib;
 import com.example.bestfood.lib.FileLib;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
@@ -41,6 +46,7 @@ import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -140,6 +146,7 @@ public class ChatActivity extends AppCompatActivity {
                 strmessage = ImageMessageFilename;
                 Toast.makeText(getApplicationContext(), "사진은 한 장씩 전송 가능합니다.", Toast.LENGTH_LONG).show();
                 getImageFromAlbum();
+                //getImageFromCamera();
             }
         });
 
@@ -249,6 +256,8 @@ public class ChatActivity extends AppCompatActivity {
         ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
 
         ImageMessageFile = FileLib.getInstance().getImageFile(context, ImageMessageFilename);
+
+        //uploadImgMessage();
     }
 
     private void getImageFromCamera() {
@@ -332,7 +341,36 @@ public class ChatActivity extends AppCompatActivity {
             ImageMessageFilename = null;
 
         } else if (requestCode == PICK_FROM_ALBUM) {
-            setProfileIconFile();
+            Uri dataUri = intent.getData();
+            MyLog.d("here3" + dataUri);
+
+            if (dataUri != null) {
+                //Picasso.get().load(dataUri).into(infoImage);
+                Picasso.get().load(dataUri).into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        MyLog.d("here1");
+                        ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
+                        ImageMessageFile = FileLib.getInstance().getImageFile(context, ImageMessageFilename);
+                        MyLog.d("here imagefile" + ImageMessageFile.length());
+                        BitmapLib.getInstance().saveBitmapToFileThread(imageUploadHandler,
+                                ImageMessageFile, bitmap);
+                        MyLog.d("here2");
+                        //isSavingImage = true;
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        MyLog.d("here5");
+                    }
+                });
+            }
+
 
             /*Cursor cursor = null;
             try {
@@ -346,8 +384,8 @@ public class ChatActivity extends AppCompatActivity {
                     cursor.close();
                 }
             }*/
-            Log.d("checking ImageMessageFilename=", ImageMessageFilename);
-            uploadImgMessage();
+            //Log.d("checking ImageMessageFilename=", ImageMessageFilename);
+            //uploadImgMessage();
             strmessage = ImageMessageFilename;
             ArrayList<ChatItem> newList = new ArrayList<ChatItem>();
             newList.add(getChatItem());
@@ -355,8 +393,8 @@ public class ChatActivity extends AppCompatActivity {
             chatMessageAdapter.addItemList(newList);
             insertChatInfo(getChatItem());
             message_list.scrollToPosition(rMessageList.size());
-            ImageMessageFile = null;
-            ImageMessageFilename = null;
+            //ImageMessageFile = null;
+            //ImageMessageFilename = null;
 
         } /*else if (requestCode == PICK_FROM_ALBUM && intent != null) {
             Uri dataUri = intent.getData();
@@ -378,6 +416,18 @@ public class ChatActivity extends AppCompatActivity {
             //Picasso.get().load(ImageMessageFile).into(imageMessage);
         }*/
     }
+
+    Handler imageUploadHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            //isSavingImage = false;
+            //setImageItem();
+            //Picasso.get().invalidate(RemoteService.IMAGE_URL + imageItem.filename);
+            MyLog.d("here imagefile" + ImageMessageFile.length());
+            uploadChatImage(currentUserSeq, ImageMessageFile);
+        }
+    };
 
     private void uploadImgMessage() {
         uploadChatImage(currentUserSeq, ImageMessageFile);
