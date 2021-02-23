@@ -1,6 +1,11 @@
 package com.example.bestfood.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,7 @@ import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class ChatMessageAdapter extends RecyclerView.Adapter {
@@ -121,7 +127,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
         }
 
         void bind(int position) {
-            //setImage(profileImage, messageList.get(position).profileImage);
+            //setImage(profileImage, profileImage);
             //nameText.setText(caseItem.repairerName);
             messageText.setText(messageList.get(position).message);
             timeText.setText(messageList.get(position).regDate.substring(11,13) + ":" + messageList.get(position).regDate.substring(14,16));
@@ -140,6 +146,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
         }
 
         void bind(int position) {
+            Log.d("checking imageview", messageList.get(position).message);
             setImage(messageImage, messageList.get(position).message);
             timeText.setText(messageList.get(position).regDate.substring(11,13) + ":" + messageList.get(position).regDate.substring(14,16));
         }
@@ -159,7 +166,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
         }
 
         void bind(int position) {
-            //setImage(profileImage, messageList.get(position).profileimage);
+            //setImage(profileImage, profileimage);
             //nameText.setText(caseItem.repairerName);
             setImage(messageImage, messageList.get(position).message);
             timeText.setText(messageList.get(position).regDate.substring(11,13) + ":" + messageList.get(position).regDate.substring(14,16));
@@ -173,11 +180,30 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
     }
 
     private void setImage(ImageView imageView, String fileName) {
-        if (StringLib.getInstance().isBlank(fileName)) {
+        String path = RemoteService.IMAGE_URL + fileName + ".png";
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        //getResizedBitmap(bitmap, 10);
+        imageView.setImageBitmap(bitmap);
+        /*if (StringLib.getInstance().isBlank(fileName)) {
             Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
         } else {
-            Picasso.get().load(RemoteService.IMAGE_URL + fileName).into(imageView);
+            Picasso.get().load(path).into(imageView);
+        }*/
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
         }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
 }

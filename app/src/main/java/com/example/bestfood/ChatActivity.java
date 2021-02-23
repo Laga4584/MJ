@@ -48,6 +48,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.w3c.dom.Document;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -143,7 +145,6 @@ public class ChatActivity extends AppCompatActivity {
             @Override //이미지 불러오기(갤러리 접근)
             public void onClick(View v) {
                 sendPosition = 3;
-                strmessage = ImageMessageFilename;
                 Toast.makeText(getApplicationContext(), "사진은 한 장씩 전송 가능합니다.", Toast.LENGTH_LONG).show();
                 getImageFromAlbum();
                 //getImageFromCamera();
@@ -330,7 +331,6 @@ public class ChatActivity extends AppCompatActivity {
         if (resultCode != RESULT_OK) return;
 
         if (requestCode == PICK_FROM_CAMERA) {
-            uploadImgMessage();
             ArrayList<ChatItem> newList = new ArrayList<ChatItem>();
             newList.add(getChatItem());
             MyLog.d(TAG, "here newlist " + newList.toString());
@@ -344,13 +344,14 @@ public class ChatActivity extends AppCompatActivity {
             Uri dataUri = intent.getData();
             MyLog.d("here3" + dataUri);
 
-            if (dataUri != null) {
+            //if (intent != null) {
                 //Picasso.get().load(dataUri).into(infoImage);
+                ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
                 Picasso.get().load(dataUri).into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         MyLog.d("here1");
-                        ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
+                        //ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
                         ImageMessageFile = FileLib.getInstance().getImageFile(context, ImageMessageFilename);
                         MyLog.d("here imagefile" + ImageMessageFile.length());
                         BitmapLib.getInstance().saveBitmapToFileThread(imageUploadHandler,
@@ -369,23 +370,8 @@ public class ChatActivity extends AppCompatActivity {
                         MyLog.d("here5");
                     }
                 });
-            }
-
-
-            /*Cursor cursor = null;
-            try {
-                String[] proj = { MediaStore.Images.Media.DATA };
-                cursor = context.getContentResolver().query(intent.getData(),  proj, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                String path = cursor.getString(column_index);
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }*/
-            //Log.d("checking ImageMessageFilename=", ImageMessageFilename);
-            //uploadImgMessage();
+            //}
+            Log.d("checking image file name: ", ImageMessageFilename);
             strmessage = ImageMessageFilename;
             ArrayList<ChatItem> newList = new ArrayList<ChatItem>();
             newList.add(getChatItem());
@@ -428,10 +414,6 @@ public class ChatActivity extends AppCompatActivity {
             uploadChatImage(currentUserSeq, ImageMessageFile);
         }
     };
-
-    private void uploadImgMessage() {
-        uploadChatImage(currentUserSeq, ImageMessageFile);
-    }
 
     public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
         int width = image.getWidth();
@@ -477,5 +459,17 @@ public class ChatActivity extends AppCompatActivity {
                 MyLog.e(TAG, "uploadChatImage fail");
             }
         });
+    }
+
+    private void setImage(ImageView imageView, String fileName) {
+        String path = RemoteService.IMAGE_URL + fileName + ".png";
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        //getResizedBitmap(bitmap, 10);
+        imageView.setImageBitmap(bitmap);
+        /*if (StringLib.getInstance().isBlank(fileName)) {
+            Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
+        } else {
+            Picasso.get().load(RemoteService.IMAGE_URL + fileName).into(imageView);
+        }*/
     }
 }
