@@ -3,6 +3,7 @@ package com.example.bestfood;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+@org.parceler.Parcel
 public class KakaoPayApproveVO {
     private String aid, tid, cid, sid;
     private String partner_order_id, partner_user_id;

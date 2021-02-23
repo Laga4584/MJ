@@ -38,9 +38,6 @@ import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -186,47 +183,9 @@ public class CaseFragment1 extends Fragment {
             @Override
             public void onClick(View view) {
                 if(status > 3) {
-                    insertCaseInfo();
                     setText(5);
+                    RemoteLib.getInstance().insertCaseInfo(caseItem, caseUploadHandler);
                 }
-            }
-        });
-    }
-
-    /**
-     * 사용자가 입력한 정보를 서버에 저장한다.
-     */
-    private void insertCaseInfo() {
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-        Call<String> call = remoteService.insertCaseInfo(caseItem);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    int seq = 0;
-                    String seqString = response.body();
-                    try {
-                        seq = Integer.parseInt(seqString);
-                    } catch (Exception e) {
-                        seq = 0;
-                    }
-                    if (seq == 0) {
-                        //등록 실패
-                    } else {
-                        //caseItem.seq = seq;
-                        //goNextPage();
-                        CaseActivity.caseItem = caseItem;
-                        insertCaptureInfo(captureItemList.size(), seq);
-                    }
-                } else { // 등록 실패
-                    int statusCode = response.code();
-                    ResponseBody errorBody = response.errorBody();
-                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
-                }
-            }
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                MyLog.d(TAG, "no internet connectivity");
             }
         });
     }
@@ -398,9 +357,27 @@ public class CaseFragment1 extends Fragment {
         requestList.setAdapter(requestListAdapter);
     }
 
+    Handler caseUploadHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            int seq = msg.what;
+            MyLog.d("here seq" + seq);
+            caseItem.seq = seq;
+            CaseActivity.caseItem = caseItem;
+            insertCaptureInfo(captureItemList.size(), seq);
+        }
+    };
 
-
-
+    Handler caseStatusHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem.status = RemoteLib.getInstance().status_list_1[msg.arg1];
+            CaseActivity.caseItem.status2 = RemoteLib.getInstance().status_list_2[msg.arg2];
+            ((CaseActivity) getActivity()).replaceFragment(msg.arg1);
+        }
+    };
 
     private void insertCaptureInfo(final int count, final int caseSeq){
         int currentPosition = captureItemList.size()-count;
@@ -417,10 +394,8 @@ public class CaseFragment1 extends Fragment {
                     insertCaptureInfo(count-1, caseSeq);
                 }
                 else {
-                    RemoteLib.getInstance().updateCaseStatus(caseSeq, 1, 0);
-                    ((CaseActivity) getActivity()).replaceFragment(0);
+                    RemoteLib.getInstance().updateCaseStatus(caseSeq, 1, 0, caseStatusHandler);
                 }
-                //finish();
             }
         };
 

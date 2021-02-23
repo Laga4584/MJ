@@ -11,6 +11,8 @@ android:orientation="vertical">
     android:layout_marginHorizontal="20dp"
     android:layout_marginVertical="10dp"
     android:backgroundTint="#ffe812"
+    android:foreground="@drawable/shape_card_dash_fg"
+    app:cardCornerRadius="10dp"
     android:elevation="3dp"
     app:contentPadding="15dp">
 
@@ -20,20 +22,18 @@ android:orientation="vertical">
         android:orientation="vertical">
 
 
-        <TextView
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:text="KakaoPay"
-            android:textSize="20dp"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:src="@drawable/ic_kakao"/>
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/kakaopay_method"
+            android:id="@+id/text_method"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -43,19 +43,21 @@ android:orientation="vertical">
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
-            android:id="@+id/kakaopay_itemname"
-            android:layout_width="match_parent"
+            android:id="@+id/text_title"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:layout_gravity="end"
             android:gravity="end"
-            android:text="김엠제이 명장 [발렌시아가] 핸드백 스트링..."
+            android:text="김엠제이 명장 [발렌시아가] 핸드백 스트링 수선 외 1건"
             android:textSize="12dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:maxLength="10"/>
-
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textIsSelectable="false"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
-            android:id="@+id/kakaopay_amount"
+            android:id="@+id/text_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -80,7 +82,7 @@ android:orientation="vertical">
     android:layout_height="0dp"
     android:layout_weight="1"/>
 <TextView
-    android:id="@+id/next"
+    android:id="@+id/button_next"
     android:layout_width="match_parent"
     android:layout_height="70dp"
     android:layout_gravity="bottom"

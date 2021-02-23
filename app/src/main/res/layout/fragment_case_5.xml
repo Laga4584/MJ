@@ -170,6 +170,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/button_pay"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/round_blue"
@@ -180,6 +181,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/button_cancel"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/round_white"

@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.bestfood.adapter.CheckListAdapter;
 import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
@@ -23,6 +25,7 @@ import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.CheckItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
+import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
 
@@ -39,7 +42,8 @@ import retrofit2.Response;
 public class CaseFragment2 extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
     public static final String CASE_ITEM = "CASE_ITEM";
-    public static final int REQUEST_CODE = 5000;
+    public static final int REQUEST_CODE_1 = 5001;
+    public static final int REQUEST_CODE_2 = 5002;
     Context context;
     CaseItem caseItem;
     TextView descriptionText, nextButton;
@@ -86,38 +90,36 @@ public class CaseFragment2 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        descriptionText = view.findViewById(R.id.text_description);
-        nextButton = view.findViewById(R.id.button_next);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedItem.seq != 0){
-                    caseItem.repairerSeq = selectedItem.repairerSeq;
-                    caseItem.price = selectedItem.price;
-                    caseItem.time = selectedItem.time;
-                    insertCaseInfo();
-                    Intent intent = new Intent(context, KakaoPayActivity.class);
-                    intent.putExtra("requestCode", REQUEST_CODE);
-                    String titleText = "[" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + caseItem.dotCount + " 건";
-                    intent.putExtra("itemName", titleText);
-                    intent.putExtra("totalAmount", selectedItem.price);
-                    startActivityForResult(intent, REQUEST_CODE);
-                    //getActivity().startActivity(new Intent(getActivity(), KakaoPayActivity.class));
-                }
-            }
-        });
-
-        noDataLayout = view.findViewById(R.id.layout_no_data);
-        checkList = view.findViewById(R.id.check_list);
-
-        if (caseItem.status2 == "대기"){
-            checkList.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.VISIBLE);
+        if(caseItem.status2 == "완료"){
+            goKakaoPayActivity();
         }else {
-            checkList.setVisibility(View.VISIBLE);
-            noDataLayout.setVisibility(View.GONE);
-            setRecyclerView();
-            listInfo(caseSeq, 0);
+            descriptionText = view.findViewById(R.id.text_description);
+            nextButton = view.findViewById(R.id.button_next);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (selectedItem.seq != 0) {
+                        caseItem.repairerSeq = selectedItem.repairerSeq;
+                        caseItem.repairerName = selectedItem.name;
+                        caseItem.price = selectedItem.price;
+                        caseItem.time = selectedItem.time;
+                        RemoteLib.getInstance().insertCaseInfo(caseItem, caseUploadHandler1);
+                    }
+                }
+            });
+
+            noDataLayout = view.findViewById(R.id.layout_no_data);
+            checkList = view.findViewById(R.id.check_list);
+
+            if (caseItem.status2 == "대기") {
+                checkList.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.VISIBLE);
+            } else {
+                checkList.setVisibility(View.VISIBLE);
+                noDataLayout.setVisibility(View.GONE);
+                setRecyclerView();
+                listInfo(caseSeq, 0);
+            }
         }
     }
 
@@ -192,55 +194,85 @@ public class CaseFragment2 extends Fragment {
         });
     }
 
-    /**
-     * 사용자가 입력한 정보를 서버에 저장한다.
-     */
-    private void insertCaseInfo() {
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-        Call<String> call = remoteService.insertCaseInfo(caseItem);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    int seq = 0;
-                    String seqString = response.body();
-                    try {
-                        seq = Integer.parseInt(seqString);
-                    } catch (Exception e) {
-                        seq = 0;
-                    }
-                    if (seq == 0) {
-                        //등록 실패
-                    } else {
-                        //caseItem.seq = seq;
-                        //goNextPage();
-                        CaseActivity.caseItem = caseItem;
-                        ((CaseActivity) getActivity()).replaceFragment(1);
-                        RemoteLib.getInstance().updateCaseStatus(caseSeq, 2, 0);
-                    }
-                } else { // 등록 실패
-                    int statusCode = response.code();
-                    ResponseBody errorBody = response.errorBody();
-                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
-                }
-            }
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                MyLog.d(TAG, "no internet connectivity");
-            }
-        });
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE_1) {
             if (resultCode != Activity.RESULT_OK) {
                 return;
             }
-            RemoteLib.getInstance().updateCaseStatus(caseSeq, 2, 0);
-            ((CaseActivity) getActivity()).replaceFragment(1);
+            caseItem.payMethod = data.getStringExtra("method");
+            caseItem.payCorp = data.getStringExtra("corp");
+            caseItem.payAmount = data.getIntExtra("amount", 0);
+            caseItem.payInterest = data.getStringExtra("interest");
+
+            RemoteLib.getInstance().insertCaseInfo(caseItem, caseUploadHandler2);
+
+        }else if (requestCode == REQUEST_CODE_2) {
+            if (resultCode != Activity.RESULT_OK) {
+                return;
+            }
+            caseItem.payMethod2 = data.getStringExtra("method");
+            caseItem.payCorp2 = data.getStringExtra("corp");
+            caseItem.payAmount2 = data.getIntExtra("amount", 0);
+            caseItem.payInterest2 = data.getStringExtra("interest");
+
+            RemoteLib.getInstance().insertCaseInfo(caseItem, caseUploadHandler3);
+
         }
     }
+
+    private void goKakaoPayActivity(){
+        Intent intent = new Intent(context, KakaoPayActivity.class);
+        String titleString = caseItem.repairerName + " 명장 [" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + caseItem.dotCount + " 건";
+        intent.putExtra("itemName", titleString);
+        if (StringLib.getInstance().isBlank(caseItem.priceFinal)) {
+            intent.putExtra("requestCode", REQUEST_CODE_1);
+            intent.putExtra("totalAmount", selectedItem.price);
+            startActivityForResult(intent, REQUEST_CODE_1);
+        }
+        else {
+            intent.putExtra("requestCode", REQUEST_CODE_2);
+            intent.putExtra("totalAmount", caseItem.priceFinal);
+            startActivityForResult(intent, REQUEST_CODE_2);
+        }
+    }
+
+    Handler caseUploadHandler1 = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem = caseItem;
+            goKakaoPayActivity();
+        }
+    };
+
+    Handler caseUploadHandler2 = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem = caseItem;
+            RemoteLib.getInstance().updateCaseStatus(caseSeq, 2, 1, caseStatusHandler);
+        }
+    };
+
+    Handler caseUploadHandler3 = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem = caseItem;
+            RemoteLib.getInstance().updateCaseStatus(caseSeq, 4, 2, caseStatusHandler);
+        }
+    };
+
+    Handler caseStatusHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem.status = RemoteLib.getInstance().status_list_1[msg.arg1];
+            CaseActivity.caseItem.status2 = RemoteLib.getInstance().status_list_2[msg.arg2];
+            ((CaseActivity) getActivity()).replaceFragment(msg.arg1);
+        }
+    };
 }

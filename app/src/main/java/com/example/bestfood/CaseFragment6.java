@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,23 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.bestfood.item.CaseItem;
-import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
-import com.example.bestfood.remote.RemoteService;
-import com.example.bestfood.remote.ServiceGenerator;
 
 import org.parceler.Parcels;
-
-import java.util.Arrays;
-import java.util.Objects;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class CaseFragment6 extends Fragment {
@@ -52,7 +42,7 @@ public class CaseFragment6 extends Fragment {
     CardView cardView1, cardView2, cardView3, cardView4, cardView5;
     TextView text1, text2, text3, text4, text5, next, option1, option2, option3, option4;
     ImageView image1, image2, image3, image4, image5;
-    EditText edit1, edit2, edit3, edit4, edit5;
+    EditText edit5;
 
     String[] items_1 = {"그때 그때 바로 연락주세요!", "불편하지 않을 정도였어요.", "연락이 안되서 답답했어요"};
     String[] items_2 = {"훌륭해요 제 마음에 쏙 들어요!", "전체적으로 만족스러워요", "실망스러워요"};
@@ -190,50 +180,30 @@ public class CaseFragment6 extends Fragment {
                     caseItem.tag2 = tagList[1];
                     caseItem.tag3 = tagList[2];
                     caseItem.tag4 = tagList[3];
-                    insertCaseInfo();
+                    RemoteLib.getInstance().insertCaseInfo(caseItem, caseUploadHandler);
                 }
             }
         });
     }
 
-    /**
-     * 사용자가 입력한 정보를 서버에 저장한다.
-     */
-    private void insertCaseInfo() {
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-        Call<String> call = remoteService.insertCaseInfo(caseItem);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    int seq = 0;
-                    String seqString = response.body();
-                    try {
-                        seq = Integer.parseInt(seqString);
-                    } catch (Exception e) {
-                        seq = 0;
-                    }
-                    if (seq == 0) {
-                        //등록 실패
-                    } else {
-                        //caseItem.seq = seq;
-                        //goNextPage();
-                        CaseActivity.caseItem = caseItem;
-                        //RemoteLib.getInstance().updateCaseStatus(1, 0);
-                        //finish();
-                    }
-                } else { // 등록 실패
-                    int statusCode = response.code();
-                    ResponseBody errorBody = response.errorBody();
-                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
-                }
-            }
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                MyLog.d(TAG, "no internet connectivity");
-            }
-        });
-    }
+    Handler caseUploadHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem = caseItem;
+            RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 6, 5, caseStatusHandler);
+        }
+    };
+
+    Handler caseStatusHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem.status = RemoteLib.getInstance().status_list_1[msg.arg1];
+            CaseActivity.caseItem.status2 = RemoteLib.getInstance().status_list_2[msg.arg2];
+            ((CaseActivity) getActivity()).replaceFragment(msg.arg1);
+        }
+    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

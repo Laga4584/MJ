@@ -1,10 +1,9 @@
 package com.example.bestfood;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +17,13 @@ import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.lib.RemoteLib;
 
 import org.parceler.Parcels;
-import org.w3c.dom.Text;
 
 
 public class CaseFragment3 extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
     public static final String CASE_ITEM = "CASE_ITEM";
     CaseItem caseItem;
-    TextView next;
-
-    TextView method;
-    TextView name;
-    TextView amount;
+    TextView methodText, titleText, amountText, nextButton;
 
     public static CaseFragment3 newInstance(CaseItem caseItem) {
         Bundle bundle = new Bundle();
@@ -56,12 +50,11 @@ public class CaseFragment3 extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_case_3, container, false);
 
-        next = rootView.findViewById(R.id.next);
-        next.setOnClickListener(new View.OnClickListener() {
+        nextButton = rootView.findViewById(R.id.button_next);
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 3, 0);
-                ((CaseActivity) getActivity()).replaceFragment(2);
+                RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 3, 0, caseStatusHandler);
             }
         });
 
@@ -72,30 +65,25 @@ public class CaseFragment3 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        method = (TextView) view.findViewById(R.id.kakaopay_method);
-        name = (TextView) view.findViewById(R.id.kakaopay_itemname);
-        amount = (TextView) view.findViewById(R.id.kakaopay_amount);
+        methodText = view.findViewById(R.id.text_method);
+        titleText = view.findViewById(R.id.text_title);
+        amountText = view.findViewById(R.id.text_amount);
 
-        /*String strmethod = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_method;
-        String strpurchase = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_purchasecorp;
-        String stramount = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_amount;
-        String strctype = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_ctype;
-        String strinterest = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_interest;
-        String strmonth = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_month;
-        String strname = ((KakaoPayActivity)KakaoPayActivity.context_kakaopay).pay_name;
-
-        if (strmethod == "CARD") {
-            method.setText(strctype + " " + strpurchase);
-            if (strinterest == "Y") {
-                amount.setText(stramount + "/ " + strmonth + " 할부");
-            }
-            else if (strinterest == "N") {
-                amount.setText(stramount + "/ " + strmonth + "무이자");
-            }
-        } else if (strmethod == "MONEY") {
-            method.setText("현금결제");
-        }
-
-        name.setText(strname);*/
+        String methodString = caseItem.payMethod + " " + caseItem.payCorp;
+        methodText.setText(methodString);
+        String titleString = caseItem.repairerName + " 명장 [" + caseItem.brand + "] " + caseItem.product + " " + caseItem.service + " 외 " + caseItem.dotCount + " 건";
+        titleText.setText(titleString);
+        String amountString = caseItem.payAmount + "원 / " + caseItem.payInterest;
+        amountText.setText(amountString);
     }
+
+    Handler caseStatusHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem.status = RemoteLib.getInstance().status_list_1[msg.arg1];
+            CaseActivity.caseItem.status2 = RemoteLib.getInstance().status_list_2[msg.arg2];
+            ((CaseActivity) getActivity()).replaceFragment(msg.arg1);
+        }
+    };
 }

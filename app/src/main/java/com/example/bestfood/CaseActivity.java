@@ -42,10 +42,7 @@ public class CaseActivity extends FragmentActivity {
     CaseFragment5 fragment5;
     CaseFragment6 fragment6;
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-
-    String[] status_list = {"요청", "확인", "결제", "발송", "수선", "배송", "후기"};
+    String[] status_list = {"요청", "확인", "결제", "발송", "수선", "후기", "완료"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +50,6 @@ public class CaseActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_case);
 
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
         context = this;
         caseItem = new CaseItem();
         caseItem.seq = 0;
@@ -180,35 +175,37 @@ public class CaseActivity extends FragmentActivity {
         }
     }
 
+
     public void replaceFragment(int position){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         switch(position){
-            case 0 :
+            case 1 :
                 fragment2 = CaseFragment2.newInstance(caseItem);
                 fragmentTransaction.replace(R.id.container, fragment2).commit();
                 tabLayout.selectTab(tabLayout.getTabAt(1));
                 break;
-            case 1:
+            case 2:
                 fragment3 = CaseFragment3.newInstance(caseItem);
                 fragmentTransaction.replace(R.id.container, fragment3).commit();
                 tabLayout.selectTab(tabLayout.getTabAt(2));
                 break;
-            case 2:
+            case 3:
                 fragment4 = CaseFragment4.newInstance(caseItem);
                 fragmentTransaction.replace(R.id.container, fragment4).commit();
                 tabLayout.selectTab(tabLayout.getTabAt(3));
                 break;
-            case 3:
+            case 4:
                 fragment5 = CaseFragment5.newInstance(caseItem);
                 fragmentTransaction.replace(R.id.container, fragment5).commit();
                 tabLayout.selectTab(tabLayout.getTabAt(4));
                 break;
-            case 4:
+            case 5:
                 fragment6 = CaseFragment6.newInstance(caseItem);
                 fragmentTransaction.replace(R.id.container, fragment6).commit();
                 tabLayout.selectTab(tabLayout.getTabAt(5));
                 break;
-            case 5:
+            case 6:
                 break;
         }
     }

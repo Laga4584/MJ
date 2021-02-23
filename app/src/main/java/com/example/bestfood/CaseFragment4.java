@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +32,6 @@ import org.parceler.Parcels;
 
 import java.util.Arrays;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,8 +51,6 @@ public class CaseFragment4 extends Fragment {
     int status;
     int count;
 
-    String[] status_list = {"발송 요청", "발송 대기", "발송 완료"};
-
     public static CaseFragment4 newInstance(CaseItem caseItem) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(CASE_ITEM, Parcels.wrap(caseItem));
@@ -68,7 +68,7 @@ public class CaseFragment4 extends Fragment {
             caseItem = Parcels.unwrap(getArguments().getParcelable(CASE_ITEM));
         }
         context = this.getActivity();
-        count = Arrays.asList(status_list).indexOf(caseItem.status2);
+        count = Arrays.asList(RemoteLib.getInstance().status_list_2).indexOf(caseItem.status2);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class CaseFragment4 extends Fragment {
                 @Override
                 public void onClick(View view) {
                     if (status > 4) {
-                        insertAddressInfo();
+                        RemoteLib.getInstance().insertCaseInfo(caseItem, caseUploadHandler);
                     }
                 }
             });
@@ -311,43 +311,23 @@ public class CaseFragment4 extends Fragment {
         });
     }
 
-    private void insertAddressInfo(){
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+    Handler caseUploadHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem = caseItem;
+            RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 3, 5, caseStatusHandler);
+        }
+    };
 
-        Call<String> call = remoteService.insertCaseInfo(caseItem);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    int seq = 0;
-                    String seqString = response.body();
+    Handler caseStatusHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem.status = RemoteLib.getInstance().status_list_1[msg.arg1];
+            CaseActivity.caseItem.status2 = RemoteLib.getInstance().status_list_2[msg.arg1];
+            ((CaseActivity) getActivity()).replaceFragment(msg.arg1);
+        }
+    };
 
-                    try {
-                        seq = Integer.parseInt(seqString);
-                    } catch (Exception e) {
-                        seq = 0;
-                    }
-
-                    if (seq == 0) {
-                        //등록 실패
-                    } else {
-                        CaseActivity.caseItem = caseItem;
-                        RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 3, 1);
-                        //caseItem.status2 = "발송 대기";
-                        ((CaseActivity) getActivity()).replaceFragment(2);
-                        //goNextPage();
-                    }
-                } else { // 등록 실패
-                    int statusCode = response.code();
-                    ResponseBody errorBody = response.errorBody();
-                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                MyLog.d(TAG, "no internet connectivity");
-            }
-        });
-    }
 }

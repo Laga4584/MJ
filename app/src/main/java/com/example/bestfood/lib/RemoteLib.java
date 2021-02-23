@@ -7,6 +7,7 @@ import android.net.Network;
 //import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import com.example.bestfood.App;
 import com.example.bestfood.CaseActivity;
 import com.example.bestfood.R;
+import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.UserItem;
 import com.example.bestfood.remote.RemoteService;
 import com.example.bestfood.remote.ServiceGenerator;
@@ -40,7 +42,8 @@ public class RemoteLib {
     public static final String TAG = RemoteLib.class.getSimpleName();
 
     private volatile static RemoteLib instance;
-    String[] status_list_1 = {"요청", "확인", "결제", "발송", "수선", "후기"};
+    public String[] status_list_1 = {"요청", "확인", "결제", "발송", "수선", "후기", "완료", "취소"};
+    public String[] status_list_2 = {"대기", "승인 대기", "수선 중", "수선 완료", "주소 확인", "완료"};
 
     public static RemoteLib getInstance() {
         if (instance == null) {
@@ -109,13 +112,48 @@ public class RemoteLib {
     }
     */
 
-    public void updateCaseStatus(int caseSeq, int index1, int index2){
-        final String status1 = status_list_1[index1];
-        final String status2;
-        if (index1 == 3 && index2 == 1 || index1 == 4 && index2 == 4) status2 = "발송 대기";
-        else if (index1 == 4 && index2 == 5) status2 = "배송 완료";
-        else status2 = CaseActivity.caseItem.status2;
+    /**
+     * 사용자가 입력한 정보를 서버에 저장한다.
+     */
+    public void insertCaseInfo(CaseItem caseItem, final Handler handler) {
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+        Call<String> call = remoteService.insertCaseInfo(caseItem);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    int seq = 0;
+                    String seqString = response.body();
+                    try {
+                        seq = Integer.parseInt(seqString);
+                    } catch (Exception e) {
+                        seq = 0;
+                    }
+                    if (seq == 0) {
+                        //등록 실패
+                    } else {
+                        //caseItem.seq = seq;
+                        //goNextPage();
+                        //CaseActivity.caseItem = caseItem;
+                        //insertCaptureInfo(captureItemList.size(), seq);
+                        handler.sendEmptyMessage(seq);
+                    }
+                } else { // 등록 실패
+                    int statusCode = response.code();
+                    ResponseBody errorBody = response.errorBody();
+                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                MyLog.d(TAG, "no internet connectivity");
+            }
+        });
+    }
 
+    public void updateCaseStatus(int caseSeq, final int index1, final int index2, final Handler handler){
+        final String status1 = status_list_1[index1];
+        final String status2 = status_list_2[index2];
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
 
         Call<String> call = remoteService.updateCaseStatus(caseSeq, status1, status2);
@@ -135,47 +173,12 @@ public class RemoteLib {
                     if (seq == 0) {
                         //등록 실패
                     } else {
-                        CaseActivity.caseItem.seq = seq;
-                        CaseActivity.caseItem.status = status1;
-                        CaseActivity.caseItem.status2 = status2;
-                        //goNextPage();
-                    }
-                } else { // 등록 실패
-                    int statusCode = response.code();
-                    ResponseBody errorBody = response.errorBody();
-                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                MyLog.d(TAG, "no internet connectivity");
-            }
-        });
-    }
-
-    public void uploadCaseDot(int seq, String dot){
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-
-        Call<String> call = remoteService.uploadCaseDot(seq, dot);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    int seq = 0;
-                    String seqString = response.body();
-
-                    try {
-                        seq = Integer.parseInt(seqString);
-                    } catch (Exception e) {
-                        seq = 0;
-                    }
-
-                    if (seq == 0) {
-                        //등록 실패
-                    } else {
-                        //CaseActivity.caseItem.seq = seq;
-                        //goNextPage();
+                        //handler.sendEmptyMessage(0);
+                        Message message = handler.obtainMessage();
+                        message.what = seq;
+                        message.arg1 = index1;
+                        message.arg2 = index2;
+                        handler.sendMessage(message);
                     }
                 } else { // 등록 실패
                     int statusCode = response.code();

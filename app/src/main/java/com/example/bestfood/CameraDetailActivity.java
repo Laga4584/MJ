@@ -64,9 +64,9 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
     EditText imageDescription;
 
     ImageButton backButton, prevButton;
-    TextView doneButton, sequence;
+    TextView redoButton, doneButton, sequence;
     LinearLayout description2;
-    FrameLayout textbox, imageLayout;
+    FrameLayout textbox;
 
     ArrayList<Integer> position_list_X;
     ArrayList<Integer> position_list_Y;
@@ -92,12 +92,13 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
         position_list_X_ratio = new ArrayList<Float>();
         position_list_Y_ratio = new ArrayList<Float>();
 
-        infoImage = (ImageView)findViewById(R.id.image);
-        pointImage = (CustomView)findViewById(R.id.dot);
-        description = (TextView)findViewById(R.id.description);
+        infoImage = findViewById(R.id.image);
+        pointImage = findViewById(R.id.dot);
+        description = findViewById(R.id.description);
         imageDescription = findViewById(R.id.image_description);
 
         backButton = findViewById(R.id.button_back);
+        redoButton = findViewById(R.id.button_redo);
         doneButton = findViewById(R.id.button_done);
         prevButton = findViewById(R.id.button_prev);
 
@@ -116,6 +117,7 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
         }
 
         backButton.setOnClickListener(this);
+        redoButton.setOnClickListener(this);
         doneButton.setOnClickListener(this);
         prevButton.setOnClickListener(this);
 
@@ -124,22 +126,10 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
         final DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);
-        //ViewGroup.LayoutParams params =  pointImage.getLayoutParams();
-
-        //LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imageLayout.getLayoutParams();
-        //MyLog.d("here position params " + params.width);
-        //MyLog.d("here position params " + params.height);
-        //params.height = metrics.widthPixels;
-        //imageLayout.setLayoutParams(params);
-        //pointImage.setLayoutParams(params);
 
         pointImage.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                //scrollView.setVisibility(View.INVISIBLE);
-                //scrollView2.setVisibility(View.VISIBLE);
-                //pointImage.X = (int) motionEvent.getX();
-                //pointImage.Y = (int) motionEvent.getY();
                 if(count == 0 || position_list_X.size() < 1) {
                     MyLog.d("here position X " + motionEvent.getX());
                     MyLog.d("here position Y " + motionEvent.getY());
@@ -152,7 +142,6 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
                     pointImage.position_list_X = position_list_X;
                     pointImage.position_list_Y = position_list_Y;
                     pointImage.invalidate();
-                    //pointImage.touched = true;
                 }
                 return false;
             }
@@ -183,6 +172,8 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
             pointImage.position_list_X = position_list_X;
             pointImage.position_list_Y = position_list_Y;
             pointImage.invalidate();
+        } else if (v.getId() == R.id.button_redo) {
+
         } else if (v.getId() == R.id.button_done){
             captureItem.positionX = position_list_X_ratio;
             captureItem.positionY = position_list_Y_ratio;
@@ -194,7 +185,6 @@ public class CameraDetailActivity extends AppCompatActivity implements View.OnCl
             }
             CameraActivity.captureItemList.set(count, captureItem);
             Intent intentR = new Intent();
-            //intentR.putExtra("CAPTURE_ITEM", Parcels.wrap(captureItem)); //사용자에게 입력받은값 넣기
             setResult(Activity.RESULT_OK, intentR);
             finish();
         }

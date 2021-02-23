@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.WebResourceRequest;
@@ -16,11 +17,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.RemoteLib;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -122,6 +125,9 @@ public class KakaoPayActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Log.d("Success KakaoPayapproval: ", kakaoPayApproveVO.toString());
+
+                FinishActivity();
+
                 if (url.contains("pg_token=") || view.getUrl().contains("pg_token=")) {
                     view.stopLoading();
                 }
@@ -137,7 +143,31 @@ public class KakaoPayActivity extends AppCompatActivity {
 
         context_kakaopay = this;
 
+    }
+
+    private void FinishActivity(){
+        String methodString = "";
+        String corpString = "";
+        String interestString = "";
+        if (kakaoPayApproveVO.getPayment_method_type().equals("CARD")) {
+            methodString = kakaoPayApproveVO.getCard_type();
+            corpString = kakaoPayApproveVO.getPurchase_corp();
+            if (kakaoPayApproveVO.getInterest_free_install().equals("Y")) {
+                interestString = kakaoPayApproveVO.getInstall_month() + "할부";
+            }
+            else if (kakaoPayApproveVO.getInterest_free_install().equals("N")) {
+                interestString = kakaoPayApproveVO.getInstall_month() + "무이자";
+            }
+        } else if (kakaoPayApproveVO.getPayment_method_type().equals("MONEY")) {
+            methodString = "현금 결제";
+        }
+
         Intent intentR = new Intent();
+        MyLog.d("here kakao3" + methodString);
+        intentR.putExtra("method", methodString);
+        intentR.putExtra("corp", corpString);
+        intentR.putExtra("amount", kakaoPayApproveVO.getTotal());
+        intentR.putExtra("interest", interestString);
         setResult(Activity.RESULT_OK, intentR);
         finish();
     }

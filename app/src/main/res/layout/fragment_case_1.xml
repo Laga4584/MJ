@@ -245,14 +245,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp">
                     <ImageView
                         android:id="@+id/image_request"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
                         android:background="@drawable/round_white"
                         android:scaleType="centerCrop"
                         android:src="@drawable/bg_bestfood_drawer" />
+                    <com.example.bestfood.custom.CustomView
+                        android:id="@+id/dot"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+                </FrameLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

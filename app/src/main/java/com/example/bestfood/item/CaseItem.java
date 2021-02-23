@@ -16,9 +16,17 @@ public class CaseItem {
     @SerializedName("dot_count") public int dotCount;
     public String price;
     public String time;
+    @SerializedName("pay_method") public String payMethod;
+    @SerializedName("pay_corp") public String payCorp;
+    @SerializedName("pay_amount") public int payAmount;
+    @SerializedName("pay_interest") public String payInterest;
+    @SerializedName("pay_method2") public String payMethod2;
+    @SerializedName("pay_corp2") public String payCorp2;
+    @SerializedName("pay_amount2") public int payAmount2;
+    @SerializedName("pay_interest2") public String payInterest2;
     public String addressee;
     public String address;
-    public String addressDetail;
+    @SerializedName("address_detail") public String addressDetail;
     @SerializedName("addressee_phone") public String addresseePhone;
     public String memo;
     @SerializedName("price_final") public String priceFinal;
@@ -46,24 +54,32 @@ public class CaseItem {
     public String toString() {
         return "CaseItem{" +
                 "seq=" + seq +
-                ", user_seq=" + userSeq +
-                ", repairer_seq=" + repairerSeq +
+                ", userSeq=" + userSeq +
+                ", repairerSeq=" + repairerSeq +
                 ", service='" + service + '\'' +
                 ", product='" + product + '\'' +
                 ", brand='" + brand + '\'' +
                 ", dotCount='" + dotCount + '\'' +
                 ", price='" + price + '\'' +
                 ", time='" + time + '\'' +
+                ", payMethod='" + payMethod + '\'' +
+                ", payCorp='" + payCorp + '\'' +
+                ", payAmount='" + payAmount + '\'' +
+                ", payInterest='" + payInterest + '\'' +
+                ", payMethod='" + payMethod2 + '\'' +
+                ", payCorp='" + payCorp2 + '\'' +
+                ", payAmount='" + payAmount2 + '\'' +
+                ", payInterest='" + payInterest2 + '\'' +
                 ", addressee='" + addressee + '\'' +
                 ", address='" + address + '\'' +
-                ", address_detail='" + addressDetail + '\'' +
+                ", addressDetail='" + addressDetail + '\'' +
                 ", addresseePhone='" + addresseePhone + '\'' +
                 ", memo='" + memo + '\'' +
                 ", priceFinal='" + priceFinal + '\'' +
                 ", timeFinal='" + timeFinal + '\'' +
                 ", report='" + report + '\'' +
-                ", repair_state='" + repairState + '\'' +
-                ", time_result='" + timeResult + '\'' +
+                ", repairState='" + repairState + '\'' +
+                ", timeResult='" + timeResult + '\'' +
                 ", score='" + score + '\'' +
                 ", errorRate='" + errorRate + '\'' +
                 ", errorRatePrice='" + errorRatePrice + '\'' +
@@ -76,8 +92,8 @@ public class CaseItem {
                 ", status='" + status + '\'' +
                 ", status2='" + status2 + '\'' +
                 ", regDate='" + regDate + '\'' +
-                ", image_filename='" + imageFilename + '\'' +
-                ", repairer_name='" + repairerName + '\'' +
+                ", imageFilename='" + imageFilename + '\'' +
+                ", repairerName='" + repairerName + '\'' +
                 ", repairerImageFilename='" + repairerImageFilename + '\'' +
                 '}';
     }

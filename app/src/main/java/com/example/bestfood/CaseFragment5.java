@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,14 +22,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.bestfood.adapter.RecyclerDecoration;
 import com.example.bestfood.adapter.RequestListAdapter;
-import com.example.bestfood.custom.EndlessRecyclerViewScrollListener;
 import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.ImageItem;
 import com.example.bestfood.item.RepairerItem;
@@ -44,7 +41,6 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,12 +54,12 @@ public class CaseFragment5 extends Fragment {
     CaseItem caseItem;
     RepairerItem repairerItem;
     TextView name, info, title, price, timeText, rateText, reportText, description1, description2, next, sequence;
-    TextView text1, text2, text3, text4, text5, option2;
-    TextView finish, restart;
-    EditText edit1, edit2, edit3, edit4, edit5;
+    TextView option2;
+    TextView payButton, cancelButton, finishButton, restartButton;
+    EditText edit1, edit3, edit4, edit5;
     CardView content1, result, report;
     LinearLayout content2;
-    ImageView image, profileIcon;
+    ImageView image;
     ImageButton prevButton, nextButton;
     RecyclerView requestList;
     RequestListAdapter requestListAdapter;
@@ -91,7 +87,7 @@ public class CaseFragment5 extends Fragment {
             caseItem = Parcels.unwrap(getArguments().getParcelable(CASE_ITEM));
         }
         context = this.getActivity();
-        count = Arrays.asList(status_list).indexOf(caseItem.status2);
+        count = Arrays.asList(RemoteLib.getInstance().status_list_2).indexOf(caseItem.status2);
     }
 
     @Override
@@ -127,6 +123,9 @@ public class CaseFragment5 extends Fragment {
             info = view.findViewById(R.id.info);
             title = view.findViewById(R.id.title);
             price = view.findViewById(R.id.price);
+
+            payButton = view.findViewById(R.id.button_pay);
+            cancelButton = view.findViewById(R.id.button_cancel);
 
             image = view.findViewById(R.id.image);
             image.setClipToOutline(true);
@@ -211,26 +210,36 @@ public class CaseFragment5 extends Fragment {
             next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    insertCaseInfo();
+                    RemoteLib.getInstance().insertCaseInfo(caseItem, caseUploadHandler);
                 }
             });
         }else{
-            finish = view.findViewById(R.id.finish);
-            restart = view.findViewById(R.id.restart);
+            finishButton = view.findViewById(R.id.button_finish);
+            restartButton = view.findViewById(R.id.button_restart);
+            if (count == 5){
+                finishButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 5, 0, caseStatusHandler);
+                    }
+                });
+                restartButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 3, 0, caseStatusHandler);
+                    }
+                });
+            }else{
+                restartButton.setVisibility(View.GONE);
+                finishButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 6, 6, caseStatusHandler);
+                    }
+                });
+            }
 
-            restart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 3, 0);
-                }
-            });
 
-            finish.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 5, 0);
-                }
-            });
         }
     }
 
@@ -247,10 +256,10 @@ public class CaseFragment5 extends Fragment {
         price.setText(priceText);
 
         if (count == 0) {
-
             sequence.setVisibility(View.GONE);
             prevButton.setVisibility(View.GONE);
             nextButton.setVisibility(View.GONE);
+            next.setVisibility(View.GONE);
         } else if (count == 1){
             priceText = "최종 견적 " + caseItem.price+ "원 | " + caseItem.time + "일";
             price.setText(priceText);
@@ -259,6 +268,19 @@ public class CaseFragment5 extends Fragment {
             content2.setVisibility(View.VISIBLE);
             description1.setText("최종 견적 금액이 처음의 견적보다 낮을 시");
             description2.setText("차액은 3~4 영업일 이내 자동 환불됩니다");
+            payButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RemoteLib.getInstance().updateCaseStatus(caseItem.seq,1, 5, caseStatusHandler);
+                }
+            });
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RemoteLib.getInstance().updateCaseStatus(caseItem.seq,4, 4, caseStatusHandler);
+                }
+            });
+            next.setVisibility(View.GONE);
         } else if (count == 2) {
             price.setVisibility(View.GONE);
             description1.setText("명장님이 고객님의 요청 사항에 맞춰 수선을 진행중이에요");
@@ -275,6 +297,13 @@ public class CaseFragment5 extends Fragment {
             price.setVisibility(View.GONE);
             description1.setText("명장님이 수선을 종료하고 결과물 사진을 올려주셨어요");
             description2.setVisibility(View.GONE);
+            next.setText("확인했어요");
+            next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 4, 4, caseUploadHandler);
+                }
+            });
         }
 
         sequence.setText(String.valueOf(imageCount+1));
@@ -311,15 +340,6 @@ public class CaseFragment5 extends Fragment {
 
         setRecyclerView();
         listInfo(caseItem.seq);
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CaseActivity.caseItem = caseItem;
-                RemoteLib.getInstance().updateCaseStatus(caseItem.seq,4, 4);
-                ((CaseActivity) getActivity()).replaceFragment(3);
-            }
-        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -431,42 +451,27 @@ public class CaseFragment5 extends Fragment {
         });
     }
 
-    /**
-     * 사용자가 입력한 정보를 서버에 저장한다.
-     */
-    private void insertCaseInfo() {
-        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
-        Call<String> call = remoteService.insertCaseInfo(caseItem);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    int seq = 0;
-                    String seqString = response.body();
-                    try {
-                        seq = Integer.parseInt(seqString);
-                    } catch (Exception e) {
-                        seq = 0;
-                    }
-                    if (seq == 0) {
-                        //등록 실패
-                    } else {
-                        //caseItem.seq = seq;
-                        //goNextPage();
-                        CaseActivity.caseItem = caseItem;
-                        RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 4, 5);
-                        ((CaseActivity) getActivity()).replaceFragment(3);
-                    }
-                } else { // 등록 실패
-                    int statusCode = response.code();
-                    ResponseBody errorBody = response.errorBody();
-                    MyLog.d(TAG, "fail " + statusCode + errorBody.toString());
-                }
+    Handler caseUploadHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            CaseActivity.caseItem = caseItem;
+            RemoteLib.getInstance().updateCaseStatus(caseItem.seq, 4, 5, caseStatusHandler);
+        }
+    };
+
+    Handler caseStatusHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.arg1 == 6) {
+                ((Activity)context).finish();
+            } else {
+                CaseActivity.caseItem.status = RemoteLib.getInstance().status_list_1[msg.arg1];
+                CaseActivity.caseItem.status2 = RemoteLib.getInstance().status_list_2[msg.arg2];
+                ((CaseActivity) getActivity()).replaceFragment(msg.arg1);
             }
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                MyLog.d(TAG, "no internet connectivity");
-            }
-        });
-    }
+        }
+    };
+
 }
