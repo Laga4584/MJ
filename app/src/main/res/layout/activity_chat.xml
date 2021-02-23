@@ -7,73 +7,87 @@
     android:orientation="vertical"
     tools:context=".ChatActivity">
 
+    <ImageButton
+        android:id="@+id/button_back"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/bg_transparent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_back"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="28.07dp"
+        android:layout_marginStart="21dp"
+        android:contentDescription="@string/chat_back" />
+
     <LinearLayout
-        android:id="@+id/name_space"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/show_repairer_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_weight="1"
-            android:text="RepairerName"
-            android:textColor="#ffffff"
-            android:textSize="24dp" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.9">
+        android:layout_weight="0.9"
+        android:orientation="vertical">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/message_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/chat_box_line"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="0dp"
-        android:background="#dfdfdf" />
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <View
+            android:id="@+id/chat_box_line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="0dp"
+            android:background="#dfdfdf" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/chat_box"
         android:layout_width="match_parent"
+        android:minHeight="60dp"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:minHeight="48dp"
+        android:layout_marginTop="7.5dp"
         android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_weight="1">
+        <ImageButton
+            android:id="@+id/upload"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="25dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/chat_upload"
+            android:src="@drawable/ic_upload" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_message"
-                android:layout_width="match_parent"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:hint="Enter message" />
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/round_gray_input"
+                android:maxLines="4"
+                android:textColor="#1a1a1a"
+                android:textSize="14dp" />
 
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/Send"
-            android:layout_width="64dp"
-            android:layout_height="48dp"
-            android:layout_gravity="bottom"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:text="SEND"
-            android:textSize="14dp" />
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="27dp"
+            android:layout_marginBottom="25dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_send" />
+
     </LinearLayout>
 </LinearLayout>

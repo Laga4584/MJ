@@ -67,4 +67,8 @@
     <string name="loading_not">잠시후에 다시 시도해주세요</string>
 
     <string name="address_input">상세주소를 입력해 주세요</string>
+    <string name="enter_message">Enter message</string>
+    <string name="chat_send">chat_send</string>
+    <string name="chat_upload">chat_upload</string>
+    <string name="chat_back">chat_back</string>
 </resources>

@@ -69,9 +69,13 @@ public interface RemoteService {
     Call<ArrayList<ChatItem>> selectChatInfo(@Query("user_seq") int userSeq,
                                              @Query("repairer_seq") int repairerSeq);
 
-
     @POST("/chat/info")
     Call<String> insertChatInfo(@Body ChatItem ChatItem);
+
+    @Multipart
+    @POST("/chat/info/image")
+    Call<ResponseBody> uploadChatImage(@Part("chat_seq") RequestBody chatSeq,
+                                      @Part MultipartBody.Part file);
 
     //케이스
     @GET("/case/info/{seq}")
