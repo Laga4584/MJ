@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,17 +18,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bestfood.App;
 import com.example.bestfood.BuildConfig;
+import com.example.bestfood.ChatActivity;
 import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.R;
+import com.example.bestfood.item.RepairerItem;
 import com.example.bestfood.lib.MyLog;
 import com.example.bestfood.lib.StringLib;
 import com.example.bestfood.remote.RemoteService;
+import com.example.bestfood.remote.ServiceGenerator;
+import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.bestfood.CaseActivity.INFO_SEQ;
+import static com.example.bestfood.ChatActivity.REPAIRER_SEQ;
 
 public class ChatMessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_CHAT_MESSAGE_SENT = 1;
@@ -37,13 +50,44 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
 
     private Context mcontext;
     private ArrayList<ChatItem> messageList;
-    private CaseItem caseItem;
+
+    private String repairerName;
+    private String repairerImage;
+
+    int repairerSeq;
+    public static RepairerItem repairerItem;
 
     public ChatMessageAdapter(Context mcontext, ArrayList<ChatItem> messageList) {
         this.mcontext = mcontext;
         this.messageList = messageList;
 
-        caseItem = ((App) mcontext.getApplicationContext()).getCaseItem();
+        repairerSeq = ChatActivity.currentRepairerSeq;
+        selectRepairerInfo(repairerSeq);
+    }
+
+    private void selectRepairerInfo(int repairerSeq) {
+        RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);
+        Call<RepairerItem> call = remoteService.selectRepairerInfo(repairerSeq);
+
+        call.enqueue(new Callback<RepairerItem>() {
+            @Override
+            public void onResponse(Call<RepairerItem> call, Response<RepairerItem> response) {
+                RepairerItem item = response.body();
+                if (response.isSuccessful() && item != null && item.seq > 0) {
+                    repairerName = item.name;
+                    repairerImage = item.profileImgFilename;
+                } else {
+                    repairerName = item.name;
+                    repairerImage = item.profileImgFilename;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RepairerItem> call, Throwable t) {
+                Log.d("TAG", "no internet connectivity");
+                Log.d("TAG", t.toString());
+            }
+        });
     }
 
     @Override
@@ -128,8 +172,8 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
         }
 
         void bind(int position) {
-            //setImage(profileImage, profileImage);
-            //nameText.setText(caseItem.repairerName);
+            setProfileImage(profileImage, repairerImage, 1);
+            nameText.setText(repairerName);
             messageText.setText(messageList.get(position).message);
             timeText.setText(messageList.get(position).regDate.substring(11,13) + ":" + messageList.get(position).regDate.substring(14,16));
         }
@@ -167,8 +211,8 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
         }
 
         void bind(int position) {
-            //setImage(profileImage, profileimage);
-            //nameText.setText(caseItem.repairerName);
+            setProfileImage(profileImage, repairerImage, 1);
+            nameText.setText(repairerName);
             setImage(messageImage, messageList.get(position).message);
             timeText.setText(messageList.get(position).regDate.substring(11,13) + ":" + messageList.get(position).regDate.substring(14,16));
         }
@@ -190,19 +234,12 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
+    private void setProfileImage(ImageView imageView, String fileName, int path) {
+        if (StringLib.getInstance().isBlank(fileName)) {
+            Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
         } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
+            if (path == 0) Picasso.get().load(RemoteService.IMAGE_URL + fileName).into(imageView);
+            else Picasso.get().load(RemoteService.USER_ICON_URL + fileName).into(imageView);
         }
-        return Bitmap.createScaledBitmap(image, width, height, true);
     }
-
 }

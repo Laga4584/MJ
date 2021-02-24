@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bestfood.adapter.ChatMessageAdapter;
+import com.example.bestfood.item.CaseItem;
 import com.example.bestfood.item.ChatItem;
 import com.example.bestfood.lib.BitmapLib;
 import com.example.bestfood.lib.FileLib;
@@ -55,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import okhttp3.MediaType;
@@ -65,6 +67,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.bestfood.CaseActivity.INFO_SEQ;
+
 public class ChatActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     public static final String REPAIRER_SEQ = "REPAIRER_SEQ";
@@ -74,7 +78,7 @@ public class ChatActivity extends AppCompatActivity {
     Context context;
 
     int currentUserSeq;
-    int currentRepairerSeq;
+    public static int currentRepairerSeq;
     int sendPosition;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
