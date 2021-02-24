@@ -78,8 +78,6 @@ public class ChatActivity extends AppCompatActivity {
     int sendPosition;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
-    private static final int CROP_FROM_CAMERA = 2;
-    private static final int CROP_FROM_ALBUM = 3;
 
     ImageButton back;
     RecyclerView message_list;
@@ -89,8 +87,8 @@ public class ChatActivity extends AppCompatActivity {
     TextInputEditText input_message;
     ImageButton btSend;
 
-    File ImageMessageFile;
-    String ImageMessageFilename;
+    File ImageMessageFile = null;
+    String ImageMessageFilename = null;
 
     String strmessage;
 
@@ -253,14 +251,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void setProfileIconFile() {
-        ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
-
-        ImageMessageFile = FileLib.getInstance().getImageFile(context, ImageMessageFilename);
-
-        //uploadImgMessage();
-    }
-
     private void getImageFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(ImageMessageFile));
@@ -275,46 +265,6 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_ALBUM);
-    }
-
-    /**
-     * 이미지를 자르기 위한 Intent를 생성해서 반환한다.
-     * @param inputUri 이미지를 자르기전 Uri
-     * @param outputUri 이미지를 자른 결과 파일 Uri
-     * @return 이미지를 자르기 위한 인텐트
-     */
-    private Intent getCropIntent(Uri inputUri, Uri outputUri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(inputUri, "image/*");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
-        intent.putExtra("scale", true);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
-
-        return intent;
-    }
-
-    /**
-     * 카메라에서 촬영한 이미지를 프로필 아이콘에 사용할 크기로 자른다.
-     */
-    private void cropImageFromCamera() {
-        Uri uri = Uri.fromFile(ImageMessageFile);
-        Intent intent = getCropIntent(uri, uri);
-        startActivityForResult(intent, CROP_FROM_CAMERA);
-    }
-
-    /**
-     * 카메라 앨범에서 선택한 이미지를 프로필 아이콘에 사용할 크기로 자른다.
-     */
-    private void cropImageFromAlbum(Uri inputUri) {
-        Uri outputUri = Uri.fromFile(ImageMessageFile);
-
-        MyLog.d(TAG, "startPickFromAlbum uri " + inputUri.toString());
-        Intent intent = getCropIntent(inputUri, outputUri);
-        startActivityForResult(intent, CROP_FROM_ALBUM);
     }
 
     /**
@@ -344,7 +294,7 @@ public class ChatActivity extends AppCompatActivity {
             Uri dataUri = intent.getData();
             MyLog.d("here3" + dataUri);
 
-            //if (intent != null) {
+            if (intent.getDataString() != null) {
                 //Picasso.get().load(dataUri).into(infoImage);
                 ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
                 Picasso.get().load(dataUri).into(new Target() {
@@ -370,7 +320,7 @@ public class ChatActivity extends AppCompatActivity {
                         MyLog.d("here5");
                     }
                 });
-            //}
+            }
             Log.d("checking image file name: ", ImageMessageFilename);
             strmessage = ImageMessageFilename;
             ArrayList<ChatItem> newList = new ArrayList<ChatItem>();
@@ -379,28 +329,7 @@ public class ChatActivity extends AppCompatActivity {
             chatMessageAdapter.addItemList(newList);
             insertChatInfo(getChatItem());
             message_list.scrollToPosition(rMessageList.size());
-            //ImageMessageFile = null;
-            //ImageMessageFilename = null;
-
-        } /*else if (requestCode == PICK_FROM_ALBUM && intent != null) {
-            Uri dataUri = intent.getData();
-            if (dataUri != null) {
-                cropImageFromAlbum(dataUri);
-            }
-        } else if (requestCode == CROP_FROM_ALBUM && intent != null) {
-            Uri dataUri = intent.getData();
-            String filePath = getPath(dataUri);
-            uploadProfileIcon();
-            ArrayList<ChatItem> newList = new ArrayList<ChatItem>();
-            newList.add(getChatItem());
-            MyLog.d(TAG, "here newlist " + newList.toString());
-            chatMessageAdapter.addItemList(newList);
-            insertChatInfo(getChatItem());
-            message_list.scrollToPosition(rMessageList.size());
-            ImageMessageFile = null;
-            ImageMessageFilename = null;
-            //Picasso.get().load(ImageMessageFile).into(imageMessage);
-        }*/
+        }
     }
 
     Handler imageUploadHandler = new Handler(Looper.getMainLooper()) {
@@ -414,21 +343,6 @@ public class ChatActivity extends AppCompatActivity {
             uploadChatImage(currentUserSeq, ImageMessageFile);
         }
     };
-
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
 
     //http://blog.naver.com/PostView.nhn?blogId=jjjjokk&logNo=220743286618
 
@@ -459,17 +373,5 @@ public class ChatActivity extends AppCompatActivity {
                 MyLog.e(TAG, "uploadChatImage fail");
             }
         });
-    }
-
-    private void setImage(ImageView imageView, String fileName) {
-        String path = RemoteService.IMAGE_URL + fileName + ".png";
-        Bitmap bitmap = BitmapFactory.decodeFile(path);
-        //getResizedBitmap(bitmap, 10);
-        imageView.setImageBitmap(bitmap);
-        /*if (StringLib.getInstance().isBlank(fileName)) {
-            Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
-        } else {
-            Picasso.get().load(RemoteService.IMAGE_URL + fileName).into(imageView);
-        }*/
     }
 }

@@ -26,6 +26,7 @@ import com.example.bestfood.remote.RemoteService;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 
 public class ChatMessageAdapter extends RecyclerView.Adapter {
@@ -181,14 +182,12 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
 
     private void setImage(ImageView imageView, String fileName) {
         String path = RemoteService.IMAGE_URL + fileName + ".png";
-        Bitmap bitmap = BitmapFactory.decodeFile(path);
-        //getResizedBitmap(bitmap, 10);
-        imageView.setImageBitmap(bitmap);
-        /*if (StringLib.getInstance().isBlank(fileName)) {
+        Uri uri = Uri.parse(path);
+        if (StringLib.getInstance().isBlank(fileName)) {
             Picasso.get().load(R.drawable.bg_bestfood_drawer).into(imageView);
         } else {
-            Picasso.get().load(path).into(imageView);
-        }*/
+            Picasso.get().load(uri).into(imageView);
+        }
     }
 
     public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
