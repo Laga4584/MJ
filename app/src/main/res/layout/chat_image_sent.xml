@@ -12,6 +12,7 @@
         android:layout_marginTop="7.5dp"
         android:layout_marginBottom="7.5dp"
         android:layout_marginRight="25dp"
+        android:background="@drawable/bg_round_white"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />

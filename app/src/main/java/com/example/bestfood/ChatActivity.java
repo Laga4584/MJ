@@ -2,6 +2,7 @@ package com.example.bestfood;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.PermissionChecker;
+import androidx.loader.content.CursorLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +49,7 @@ import com.example.bestfood.remote.ServiceGenerator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
 
 import org.w3c.dom.Document;
 
@@ -167,6 +169,20 @@ public class ChatActivity extends AppCompatActivity {
                 input_message.setText(null);
             }
         });
+
+        message_list.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (bottom < oldBottom) {
+                    message_list.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            message_list.scrollToPosition(rMessageList.size()-1);
+                        }
+                    }, 50);
+                }
+            }
+        });
     }
 
     private void getList(){
@@ -255,12 +271,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void getImageFromCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(ImageMessageFile));
-        startActivityForResult(intent, PICK_FROM_CAMERA);
-    }
-
     /**
      * 카메라 앨범앱을 실행해서 이미지를 선택한다.
      */
@@ -277,6 +287,11 @@ public class ChatActivity extends AppCompatActivity {
      * @param resultCode 실행한 액티비티가 설정한 결과 코드
      * @param intent 결과 데이터
      */
+    /**https://relz.tistory.com/10
+     * onBitmapLoaded 호출이 되지 않는다.
+     * 이미지 업로드가 앱 실행 후 한번만 된다.
+     * 업로드 될때도 onBitmapLoaded의 로그는 뜨지 않는다.(here1, here2)
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -284,55 +299,50 @@ public class ChatActivity extends AppCompatActivity {
 
         if (resultCode != RESULT_OK) return;
 
-        if (requestCode == PICK_FROM_CAMERA) {
-            ArrayList<ChatItem> newList = new ArrayList<ChatItem>();
-            newList.add(getChatItem());
-            MyLog.d(TAG, "here newlist " + newList.toString());
-            chatMessageAdapter.addItemList(newList);
-            insertChatInfo(getChatItem());
-            message_list.scrollToPosition(rMessageList.size());
-            ImageMessageFile = null;
-            ImageMessageFilename = null;
-
-        } else if (requestCode == PICK_FROM_ALBUM) {
+        if (requestCode == PICK_FROM_ALBUM) {
             Uri dataUri = intent.getData();
             MyLog.d("here3" + dataUri);
 
-            if (intent.getDataString() != null) {
-                //Picasso.get().load(dataUri).into(infoImage);
-                ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
-                Picasso.get().load(dataUri).into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        MyLog.d("here1");
-                        //ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
-                        ImageMessageFile = FileLib.getInstance().getImageFile(context, ImageMessageFilename);
-                        MyLog.d("here imagefile" + ImageMessageFile.length());
-                        BitmapLib.getInstance().saveBitmapToFileThread(imageUploadHandler,
-                                ImageMessageFile, bitmap);
-                        MyLog.d("here2");
-                        //isSavingImage = true;
-                    }
+            ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
 
-                    @Override
-                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            ImageView iv = new ImageView(context);
+            final Target target = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    MyLog.d("here1");
+                    //ImageMessageFilename = currentUserSeq + "_" + String.valueOf(System.currentTimeMillis());
+                    ImageMessageFile = FileLib.getInstance().getImageFile(context, ImageMessageFilename);
+                    MyLog.d("here imagefile" + ImageMessageFile.length());
+                    BitmapLib.getInstance().saveBitmapToFileThread(imageUploadHandler,
+                            ImageMessageFile, bitmap);
+                    MyLog.d("here2");
+                    //isSavingImage = true;
+                }
 
-                    }
+                @Override
+                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
 
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        MyLog.d("here5");
-                    }
-                });
-            }
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    MyLog.d("here5");
+                }
+            };
+            iv.setTag(target);
+            Picasso.get().load(dataUri).into((Target) iv.getTag());
+
             Log.d("checking image file name: ", ImageMessageFilename);
             strmessage = ImageMessageFilename;
             ArrayList<ChatItem> newList = new ArrayList<ChatItem>();
+            int oldSize = rMessageList.size();
             newList.add(getChatItem());
             MyLog.d(TAG, "here newlist " + newList.toString());
             chatMessageAdapter.addItemList(newList);
             insertChatInfo(getChatItem());
-            message_list.scrollToPosition(rMessageList.size());
+
+            if (rMessageList.size() == oldSize) {
+            }
         }
     }
 
@@ -347,8 +357,6 @@ public class ChatActivity extends AppCompatActivity {
             uploadChatImage(currentUserSeq, ImageMessageFile);
         }
     };
-
-    //http://blog.naver.com/PostView.nhn?blogId=jjjjokk&logNo=220743286618
 
     public void uploadChatImage(int chatSeq, File file) {
         RemoteService remoteService = ServiceGenerator.createService(RemoteService.class);

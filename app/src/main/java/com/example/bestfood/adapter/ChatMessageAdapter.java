@@ -188,6 +188,8 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
 
             messageImage = (ImageView) itemView.findViewById(R.id.image_sent_message);
             timeText = (TextView) itemView.findViewById(R.id.text_sent_message_time);
+
+            messageImage.setClipToOutline(true);
         }
 
         void bind(int position) {
@@ -208,6 +210,8 @@ public class ChatMessageAdapter extends RecyclerView.Adapter {
             nameText = (TextView) itemView.findViewById(R.id.text_chat_user_other);
             messageImage = (ImageView) itemView.findViewById(R.id.image_received_message);
             timeText = (TextView) itemView.findViewById(R.id.text_received_message_time);
+
+            messageImage.setClipToOutline(true);
         }
 
         void bind(int position) {
